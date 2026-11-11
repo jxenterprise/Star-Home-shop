@@ -2,6 +2,8 @@
 
 Landing de una sola página con catálogo por temporadas, carrito, pedido por WhatsApp, pago en línea con Wompi y administrador para que la dueña cambie productos y precios sin depender del desarrollador.
 
+**Versión actual: v1.2** (11 nov 2026) · En vivo: <https://star-home-shop.pages.dev> · Historial de cambios: [`CHANGELOG.md`](CHANGELOG.md)
+
 > ⚠ **Catálogo de muestra.** Los productos, fotos y precios actuales son simulados mientras llega el material real. La página está en **Modo muestra**: muestra un aviso arriba y no se indexa en Google. Se apaga desde el administrador.
 
 ---
@@ -161,6 +163,7 @@ La ficha de Google hace que el negocio aparezca en Google Maps y en búsquedas c
 
 - Todo el historial vive en GitHub: cada cambio del administrador es un commit. Para descargar una copia: **Code → Download ZIP**.
 - Cloudflare guarda los despliegues anteriores: en *Deployments* puedes volver a una versión anterior con un clic.
+- Cada entrega tiene su etiqueta en GitHub (`v1.0`, `v1.2`…): en **Tags** se descarga el ZIP exacto de esa versión. Qué cambió en cada una está en `CHANGELOG.md`.
 
 ---
 

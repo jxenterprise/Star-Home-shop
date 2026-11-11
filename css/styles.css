@@ -406,6 +406,25 @@ textarea { font: inherit; color: inherit; }
 .portada__texto > * { animation: aparecer .6s cubic-bezier(.2, .7, .2, 1) both; }
 .portada__texto > :nth-child(2) { animation-delay: .08s; }
 .portada__texto > :nth-child(3) { animation-delay: .16s; }
+.portada__texto > :nth-child(4) { animation-delay: .24s; }
+
+/* Etiqueta de versión del sitio sobre el titular (píldora con la estrella del logo).
+   El número se cambia en la ZONA EDITABLE · VERSIÓN de index.html. */
+.portada__version {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 4px 12px 4px 9px;
+  border-radius: 999px;
+  background: var(--estrella-suave);
+  color: var(--noche);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.portada__version .marca__estrella { width: 14px; height: 14px; }
 .portada__arte img { animation: aparecer-arte .9s .1s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes aparecer { from { opacity: 0; transform: translateY(14px); } }
 @keyframes aparecer-arte { from { opacity: 0; transform: translateY(18px) scale(.985); } }
