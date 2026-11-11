@@ -5,7 +5,7 @@ Contexto para cualquier chat futuro (Claude u otra IA) que vaya a editar este pr
 ## 📌 ESTADO ACTUAL (léelo primero — se actualiza en cada sesión)
 _Última actualización: 11 nov 2026._
 
-- **Versión publicada en el código: v1.2** (etiqueta `v1.2` en git; se ve en la portada sobre el titular). Historial completo en `CHANGELOG.md`.
+- **Versión en el código: v1.2** (se ve en la portada sobre el titular). Las etiquetas de git `v1.0`/`v1.2` NO se pudieron subir desde la sesión en la nube (bloqueo 403): las crea JX en GitHub → Releases (ver "VERSIONES"). Historial completo en `CHANGELOG.md`.
 - **Sitio en vivo:** `https://star-home-shop.pages.dev` (Cloudflare Pages, producción = rama `main`). Cada rama/PR tiene vista previa en `https://<rama>.star-home-shop.pages.dev` (el bot de Cloudflare la comenta en la PR).
 - **Repositorio:** `jxenterprise/Star-Home-shop`. Se trabaja en ramas `claude/…` + PR en borrador hacia `main`; JX fusiona.
 - **Sigue en Modo muestra** (catálogo simulado, `noindex`).
@@ -223,6 +223,7 @@ Al cerrar una entrega:
 3. Actualizar "📌 ESTADO ACTUAL" y sumar la entrada en "🧭 MAPA DEL CÓDIGO" de este archivo.
 4. Commit, push de la rama y PR hacia `main`.
 5. Etiqueta: `git tag -a vX.Y -m "…"` sobre el commit de la entrega y `git push origin vX.Y`. Si la PR se fusiona con "squash", mover la etiqueta al commit de `main` (`git tag -fa vX.Y <commit> && git push -f origin vX.Y`). En GitHub → Releases se puede crear la versión a partir de la etiqueta con el texto del CHANGELOG.
+   ⚠ Desde las sesiones de Claude en la nube el push de etiquetas está BLOQUEADO (403 del proxy: solo se puede subir la rama de trabajo). En ese caso las crea JX en GitHub → **Releases → Draft a new release → Choose a tag** (escribir `vX.Y`, "Create new tag on publish"), con destino `main` después de fusionar la PR, y pega el texto de esa versión del CHANGELOG. `v1.0` va sobre el commit `f5f60a1` ("Add files via upload"; en el selector de destino → *Recent commits*).
 
 ## Herramienta: regenerar la copia de respaldo del catálogo
 Si cambias el render de las tarjetas o los JSON y quieres actualizar la copia estática de `index.html`, crea fuera del proyecto un archivo `copia.mjs` con este contenido y ejecútalo con Node 18+ (`node copia.mjs`), ajustando `RAIZ`:
