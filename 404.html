@@ -6,6 +6,9 @@
        Página de error 404 (Cloudflare Pages la sirve sola en cualquier URL rota).
        Comparte cabecera, pie, banner de cookies y estilos con index.html
        (css/styles.css y js/script.js). noindex: no compite en Google.
+       Rutas ABSOLUTAS (/css, /js, /privacidad…): esta página se sirve en
+       cualquier URL rota, también profundas (/a/b/c), y con rutas relativas
+       se quedaba sin estilos.
        =========================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -13,16 +16,16 @@
   <meta name="description" content="La página que buscas no existe. Vuelve a la tienda de Estrellita House para ver sábanas, cortinas y tapetes.">
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#1C2541">
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap"></noscript>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -71,11 +74,11 @@
       <div class="pie__columna">
         <h2 class="pie__titulo">Legal</h2>
         <ul class="pie__lista">
-          <li><a href="politicas-de-compra.html">Compras, envíos y devoluciones</a></li>
-          <li><a href="politicas-de-compra.html#pqr">PQR, retracto y reversión del pago</a></li>
-          <li><a href="privacidad.html">Política de privacidad</a></li>
-          <li><a href="cookies.html">Política de cookies</a></li>
-          <li><a href="terminos.html">Términos y condiciones</a></li>
+          <li><a href="/politicas-de-compra">Compras, envíos y devoluciones</a></li>
+          <li><a href="/politicas-de-compra#pqr">PQR, retracto y reversión del pago</a></li>
+          <li><a href="/privacidad">Política de privacidad</a></li>
+          <li><a href="/cookies">Política de cookies</a></li>
+          <li><a href="/terminos">Términos y condiciones</a></li>
           <li><button type="button" class="enlace-boton" data-abrir-cookies>Configurar cookies</button></li>
         </ul>
       </div>
@@ -100,13 +103,13 @@
   <!-- Banner de cookies (mismo de la landing) -->
   <div class="cookies" id="cookies" role="dialog" aria-modal="false" aria-labelledby="cookies-titulo" aria-describedby="cookies-texto" hidden>
     <p class="cookies__titulo" id="cookies-titulo">Tu privacidad</p>
-    <p class="cookies__texto" id="cookies-texto">Usamos cookies de Google Analytics para saber cuántas personas visitan la página y el almacenamiento de tu navegador para recordar tu carrito. Solo se activan si aceptas. Detalles en la <a href="cookies.html">política de cookies</a>.</p>
+    <p class="cookies__texto" id="cookies-texto">Usamos cookies de Google Analytics para saber cuántas personas visitan la página y el almacenamiento de tu navegador para recordar tu carrito. Solo se activan si aceptas. Detalles en la <a href="/cookies">política de cookies</a>.</p>
     <div class="cookies__botones">
       <button type="button" class="boton boton--cookies" data-consentimiento="rechazado">Rechazar</button>
       <button type="button" class="boton boton--cookies" data-consentimiento="aceptado">Aceptar</button>
     </div>
   </div>
 
-  <script src="js/script.js" defer></script>
+  <script src="/js/script.js" defer></script>
 </body>
 </html>

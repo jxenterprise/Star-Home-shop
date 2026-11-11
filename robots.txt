@@ -39,4 +39,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://estrellita-house.pages.dev/sitemap.xml
+Sitemap: https://star-home-shop.pages.dev/sitemap.xml

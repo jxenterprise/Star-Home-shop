@@ -8,7 +8,7 @@ Landing de una sola página para **Estrellita House**, emprendimiento de la novi
 
 - Proyecto de JX Company (lleva el crédito "Diseño y desarrollo: JX Company" en el pie).
 - Hecho con la skill `skill-jx-landing-pages-2026` (auditoría de 24 puntos).
-- Hosting: Cloudflare Pages, en la cuenta de JX (cliente básico). Dominio provisional: `estrellita-house.pages.dev` `{POR CONFIRMAR}`.
+- Hosting: Cloudflare Pages, en la cuenta de JX (cliente básico). Dominio actual: `star-home-shop.pages.dev` (si llega un dominio propio, cambiarlo en todos los sitios del punto 10 de pendientes). Repositorio: `jxenterprise/Star-Home-shop`, rama `main`.
 - Idioma: solo español.
 
 ### ⚠ El catálogo actual es SIMULADO
@@ -182,6 +182,15 @@ _Registro de todo el código. Se suma, nunca se borra lo anterior._
 - **`admin/config.yml`** — dos singletons: Productos (lista con uuid, nombre, colección por relación, tipo, descripción, foto, alt, medidas y precios, etiqueta, agotado, mostrar) y Ajustes (modo muestra, aviso, portada, colecciones, colección inicial, domicilio, pago en línea). Fotos a WebP 1600 px.
 - **Accesibilidad aplicada:** el botón del carrito toma su nombre del texto ("Carrito" + `#carrito-n-texto` solo para lector de pantalla; en ≤500px "Carrito" se oculta a la vista pero se sigue leyendo); el aviso superior es un `<aside>` con etiqueta; el botón flotante de WhatsApp vive dentro del `<footer>` para quedar en un landmark; el carrito es `<div role="dialog">` con foco atrapado; en ≤360px el botón dice "Agregar" y el resto ("al carrito") queda solo para lector.
 - **Pruebas hechas:** emulador oficial de Cloudflare Pages (wrangler 4.156): inyección del catálogo con datos modificados, firma verificada con SHA-256 independiente, errores de validación, domicilio fijo, 404 propia y cabeceras de `_headers`; prueba de punta a punta del flujo en escritorio y móvil (24 verificaciones cada una, consola limpia); axe-core sin violaciones en todas las páginas y estados (carrito, menú, toast, banner); html-validate sin errores; `admin/config.yml` válido contra el esquema oficial de Sveltia; sin desbordes en 17 anchos de 320 a 1920 px; Lighthouse local: Accesibilidad 100, SEO 100 con el Modo muestra apagado (69 mientras está en noindex, a propósito).
+
+### 11 nov 2026 — Revisión en vivo (star-home-shop.pages.dev) y arreglos de móvil
+Revisado con perfiles reales de iPhone SE/12 mini/13/15 Pro Max, Galaxy S8/S9+/S24/A55/Z Flip/Z Fold, Pixel 7, Moto G4, iPad Mini, Galaxy Tab y horizontal: sin desbordes ni errores de consola. Arreglado:
+- **Dominio:** todo apuntaba a `estrellita-house.pages.dev` (no existe): canonical, og:image (la vista previa al compartir por WhatsApp salía sin imagen), JSON-LD, sitemap, robots, llms, `SITIO_URL` y `site_url`. Ahora `https://star-home-shop.pages.dev`.
+- **`admin/config.yml`:** `backend.repo` ahora es `jxenterprise/Star-Home-shop` (antes un marcador).
+- **Bug WhatsApp (`js/script.js → abrirWhatsApp`):** `window.open(url, '_blank', 'noopener')` SIEMPRE devuelve `null`, así que el código creía que estaba bloqueado: abría WhatsApp dos veces y la pestaña de la tienda se iba a WhatsApp (con cookies rechazadas se perdía el carrito). Ahora abre sin `noopener` y corta `opener` a mano.
+- **Pago en línea sin llaves:** `functions/index.js → wompiConfigurado(env)` apaga `pagoEnLinea` si faltan `WOMPI_PUBLIC_KEY`/`WOMPI_INTEGRITY_SECRET`: el botón "Pagar en línea" no sale y la ayuda del carrito habla solo de WhatsApp. Aparece solo cuando se carguen las llaves en Cloudflare.
+- **CSS:** `.contenedor`, aviso, menú móvil, carrito y cookies respetan `env(safe-area-inset-left/right)` (iPhone en horizontal, notch/isla); `.pie` con 96 px abajo en ≤900px para que el botón flotante no tape el crédito JX; `body.cookies-abierto` esconde el botón flotante mientras el banner está abierto en ≤600px de ancho o ≤520px de alto; banner de cookies con botones lado a lado también en ≤380px; enlaces del pie de 44 px de alto; `.boton--agregar` con `gap: .3em`.
+- **`404.html`:** rutas absolutas (`/css/…`, `/js/…`, `/privacidad`…): en URLs profundas (`/a/b/c`) salía sin estilos.
 
 ## Herramienta: regenerar la copia de respaldo del catálogo
 Si cambias el render de las tarjetas o los JSON y quieres actualizar la copia estática de `index.html`, crea fuera del proyecto un archivo `copia.mjs` con este contenido y ejecútalo con Node 18+ (`node copia.mjs`), ajustando `RAIZ`:

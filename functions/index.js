@@ -29,7 +29,7 @@
 
 // ⚠ URL oficial del sitio. Se repite en index.html (canonical, og, JSON-LD),
 // sitemap.xml, robots.txt y llms.txt. Si cambia el dominio, cambiarla en TODOS.
-export const SITIO_URL = 'https://estrellita-house.pages.dev'; // {POR CONFIRMAR} dominio final
+export const SITIO_URL = 'https://star-home-shop.pages.dev'; // {POR CONFIRMAR} dominio final
 
 const ROBOTS_INDEXAR = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
 const ROBOTS_MUESTRA = 'noindex, nofollow';
@@ -252,6 +252,11 @@ async function leerJSON(context, ruta) {
   return r.json();
 }
 
+/* ¿Están las dos llaves de Wompi? (las mismas que exige api/wompi/firma.js) */
+export function wompiConfigurado(env = {}) {
+  return Boolean(String(env.WOMPI_PUBLIC_KEY || '').trim() && String(env.WOMPI_INTEGRITY_SECRET || '').trim());
+}
+
 /* ---------------------------------------------------------------------------
    Manejador de la ruta "/"
 --------------------------------------------------------------------------- */
@@ -267,6 +272,10 @@ export async function onRequest(context) {
       leerJSON(context, '/contenido/tienda.json')
     ]);
     datos = normalizarDatos(catalogo, tienda);
+    // Sin las llaves de Wompi en Cloudflare, el botón "Pagar en línea" no se
+    // muestra (si no, el cliente lo toca y le sale error). Aparece solo cuando
+    // JX cargue WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_SECRET, sin tocar código.
+    datos.pagoEnLinea = datos.pagoEnLinea && wompiConfigurado(context.env);
   } catch (error) {
     console.error('Catálogo no disponible, se sirve la copia estática:', error);
     return respuesta;

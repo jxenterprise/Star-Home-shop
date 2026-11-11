@@ -86,7 +86,7 @@ WOMPI_INTEGRITY_SECRET=test_integrity_...
 
 ### Dominio propio (cuando lo compren)
 
-Cambiar la URL `https://estrellita-house.pages.dev` en: `index.html` (canonical, og:url, og:image, twitter:image y JSON-LD), canonical de las páginas legales, `sitemap.xml`, `robots.txt`, `llms.txt`, `functions/index.js` (`SITIO_URL`) y `admin/config.yml` (`site_url`). Luego crear `functions/_middleware.js` con la redirección 301 del `.pages.dev` al dominio nuevo (nunca `_redirects` con `/*`).
+Cambiar la URL `https://star-home-shop.pages.dev` en: `index.html` (canonical, og:url, og:image, twitter:image y JSON-LD), canonical de las páginas legales, `sitemap.xml`, `robots.txt`, `llms.txt`, `functions/index.js` (`SITIO_URL`) y `admin/config.yml` (`site_url`). Luego crear `functions/_middleware.js` con la redirección 301 del `.pages.dev` al dominio nuevo (nunca `_redirects` con `/*`).
 
 ---
 
