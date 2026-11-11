@@ -1,0 +1,23 @@
+# Estrellita House
+
+> Tienda en Cartagena de Indias (Colombia) de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con colecciones de Navidad, Halloween y para todo el año. Domicilios en Cartagena; pedidos por WhatsApp o pago en línea con Wompi.
+
+## Secciones
+- [Inicio](https://estrellita-house.pages.dev/): colección de temporada con precios en pesos colombianos y carrito de compras.
+- [Colección](https://estrellita-house.pages.dev/#coleccion): productos por temporada con medidas y precios.
+- [Cómo comprar](https://estrellita-house.pages.dev/#como-comprar): cuatro pasos, de elegir el diseño a recibirlo en casa.
+- [Domicilios y pagos](https://estrellita-house.pages.dev/#domicilios): cobertura en Cartagena y medios de pago.
+- [Preguntas frecuentes](https://estrellita-house.pages.dev/#preguntas): domicilios, pagos, seguridad y devoluciones.
+
+## Políticas
+- [Compras, envíos y devoluciones](https://estrellita-house.pages.dev/politicas-de-compra): domicilios, retracto, garantía, reversión del pago y PQR.
+- [Política de privacidad](https://estrellita-house.pages.dev/privacidad)
+- [Términos y condiciones](https://estrellita-house.pages.dev/terminos)
+
+## Contacto
+- WhatsApp: https://wa.me/573008447167
+- Ciudad: Cartagena de Indias, Bolívar, Colombia
+
+## Notas
+- Pagos en línea procesados por Wompi (Bancolombia).
+- Sitio desarrollado por JX Company.

@@ -1,0 +1,219 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# ============================================================================
+# Estrellita House — admin/config.yml
+# Configuración del administrador (Sveltia CMS).
+#
+# Qué edita la dueña desde /admin:
+#   · Productos  → contenido/catalogo.json (nombre, colección, foto, medidas,
+#                  precios, etiqueta, agotado, mostrar/ocultar)
+#   · Ajustes    → contenido/tienda.json (modo muestra, aviso, portada,
+#                  colecciones, domicilio, pago en línea)
+# Cada vez que guarda, el CMS hace un commit en GitHub y Cloudflare Pages
+# vuelve a publicar la página sola en 1–2 minutos. functions/index.js pinta
+# los cambios dentro del HTML.
+#
+# Lo que NO está aquí a propósito (lo cambia JX, porque toca JSON-LD y SEO):
+# número de WhatsApp, dominio, textos legales y diseño.
+#
+# ⚠ Antes de usarlo hay que completar los datos marcados {POR CONFIRMAR}.
+# ============================================================================
+
+backend:
+  name: github
+  repo: USUARIO-GITHUB/estrellita-house          # {POR CONFIRMAR} usuario/repositorio real en GitHub
+  branch: main
+  # URL del autenticador de Sveltia en Cloudflare Workers (ver README, "Administrador").
+  # Mientras no exista, se puede entrar con un token de GitHub ("Sign in with token").
+  base_url: https://sveltia-cms-auth.SUBDOMINIO.workers.dev   # {POR CONFIRMAR}
+  commit_messages:
+    create: 'Administrador: crea {{collection}} {{slug}}'
+    update: 'Administrador: actualiza {{collection}} {{slug}}'
+    delete: 'Administrador: borra {{collection}} {{slug}}'
+    uploadMedia: 'Administrador: sube foto {{path}}'
+    deleteMedia: 'Administrador: borra foto {{path}}'
+
+app_title: Estrellita House · Administrador
+logo_url: /favicon.svg
+site_url: https://estrellita-house.pages.dev     # {POR CONFIRMAR} dominio final
+show_preview_links: false
+
+# Fotos de productos: se guardan en img/productos y se convierten SOLAS a WebP
+# al subirlas (regla de JX: todas las imágenes en WebP), máx. 1600 px.
+media_folder: img/productos
+public_folder: /img/productos
+media_libraries:
+  default:
+    config:
+      max_file_size: 15000000
+      slugify_filename: true
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 1600
+          height: 1600
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+singletons:
+  # ------------------------------------------------------------------------
+  # PRODUCTOS
+  # ------------------------------------------------------------------------
+  - name: catalogo
+    label: Productos
+    icon: inventory_2
+    file: contenido/catalogo.json
+    fields:
+      - name: productos
+        label: Productos
+        label_singular: producto
+        widget: list
+        add_to_top: true
+        collapsed: true
+        summary: '{{fields.nombre}}'
+        thumbnail: imagen
+        hint: 'El orden de esta lista es el orden en que salen en la página. Arrastra para reordenar.'
+        fields:
+          - name: id
+            label: Código interno
+            widget: uuid
+            prefix: 'p-'
+            use_b32_encoding: true
+            read_only: true
+            hint: 'Se crea solo. No se cambia (lo usa el carrito).'
+          - name: nombre
+            label: Nombre del producto
+            widget: string
+            maxlength: 60
+            hint: 'Ej.: Juego de sábanas Pinos y estrellas'
+          - name: coleccion
+            label: Colección
+            widget: relation
+            collection: _singletons
+            file: tienda
+            value_field: 'colecciones.*.id'
+            display_fields: ['colecciones.*.nombre']
+            search_fields: ['colecciones.*.nombre']
+            hint: 'Las colecciones se crean en Ajustes de la tienda.'
+          - name: categoria
+            label: Tipo de producto
+            widget: select
+            options: [Sábanas, Cortinas, Tapetes, Cojines, Manteles, Toallas, Decoración, Otros]
+          - name: descripcion
+            label: Descripción corta
+            widget: text
+            maxlength: 160
+            hint: 'Máx. 160 caracteres: cómo es y qué incluye.'
+          - name: imagen
+            label: Foto
+            widget: image
+            choose_url: false
+            accept: 'image/*'
+            hint: 'Ideal cuadrada y con buena luz. Se convierte sola a WebP.'
+          - name: alt
+            label: Qué se ve en la foto
+            widget: string
+            maxlength: 140
+            hint: 'Ej.: Juego de sábanas azul con pinos verdes, doblado. Lo usan Google y los lectores de pantalla.'
+          - name: variantes
+            label: Medidas y precios
+            label_singular: medida
+            widget: list
+            min: 1
+            summary: '{{fields.nombre}} · ${{fields.precio}}'
+            fields:
+              - name: nombre
+                label: Medida o presentación
+                widget: string
+                maxlength: 40
+                hint: 'Ej.: Doble 140 × 190 cm'
+              - name: precio
+                label: Precio en pesos (sin puntos)
+                widget: number
+                value_type: int
+                min: 1000
+                step: 100
+                hint: 'Ej.: 84900'
+          - name: etiqueta
+            label: Etiqueta en la foto
+            widget: select
+            required: false
+            options: ['Nuevo', 'Últimos días', 'Pocas unidades', 'Oferta']
+            hint: 'Opcional.'
+          - name: agotado
+            label: Agotado
+            widget: boolean
+            default: false
+          - name: mostrar
+            label: Mostrar en la página
+            widget: boolean
+            default: true
+            hint: 'Apágalo para esconder el producto sin borrarlo.'
+
+  # ------------------------------------------------------------------------
+  # AJUSTES DE LA TIENDA
+  # ------------------------------------------------------------------------
+  - name: tienda
+    label: Ajustes de la tienda
+    icon: storefront
+    file: contenido/tienda.json
+    fields:
+      - name: modo_muestra
+        label: Modo muestra
+        widget: boolean
+        default: true
+        hint: 'Encendido: arriba sale "Catálogo de muestra" y Google no indexa la página. Apágalo cuando estén los productos y precios reales.'
+      - name: aviso
+        label: Aviso superior
+        widget: object
+        fields:
+          - { name: mostrar, label: Mostrar aviso, widget: boolean, default: false }
+          - { name: texto, label: Texto del aviso, widget: string, maxlength: 90, required: false, hint: 'Ej.: Domicilio gratis por compras desde $150.000' }
+      - name: portada
+        label: Portada
+        widget: object
+        fields:
+          - { name: titulo, label: Título grande, widget: string, maxlength: 60 }
+          - { name: subtitulo, label: Texto debajo del título, widget: text, maxlength: 180 }
+      - name: colecciones
+        label: Colecciones (temporadas)
+        label_singular: colección
+        widget: list
+        summary: '{{fields.nombre}}'
+        hint: 'El orden de esta lista es el orden de las pestañas.'
+        fields:
+          - name: id
+            label: Código
+            widget: string
+            pattern: ['^[a-z0-9-]+$', 'Solo minúsculas, números y guiones. Ej.: san-valentin']
+            hint: 'Sin espacios ni tildes. Una vez creado, no lo cambies.'
+          - { name: nombre, label: Nombre de la pestaña, widget: string, maxlength: 24 }
+          - { name: descripcion, label: Descripción corta, widget: string, maxlength: 140 }
+          - { name: mostrar, label: Mostrar, widget: boolean, default: true }
+      - name: coleccion_inicial
+        label: Colección que se ve primero
+        widget: relation
+        collection: _singletons
+        file: tienda
+        value_field: 'colecciones.*.id'
+        display_fields: ['colecciones.*.nombre']
+      - name: domicilio
+        label: Domicilio
+        widget: object
+        fields:
+          - name: modo
+            label: ¿Cómo se cobra el domicilio?
+            widget: select
+            options:
+              - { label: 'Se acuerda por WhatsApp según el barrio', value: acordar }
+              - { label: 'Valor fijo en todo Cartagena', value: fijo }
+          - { name: valor, label: Valor fijo en pesos (solo si elegiste valor fijo), widget: number, value_type: int, min: 0, step: 500 }
+          - { name: texto, label: Texto que sale en la página, widget: string, maxlength: 140 }
+      - name: pago_en_linea
+        label: Pago en línea con Wompi activo
+        widget: boolean
+        default: true
+        hint: 'Apágalo si necesitas pausar los pagos en línea; el pedido por WhatsApp sigue funcionando.'

@@ -1,0 +1,26 @@
+# Estrellita House — _headers (Cloudflare Pages)
+# Ojo: estas reglas aplican a los archivos estáticos. La página principal "/"
+# la entrega functions/index.js, que pone sus propias cabeceras.
+
+# CSS y JS siempre frescos después de cada cambio (regla JX en todos los proyectos)
+/css/*
+  Cache-Control: no-cache
+
+/js/*
+  Cache-Control: no-cache
+
+# Datos del catálogo que edita el administrador
+/contenido/*
+  Cache-Control: no-cache
+
+# Administrador: fuera de Google y sin caché
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+
+# Cabeceras de seguridad básicas para todo el sitio
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: SAMEORIGIN

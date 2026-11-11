@@ -1,0 +1,184 @@
+{
+  "productos": [
+    {
+      "id": "p-sabanas-pinos-estrellas",
+      "nombre": "Juego de sábanas Pinos y estrellas",
+      "coleccion": "navidad",
+      "categoria": "Sábanas",
+      "descripcion": "Azul noche con pinos verdes y estrellas doradas. Incluye sábana ajustable, sábana plana y funda.",
+      "imagen": "/img/productos/sabanas-pinos-y-estrellas-navidad.webp",
+      "alt": "Juego de sábanas azul noche con estampado de pinos verdes y estrellas doradas, doblado y con cinta",
+      "variantes": [
+        { "nombre": "Sencilla 100 × 190 cm", "precio": 64900 },
+        { "nombre": "Semidoble 120 × 190 cm", "precio": 74900 },
+        { "nombre": "Doble 140 × 190 cm", "precio": 84900 },
+        { "nombre": "Queen 160 × 190 cm", "precio": 94900 }
+      ],
+      "etiqueta": "Nuevo",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-cortina-copos-nieve",
+      "nombre": "Cortina Copos de nieve",
+      "coleccion": "navidad",
+      "categoria": "Cortinas",
+      "descripcion": "Rojo navideño con copos blancos. Panel de 1,40 m de ancho por 2,20 m de alto, con argollas.",
+      "imagen": "/img/productos/cortina-copos-de-nieve-navidad.webp",
+      "alt": "Cortina roja con estampado de copos de nieve blancos colgada de un tubo con argollas",
+      "variantes": [
+        { "nombre": "1 panel 1,40 × 2,20 m", "precio": 54900 },
+        { "nombre": "Par de paneles 2,80 × 2,20 m", "precio": 99900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-tapete-feliz-navidad",
+      "nombre": "Tapete de entrada Feliz Navidad",
+      "coleccion": "navidad",
+      "categoria": "Tapetes",
+      "descripcion": "Tapete tipo fibra natural con letras rojas y ramita de acebo para recibir visitas en diciembre.",
+      "imagen": "/img/productos/tapete-entrada-feliz-navidad.webp",
+      "alt": "Tapete de entrada color fibra natural con el texto Feliz Navidad en rojo y una ramita de acebo",
+      "variantes": [
+        { "nombre": "40 × 60 cm", "precio": 32900 },
+        { "nombre": "60 × 90 cm", "precio": 49900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-mantel-cuadros-navidad",
+      "nombre": "Mantel Cuadros de Navidad",
+      "coleccion": "navidad",
+      "categoria": "Manteles",
+      "descripcion": "Cuadros escoceses en rojo y verde con línea dorada, para la cena del 24.",
+      "imagen": "/img/productos/mantel-cuadros-de-navidad.webp",
+      "alt": "Mantel de cuadros escoceses rojo y verde sobre una mesa redonda",
+      "variantes": [
+        { "nombre": "Redondo 1,50 m", "precio": 59900 },
+        { "nombre": "Rectangular 1,50 × 2,20 m", "precio": 69900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-cojines-tejido-nordico",
+      "nombre": "Fundas de cojín Tejido nórdico",
+      "coleccion": "navidad",
+      "categoria": "Cojines",
+      "descripcion": "Par de fundas crema con estrellas nórdicas rojas. Para cojines de 45 × 45 cm.",
+      "imagen": "/img/productos/fundas-cojin-tejido-nordico.webp",
+      "alt": "Dos fundas de cojín color crema con estrellas nórdicas rojas y franjas verdes",
+      "variantes": [
+        { "nombre": "Par de fundas 45 × 45 cm", "precio": 36900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-sabanas-calabazas",
+      "nombre": "Juego de sábanas Calabazas",
+      "coleccion": "halloween",
+      "categoria": "Sábanas",
+      "descripcion": "Fondo carbón con calabazas naranja, murciélagos y lunas. Incluye sábana ajustable, sábana plana y funda.",
+      "imagen": "/img/productos/sabanas-calabazas-halloween.webp",
+      "alt": "Juego de sábanas color carbón con estampado de calabazas naranja, murciélagos y lunas, doblado",
+      "variantes": [
+        { "nombre": "Sencilla 100 × 190 cm", "precio": 59900 },
+        { "nombre": "Semidoble 120 × 190 cm", "precio": 69900 },
+        { "nombre": "Doble 140 × 190 cm", "precio": 79900 }
+      ],
+      "etiqueta": "Últimos días",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-tapete-boo",
+      "nombre": "Tapete de entrada Boo!",
+      "coleccion": "halloween",
+      "categoria": "Tapetes",
+      "descripcion": "Negro con letras naranja y dos fantasmitas. Para la puerta en la noche de brujas.",
+      "imagen": "/img/productos/tapete-entrada-boo-halloween.webp",
+      "alt": "Tapete de entrada negro con el texto Boo en naranja y dos fantasmas blancos",
+      "variantes": [
+        { "nombre": "40 × 60 cm", "precio": 29900 }
+      ],
+      "etiqueta": "Últimos días",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-sabanas-rayas-suaves",
+      "nombre": "Juego de sábanas Rayas suaves",
+      "coleccion": "todo-el-ano",
+      "categoria": "Sábanas",
+      "descripcion": "Blanco con rayas azul cielo. Incluye sábana ajustable, sábana plana y funda.",
+      "imagen": "/img/productos/sabanas-rayas-suaves.webp",
+      "alt": "Juego de sábanas blanco con rayas verticales azul claro, doblado y con cinta",
+      "variantes": [
+        { "nombre": "Sencilla 100 × 190 cm", "precio": 59900 },
+        { "nombre": "Semidoble 120 × 190 cm", "precio": 69900 },
+        { "nombre": "Doble 140 × 190 cm", "precio": 79900 },
+        { "nombre": "Queen 160 × 190 cm", "precio": 89900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-cortina-lino-arena",
+      "nombre": "Cortina blackout Lino arena",
+      "coleccion": "todo-el-ano",
+      "categoria": "Cortinas",
+      "descripcion": "Color arena con textura de lino que oscurece la habitación. Panel de 1,40 × 2,20 m.",
+      "imagen": "/img/productos/cortina-blackout-lino-arena.webp",
+      "alt": "Cortina color arena con textura de lino colgada de un tubo con argollas",
+      "variantes": [
+        { "nombre": "1 panel 1,40 × 2,20 m", "precio": 64900 },
+        { "nombre": "Par de paneles 2,80 × 2,20 m", "precio": 119900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-tapete-bano-algodon-nube",
+      "nombre": "Tapete de baño Algodón nube",
+      "coleccion": "todo-el-ano",
+      "categoria": "Tapetes",
+      "descripcion": "Azul nube, suave y acolchado, con borde blanco.",
+      "imagen": "/img/productos/tapete-bano-algodon-nube.webp",
+      "alt": "Tapete de baño azul claro acolchado con borde blanco",
+      "variantes": [
+        { "nombre": "45 × 70 cm", "precio": 27900 }
+      ],
+      "etiqueta": "",
+      "agotado": false,
+      "mostrar": true
+    },
+    {
+      "id": "p-sabanas-hojas-palma",
+      "nombre": "Juego de sábanas Hojas de palma",
+      "coleccion": "todo-el-ano",
+      "categoria": "Sábanas",
+      "descripcion": "Blanco con hojas de palma verdes. Incluye sábana ajustable, sábana plana y funda.",
+      "imagen": "/img/productos/sabanas-hojas-de-palma.webp",
+      "alt": "Juego de sábanas blanco con estampado de hojas de palma verdes, doblado y con cinta",
+      "variantes": [
+        { "nombre": "Sencilla 100 × 190 cm", "precio": 62900 },
+        { "nombre": "Semidoble 120 × 190 cm", "precio": 72900 },
+        { "nombre": "Doble 140 × 190 cm", "precio": 82900 },
+        { "nombre": "Queen 160 × 190 cm", "precio": 92900 }
+      ],
+      "etiqueta": "Nuevo",
+      "agotado": false,
+      "mostrar": true
+    }
+  ]
+}

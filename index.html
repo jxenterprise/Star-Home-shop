@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ===========================================================
+       Estrellita House — index.html (landing de una sola página)
+       Tienda de sábanas, cortinas, tapetes y decoración de temporada
+       con domicilio en Cartagena. Venta por WhatsApp o pago en línea (Wompi).
+       Depende de: css/styles.css, js/script.js, img/, contenido/*.json
+       y functions/index.js (que reinyecta el catálogo vivo del CMS).
+       =========================================================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Estrellita House | Sábanas, cortinas y tapetes en Cartagena</title>
+  <meta name="description" content="Sábanas, cortinas, tapetes y decoración de temporada para tu hogar, con domicilio en Cartagena. Pide por WhatsApp o paga en línea con Wompi.">
+  <!-- Mientras el catálogo sea de muestra va "noindex". functions/index.js lo cambia
+       solo a "index, follow…" cuando se apaga el Modo muestra en el administrador. -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://estrellita-house.pages.dev/">
+  <meta name="theme-color" content="#1C2541">
+
+  <!-- Vista previa al compartir (WhatsApp, Instagram, Facebook…). og:image SIEMPRE absoluta. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Estrellita House">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:title" content="Estrellita House | Sábanas, cortinas y tapetes en Cartagena">
+  <meta property="og:description" content="Diseños de Navidad, Halloween y para todo el año, con domicilio en Cartagena. Pide por WhatsApp o paga en línea.">
+  <meta property="og:url" content="https://estrellita-house.pages.dev/">
+  <meta property="og:image" content="https://estrellita-house.pages.dev/img/og-estrellita-house-cartagena.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pila de sábanas con estampados de Navidad frente a una ventana de noche, con el nombre Estrellita House">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Estrellita House | Sábanas, cortinas y tapetes en Cartagena">
+  <meta name="twitter:description" content="Diseños de temporada para tu hogar, con domicilio en Cartagena.">
+  <meta name="twitter:image" content="https://estrellita-house.pages.dev/img/og-estrellita-house-cartagena.webp">
+
+  <!-- Zona de cobertura (no hay local abierto al público, por eso no van coordenadas exactas) -->
+  <meta name="geo.region" content="CO-BOL">
+  <meta name="geo.placename" content="Cartagena de Indias">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+  <!-- Tipografías de Google Fonts, carga NO bloqueante (preload + onload, con noscript) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..600&amp;family=Manrope:wght@400..700&amp;display=swap"></noscript>
+
+  <link rel="preload" as="image" href="img/heroe-sabanas-cortinas-estrellita-house.webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- JSON-LD del negocio: WebSite + tienda de artículos para el hogar + preguntas frecuentes.
+       ⚠ Teléfono y URL se repiten aquí: si cambian, actualizarlos también en este bloque. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://estrellita-house.pages.dev/#sitio",
+        "url": "https://estrellita-house.pages.dev/",
+        "name": "Estrellita House",
+        "inLanguage": "es-CO",
+        "publisher": { "@id": "https://estrellita-house.pages.dev/#tienda" }
+      },
+      {
+        "@type": "HomeGoodsStore",
+        "@id": "https://estrellita-house.pages.dev/#tienda",
+        "name": "Estrellita House",
+        "url": "https://estrellita-house.pages.dev/",
+        "description": "Tienda de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con domicilio en Cartagena.",
+        "logo": "https://estrellita-house.pages.dev/img/logo-estrellita-house.webp",
+        "image": "https://estrellita-house.pages.dev/img/og-estrellita-house-cartagena.webp",
+        "telephone": "+57 300 844 7167",
+        "priceRange": "$$",
+        "currenciesAccepted": "COP",
+        "paymentAccepted": "Pago en línea con Wompi, pago coordinado por WhatsApp",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Cartagena de Indias",
+          "addressRegion": "Bolívar",
+          "addressCountry": "CO"
+        },
+        "areaServed": { "@type": "City", "name": "Cartagena de Indias" },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+57 300 844 7167",
+          "contactType": "customer service",
+          "availableLanguage": "es"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Hacen domicilios?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Sí, hacemos domicilios en Cartagena. Despachamos desde Ciudadela La Paz." }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo puedo pagar?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Puedes pagar en línea con Wompi (tarjeta, PSE, Nequi, Botón Bancolombia y otros medios) o hacer tu pedido por WhatsApp y acordar el pago por chat." }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Es seguro pagar en línea?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Sí. El pago se hace en Wompi, la plataforma de pagos de Bancolombia. Estrellita House no ve ni guarda los datos de tu tarjeta." }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Puedo devolver un producto?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Sí. Tienes derecho de retracto durante los 5 días hábiles siguientes a la entrega, como establece la Ley 1480 de 2011. Las condiciones están en las políticas de compra." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <!-- JSON-LD de productos (ItemList → Product → offers → Offer). Lo regenera functions/index.js -->
+  <script type="application/ld+json" id="jsonld-productos">{"@context":"https://schema.org","@type":"ItemList","name":"Catálogo de Estrellita House","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-sabanas-pinos-estrellas","name":"Juego de sábanas Pinos y estrellas","description":"Azul noche con pinos verdes y estrellas doradas. Incluye sábana ajustable, sábana plana y funda.","image":"https://estrellita-house.pages.dev/img/productos/sabanas-pinos-y-estrellas-navidad.webp","category":"Sábanas","offers":[{"@type":"Offer","name":"Sencilla 100 × 190 cm","price":"64900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-pinos-estrellas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Semidoble 120 × 190 cm","price":"74900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-pinos-estrellas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Doble 140 × 190 cm","price":"84900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-pinos-estrellas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Queen 160 × 190 cm","price":"94900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-pinos-estrellas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":2,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-cortina-copos-nieve","name":"Cortina Copos de nieve","description":"Rojo navideño con copos blancos. Panel de 1,40 m de ancho por 2,20 m de alto, con argollas.","image":"https://estrellita-house.pages.dev/img/productos/cortina-copos-de-nieve-navidad.webp","category":"Cortinas","offers":[{"@type":"Offer","name":"1 panel 1,40 × 2,20 m","price":"54900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-cortina-copos-nieve","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Par de paneles 2,80 × 2,20 m","price":"99900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-cortina-copos-nieve","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":3,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-tapete-feliz-navidad","name":"Tapete de entrada Feliz Navidad","description":"Tapete tipo fibra natural con letras rojas y ramita de acebo para recibir visitas en diciembre.","image":"https://estrellita-house.pages.dev/img/productos/tapete-entrada-feliz-navidad.webp","category":"Tapetes","offers":[{"@type":"Offer","name":"40 × 60 cm","price":"32900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-tapete-feliz-navidad","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"60 × 90 cm","price":"49900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-tapete-feliz-navidad","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":4,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-mantel-cuadros-navidad","name":"Mantel Cuadros de Navidad","description":"Cuadros escoceses en rojo y verde con línea dorada, para la cena del 24.","image":"https://estrellita-house.pages.dev/img/productos/mantel-cuadros-de-navidad.webp","category":"Manteles","offers":[{"@type":"Offer","name":"Redondo 1,50 m","price":"59900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-mantel-cuadros-navidad","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Rectangular 1,50 × 2,20 m","price":"69900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-mantel-cuadros-navidad","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":5,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-cojines-tejido-nordico","name":"Fundas de cojín Tejido nórdico","description":"Par de fundas crema con estrellas nórdicas rojas. Para cojines de 45 × 45 cm.","image":"https://estrellita-house.pages.dev/img/productos/fundas-cojin-tejido-nordico.webp","category":"Cojines","offers":[{"@type":"Offer","name":"Par de fundas 45 × 45 cm","price":"36900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-cojines-tejido-nordico","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":6,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-sabanas-calabazas","name":"Juego de sábanas Calabazas","description":"Fondo carbón con calabazas naranja, murciélagos y lunas. Incluye sábana ajustable, sábana plana y funda.","image":"https://estrellita-house.pages.dev/img/productos/sabanas-calabazas-halloween.webp","category":"Sábanas","offers":[{"@type":"Offer","name":"Sencilla 100 × 190 cm","price":"59900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-calabazas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Semidoble 120 × 190 cm","price":"69900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-calabazas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Doble 140 × 190 cm","price":"79900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-calabazas","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":7,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-tapete-boo","name":"Tapete de entrada Boo!","description":"Negro con letras naranja y dos fantasmitas. Para la puerta en la noche de brujas.","image":"https://estrellita-house.pages.dev/img/productos/tapete-entrada-boo-halloween.webp","category":"Tapetes","offers":[{"@type":"Offer","name":"40 × 60 cm","price":"29900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-tapete-boo","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":8,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-sabanas-rayas-suaves","name":"Juego de sábanas Rayas suaves","description":"Blanco con rayas azul cielo. Incluye sábana ajustable, sábana plana y funda.","image":"https://estrellita-house.pages.dev/img/productos/sabanas-rayas-suaves.webp","category":"Sábanas","offers":[{"@type":"Offer","name":"Sencilla 100 × 190 cm","price":"59900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-rayas-suaves","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Semidoble 120 × 190 cm","price":"69900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-rayas-suaves","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Doble 140 × 190 cm","price":"79900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-rayas-suaves","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Queen 160 × 190 cm","price":"89900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-rayas-suaves","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":9,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-cortina-lino-arena","name":"Cortina blackout Lino arena","description":"Color arena con textura de lino que oscurece la habitación. Panel de 1,40 × 2,20 m.","image":"https://estrellita-house.pages.dev/img/productos/cortina-blackout-lino-arena.webp","category":"Cortinas","offers":[{"@type":"Offer","name":"1 panel 1,40 × 2,20 m","price":"64900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-cortina-lino-arena","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Par de paneles 2,80 × 2,20 m","price":"119900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-cortina-lino-arena","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":10,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-tapete-bano-algodon-nube","name":"Tapete de baño Algodón nube","description":"Azul nube, suave y acolchado, con borde blanco.","image":"https://estrellita-house.pages.dev/img/productos/tapete-bano-algodon-nube.webp","category":"Tapetes","offers":[{"@type":"Offer","name":"45 × 70 cm","price":"27900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-tapete-bano-algodon-nube","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}},{"@type":"ListItem","position":11,"item":{"@type":"Product","@id":"https://estrellita-house.pages.dev/#producto-p-sabanas-hojas-palma","name":"Juego de sábanas Hojas de palma","description":"Blanco con hojas de palma verdes. Incluye sábana ajustable, sábana plana y funda.","image":"https://estrellita-house.pages.dev/img/productos/sabanas-hojas-de-palma.webp","category":"Sábanas","offers":[{"@type":"Offer","name":"Sencilla 100 × 190 cm","price":"62900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-hojas-palma","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Semidoble 120 × 190 cm","price":"72900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-hojas-palma","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Doble 140 × 190 cm","price":"82900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-hojas-palma","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}},{"@type":"Offer","name":"Queen 160 × 190 cm","price":"92900","priceCurrency":"COP","availability":"https://schema.org/InStock","itemCondition":"https://schema.org/NewCondition","url":"https://estrellita-house.pages.dev/#producto-p-sabanas-hojas-palma","seller":{"@id":"https://estrellita-house.pages.dev/#tienda"}}]}}]}</script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- ===========================================================
+       AVISO SUPERIOR
+       Qué es: barra delgada con un mensaje corto.
+       Función: en Modo muestra avisa que el catálogo es de prueba; si no,
+                muestra el aviso que la dueña active en el administrador.
+       Depende de: contenido/tienda.json (lo pinta functions/index.js).
+       =========================================================== -->
+  <aside class="aviso" id="aviso-tienda" aria-label="Aviso de la tienda"><p>Catálogo de muestra: pronto subimos los productos y precios reales.</p></aside>
+
+  <!-- ===========================================================
+       CABECERA
+       Qué es: marca, menú de secciones y botón del carrito.
+       Función: navegación fija arriba; en móvil (≤900px) el menú se
+                abre con la hamburguesa.
+       Depende de: .cabecera/.menu en styles.css; menú y carrito en script.js
+       =========================================================== -->
+  <header class="cabecera" id="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a class="marca" href="/" aria-label="Estrellita House, ir al inicio">
+        <svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg>
+        <span class="marca__nombre">Estrellita <span class="marca__casa">House</span></span>
+      </a>
+
+      <nav class="menu" id="menu" aria-label="Secciones">
+        <ul class="menu__lista">
+          <li><a href="#coleccion">Colección</a></li>
+          <li><a href="#como-comprar">Cómo comprar</a></li>
+          <li><a href="#domicilios">Domicilios y pagos</a></li>
+          <li><a href="#preguntas">Preguntas</a></li>
+        </ul>
+      </nav>
+
+      <div class="cabecera__acciones">
+        <button type="button" class="boton-carrito" id="abrir-carrito" aria-controls="carrito" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5.5 8h13l-1.1 12.1a1 1 0 0 1-1 .9H7.6a1 1 0 0 1-1-.9L5.5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="boton-carrito__texto">Carrito</span>
+          <span class="boton-carrito__n" id="carrito-n" aria-hidden="true">0</span>
+          <span class="sr-only" id="carrito-n-texto">, vacío</span>
+        </button>
+        <button type="button" class="boton-menu" id="boton-menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir el menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <!-- ===========================================================
+         PORTADA
+         Qué es: titular + texto corto + botón a la colección, con la
+                 ilustración de la pila de sábanas frente a la ventana.
+         Función: decir en 3 segundos qué se vende, dónde y cómo se compra.
+         Depende de: .portada en styles.css. El título y el subtítulo se
+                     editan desde el administrador (tienda.json → portada).
+         La imagen es el LCP: va con fetchpriority="high", nunca lazy.
+         =========================================================== -->
+    <section class="portada" aria-labelledby="portada-titulo">
+      <div class="contenedor portada__grid">
+        <div class="portada__texto">
+          <h1 class="portada__titulo" id="portada-titulo">Estrena sábanas y cortinas para diciembre</h1>
+          <p class="portada__sub" id="portada-subtitulo">Diseños de Navidad, Halloween y para todo el año, con domicilio en Cartagena. Pide por WhatsApp o paga en línea.</p>
+          <div class="portada__acciones">
+            <a class="boton boton--principal" href="#coleccion">Ver la colección</a>
+            <a class="enlace-subrayado" href="#como-comprar">Cómo comprar</a>
+          </div>
+        </div>
+        <div class="portada__arte">
+          <img src="img/heroe-sabanas-cortinas-estrellita-house.webp" width="840" height="1200" alt="Pila de sábanas dobladas con estampados de Navidad frente a una ventana de noche con una estrella" fetchpriority="high" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================================================
+         COLECCIÓN (CATÁLOGO)
+         Qué es: pestañas por temporada + tarjetas de producto con medida,
+                 precio y botón "Agregar al carrito".
+         Función: es la sección que vende; aquí el visitante decide.
+         Depende de: contenido/catalogo.json y tienda.json (CMS). Las tarjetas
+                     las pinta functions/index.js en cada visita; lo que hay
+                     entre CATALOGO:INICIO y CATALOGO:FIN es una copia de
+                     respaldo — NO editar a mano, se cambia desde /admin.
+                     Filtros y carrito en script.js; estilos .pestana/.producto.
+         =========================================================== -->
+    <section class="coleccion" id="coleccion" aria-labelledby="coleccion-titulo">
+      <div class="contenedor">
+        <div class="coleccion__cabeza">
+          <h2 id="coleccion-titulo">Elige tu diseño</h2>
+          <p class="coleccion__intro">Escoge la medida, agrégalo al carrito y pide varios productos en un solo pedido.</p>
+        </div>
+
+        <div class="pestanas" id="catalogo-pestanas" role="tablist" aria-label="Colecciones"><!-- PESTANAS:INICIO -->
+<button type="button" class="pestana" role="tab" id="pestana-navidad" data-coleccion="navidad" aria-selected="true" aria-controls="catalogo-grid" tabindex="0">Navidad <span class="pestana__n">5</span></button>
+<button type="button" class="pestana" role="tab" id="pestana-halloween" data-coleccion="halloween" aria-selected="false" aria-controls="catalogo-grid" tabindex="-1">Halloween <span class="pestana__n">2</span></button>
+<button type="button" class="pestana" role="tab" id="pestana-todo-el-ano" data-coleccion="todo-el-ano" aria-selected="false" aria-controls="catalogo-grid" tabindex="-1">Todo el año <span class="pestana__n">4</span></button>
+<button type="button" class="pestana" role="tab" id="pestana-todas" data-coleccion="todas" aria-selected="false" aria-controls="catalogo-grid" tabindex="-1">Ver todo <span class="pestana__n">11</span></button>
+<!-- PESTANAS:FIN --></div>
+        <p class="pestanas__desc" id="coleccion-desc" aria-live="polite">Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre.</p>
+
+        <div class="catalogo" id="catalogo-grid" data-filtro="navidad" role="tabpanel" aria-labelledby="pestana-navidad"><!-- CATALOGO:INICIO -->
+      <article class="producto coincide" id="producto-p-sabanas-pinos-estrellas" data-id="p-sabanas-pinos-estrellas" data-coleccion="navidad">
+        <div class="producto__foto">
+          <img src="img/productos/sabanas-pinos-y-estrellas-navidad.webp" alt="Juego de sábanas azul noche con estampado de pinos verdes y estrellas doradas, doblado y con cinta" width="800" height="800" loading="lazy" decoding="async">
+          <span class="etiqueta-colgante">Nuevo</span>
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Juego de sábanas Pinos y estrellas</h3>
+          <p class="producto__desc">Azul noche con pinos verdes y estrellas doradas. Incluye sábana ajustable, sábana plana y funda.</p>
+          <form class="producto__compra" data-producto="p-sabanas-pinos-estrellas">
+            <p class="producto__precio" data-precio-visible>$64.900</p>
+            <label class="producto__medida-label" for="medida-p-sabanas-pinos-estrellas">Medida</label>
+            <select class="producto__medida" id="medida-p-sabanas-pinos-estrellas" name="variante">
+              <option value="0" data-precio="64900">Sencilla 100 × 190 cm</option>
+              <option value="1" data-precio="74900">Semidoble 120 × 190 cm</option>
+              <option value="2" data-precio="84900">Doble 140 × 190 cm</option>
+              <option value="3" data-precio="94900">Queen 160 × 190 cm</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto coincide" id="producto-p-cortina-copos-nieve" data-id="p-cortina-copos-nieve" data-coleccion="navidad">
+        <div class="producto__foto">
+          <img src="img/productos/cortina-copos-de-nieve-navidad.webp" alt="Cortina roja con estampado de copos de nieve blancos colgada de un tubo con argollas" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Cortina Copos de nieve</h3>
+          <p class="producto__desc">Rojo navideño con copos blancos. Panel de 1,40 m de ancho por 2,20 m de alto, con argollas.</p>
+          <form class="producto__compra" data-producto="p-cortina-copos-nieve">
+            <p class="producto__precio" data-precio-visible>$54.900</p>
+            <label class="producto__medida-label" for="medida-p-cortina-copos-nieve">Medida</label>
+            <select class="producto__medida" id="medida-p-cortina-copos-nieve" name="variante">
+              <option value="0" data-precio="54900">1 panel 1,40 × 2,20 m</option>
+              <option value="1" data-precio="99900">Par de paneles 2,80 × 2,20 m</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto coincide" id="producto-p-tapete-feliz-navidad" data-id="p-tapete-feliz-navidad" data-coleccion="navidad">
+        <div class="producto__foto">
+          <img src="img/productos/tapete-entrada-feliz-navidad.webp" alt="Tapete de entrada color fibra natural con el texto Feliz Navidad en rojo y una ramita de acebo" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Tapete de entrada Feliz Navidad</h3>
+          <p class="producto__desc">Tapete tipo fibra natural con letras rojas y ramita de acebo para recibir visitas en diciembre.</p>
+          <form class="producto__compra" data-producto="p-tapete-feliz-navidad">
+            <p class="producto__precio" data-precio-visible>$32.900</p>
+            <label class="producto__medida-label" for="medida-p-tapete-feliz-navidad">Medida</label>
+            <select class="producto__medida" id="medida-p-tapete-feliz-navidad" name="variante">
+              <option value="0" data-precio="32900">40 × 60 cm</option>
+              <option value="1" data-precio="49900">60 × 90 cm</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto coincide" id="producto-p-mantel-cuadros-navidad" data-id="p-mantel-cuadros-navidad" data-coleccion="navidad">
+        <div class="producto__foto">
+          <img src="img/productos/mantel-cuadros-de-navidad.webp" alt="Mantel de cuadros escoceses rojo y verde sobre una mesa redonda" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Mantel Cuadros de Navidad</h3>
+          <p class="producto__desc">Cuadros escoceses en rojo y verde con línea dorada, para la cena del 24.</p>
+          <form class="producto__compra" data-producto="p-mantel-cuadros-navidad">
+            <p class="producto__precio" data-precio-visible>$59.900</p>
+            <label class="producto__medida-label" for="medida-p-mantel-cuadros-navidad">Medida</label>
+            <select class="producto__medida" id="medida-p-mantel-cuadros-navidad" name="variante">
+              <option value="0" data-precio="59900">Redondo 1,50 m</option>
+              <option value="1" data-precio="69900">Rectangular 1,50 × 2,20 m</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto coincide" id="producto-p-cojines-tejido-nordico" data-id="p-cojines-tejido-nordico" data-coleccion="navidad">
+        <div class="producto__foto">
+          <img src="img/productos/fundas-cojin-tejido-nordico.webp" alt="Dos fundas de cojín color crema con estrellas nórdicas rojas y franjas verdes" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Fundas de cojín Tejido nórdico</h3>
+          <p class="producto__desc">Par de fundas crema con estrellas nórdicas rojas. Para cojines de 45 × 45 cm.</p>
+          <form class="producto__compra" data-producto="p-cojines-tejido-nordico">
+            <p class="producto__precio" data-precio-visible>$36.900</p>
+            <span class="producto__medida-label">Medida</span>
+            <p class="producto__medida producto__medida--fija" title="Par de fundas 45 × 45 cm">Par de fundas 45 × 45 cm</p>
+            <input type="hidden" name="variante" value="0">
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-sabanas-calabazas" data-id="p-sabanas-calabazas" data-coleccion="halloween">
+        <div class="producto__foto">
+          <img src="img/productos/sabanas-calabazas-halloween.webp" alt="Juego de sábanas color carbón con estampado de calabazas naranja, murciélagos y lunas, doblado" width="800" height="800" loading="lazy" decoding="async">
+          <span class="etiqueta-colgante">Últimos días</span>
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Juego de sábanas Calabazas</h3>
+          <p class="producto__desc">Fondo carbón con calabazas naranja, murciélagos y lunas. Incluye sábana ajustable, sábana plana y funda.</p>
+          <form class="producto__compra" data-producto="p-sabanas-calabazas">
+            <p class="producto__precio" data-precio-visible>$59.900</p>
+            <label class="producto__medida-label" for="medida-p-sabanas-calabazas">Medida</label>
+            <select class="producto__medida" id="medida-p-sabanas-calabazas" name="variante">
+              <option value="0" data-precio="59900">Sencilla 100 × 190 cm</option>
+              <option value="1" data-precio="69900">Semidoble 120 × 190 cm</option>
+              <option value="2" data-precio="79900">Doble 140 × 190 cm</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-tapete-boo" data-id="p-tapete-boo" data-coleccion="halloween">
+        <div class="producto__foto">
+          <img src="img/productos/tapete-entrada-boo-halloween.webp" alt="Tapete de entrada negro con el texto Boo en naranja y dos fantasmas blancos" width="800" height="800" loading="lazy" decoding="async">
+          <span class="etiqueta-colgante">Últimos días</span>
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Tapete de entrada Boo!</h3>
+          <p class="producto__desc">Negro con letras naranja y dos fantasmitas. Para la puerta en la noche de brujas.</p>
+          <form class="producto__compra" data-producto="p-tapete-boo">
+            <p class="producto__precio" data-precio-visible>$29.900</p>
+            <span class="producto__medida-label">Medida</span>
+            <p class="producto__medida producto__medida--fija" title="40 × 60 cm">40 × 60 cm</p>
+            <input type="hidden" name="variante" value="0">
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-sabanas-rayas-suaves" data-id="p-sabanas-rayas-suaves" data-coleccion="todo-el-ano">
+        <div class="producto__foto">
+          <img src="img/productos/sabanas-rayas-suaves.webp" alt="Juego de sábanas blanco con rayas verticales azul claro, doblado y con cinta" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Juego de sábanas Rayas suaves</h3>
+          <p class="producto__desc">Blanco con rayas azul cielo. Incluye sábana ajustable, sábana plana y funda.</p>
+          <form class="producto__compra" data-producto="p-sabanas-rayas-suaves">
+            <p class="producto__precio" data-precio-visible>$59.900</p>
+            <label class="producto__medida-label" for="medida-p-sabanas-rayas-suaves">Medida</label>
+            <select class="producto__medida" id="medida-p-sabanas-rayas-suaves" name="variante">
+              <option value="0" data-precio="59900">Sencilla 100 × 190 cm</option>
+              <option value="1" data-precio="69900">Semidoble 120 × 190 cm</option>
+              <option value="2" data-precio="79900">Doble 140 × 190 cm</option>
+              <option value="3" data-precio="89900">Queen 160 × 190 cm</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-cortina-lino-arena" data-id="p-cortina-lino-arena" data-coleccion="todo-el-ano">
+        <div class="producto__foto">
+          <img src="img/productos/cortina-blackout-lino-arena.webp" alt="Cortina color arena con textura de lino colgada de un tubo con argollas" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Cortina blackout Lino arena</h3>
+          <p class="producto__desc">Color arena con textura de lino que oscurece la habitación. Panel de 1,40 × 2,20 m.</p>
+          <form class="producto__compra" data-producto="p-cortina-lino-arena">
+            <p class="producto__precio" data-precio-visible>$64.900</p>
+            <label class="producto__medida-label" for="medida-p-cortina-lino-arena">Medida</label>
+            <select class="producto__medida" id="medida-p-cortina-lino-arena" name="variante">
+              <option value="0" data-precio="64900">1 panel 1,40 × 2,20 m</option>
+              <option value="1" data-precio="119900">Par de paneles 2,80 × 2,20 m</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-tapete-bano-algodon-nube" data-id="p-tapete-bano-algodon-nube" data-coleccion="todo-el-ano">
+        <div class="producto__foto">
+          <img src="img/productos/tapete-bano-algodon-nube.webp" alt="Tapete de baño azul claro acolchado con borde blanco" width="800" height="800" loading="lazy" decoding="async">
+          
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Tapete de baño Algodón nube</h3>
+          <p class="producto__desc">Azul nube, suave y acolchado, con borde blanco.</p>
+          <form class="producto__compra" data-producto="p-tapete-bano-algodon-nube">
+            <p class="producto__precio" data-precio-visible>$27.900</p>
+            <span class="producto__medida-label">Medida</span>
+            <p class="producto__medida producto__medida--fija" title="45 × 70 cm">45 × 70 cm</p>
+            <input type="hidden" name="variante" value="0">
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+
+      <article class="producto" id="producto-p-sabanas-hojas-palma" data-id="p-sabanas-hojas-palma" data-coleccion="todo-el-ano">
+        <div class="producto__foto">
+          <img src="img/productos/sabanas-hojas-de-palma.webp" alt="Juego de sábanas blanco con estampado de hojas de palma verdes, doblado y con cinta" width="800" height="800" loading="lazy" decoding="async">
+          <span class="etiqueta-colgante">Nuevo</span>
+        </div>
+        <div class="producto__info">
+          <h3 class="producto__nombre">Juego de sábanas Hojas de palma</h3>
+          <p class="producto__desc">Blanco con hojas de palma verdes. Incluye sábana ajustable, sábana plana y funda.</p>
+          <form class="producto__compra" data-producto="p-sabanas-hojas-palma">
+            <p class="producto__precio" data-precio-visible>$62.900</p>
+            <label class="producto__medida-label" for="medida-p-sabanas-hojas-palma">Medida</label>
+            <select class="producto__medida" id="medida-p-sabanas-hojas-palma" name="variante">
+              <option value="0" data-precio="62900">Sencilla 100 × 190 cm</option>
+              <option value="1" data-precio="72900">Semidoble 120 × 190 cm</option>
+              <option value="2" data-precio="82900">Doble 140 × 190 cm</option>
+              <option value="3" data-precio="92900">Queen 160 × 190 cm</option>
+            </select>
+            <button type="submit" class="boton boton--agregar">Agregar <span class="boton__extra">al carrito</span></button>
+          </form>
+        </div>
+      </article>
+        <!-- CATALOGO:FIN --></div>
+
+        <!-- ▼▼▼ ZONA EDITABLE · TEXTOS ▼▼▼
+             QUÉ CAMBIAR: la nota de precios cuando se confirme lo del IVA.
+             CÓMO: cambia solo el texto que está entre > y <.
+             EJEMPLO: IVA: {POR CONFIRMAR}  →  Precios con IVA incluido.
+             LÍMITE: máx. 90 caracteres.
+             NO TOCAR: class, p, ni nada fuera de esta zona.
+        -->
+        <p class="catalogo__nota">Precios en pesos colombianos (COP). IVA: {POR CONFIRMAR}</p>
+        <!-- ▲▲▲ FIN ZONA EDITABLE · TEXTOS ▲▲▲ -->
+      </div>
+    </section>
+
+    <!-- ===========================================================
+         CÓMO COMPRAR
+         Qué es: los 4 pasos de compra, en orden (por eso van numerados).
+         Función: quitar dudas antes de que el visitante escriba.
+         Depende de: .pasos en styles.css.
+         =========================================================== -->
+    <section class="pasos" id="como-comprar" aria-labelledby="pasos-titulo">
+      <div class="contenedor">
+        <h2 id="pasos-titulo">Cómo comprar</h2>
+        <ol class="pasos__lista">
+          <li class="paso">
+            <span class="paso__n" aria-hidden="true">1</span>
+            <h3 class="paso__titulo">Elige tu diseño</h3>
+            <p>Mira la colección y escoge la medida que necesitas.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__n" aria-hidden="true">2</span>
+            <h3 class="paso__titulo">Agrégalo al carrito</h3>
+            <p>Suma varios productos y revisa el total antes de pedir.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__n" aria-hidden="true">3</span>
+            <h3 class="paso__titulo">Pide por WhatsApp o paga en línea</h3>
+            <p>Tú escoges: envías el pedido por chat o pagas con Wompi.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__n" aria-hidden="true">4</span>
+            <h3 class="paso__titulo">Recíbelo en casa</h3>
+            <p>Llevamos tu pedido a tu barrio en Cartagena.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===========================================================
+         DOMICILIOS Y PAGOS
+         Qué es: cobertura de entregas y formas de pago.
+         Función: reemplaza al mapa, porque el negocio no tiene local
+                  abierto al público (se despacha a domicilio).
+         Depende de: .domicilios en styles.css; el párrafo #domicilio-texto
+                     sale de tienda.json → domicilio (CMS).
+         =========================================================== -->
+    <section class="domicilios" id="domicilios" aria-labelledby="domicilios-titulo">
+      <div class="contenedor domicilios__grid">
+        <div class="domicilios__entrega">
+          <h2 id="domicilios-titulo">Domicilios en Cartagena</h2>
+          <p>Despachamos desde Ciudadela La Paz y llevamos tu pedido hasta la puerta de tu casa.</p>
+          <p id="domicilio-texto">Te confirmamos el valor del domicilio por WhatsApp según tu barrio.</p>
+        </div>
+        <div class="domicilios__pagos">
+          <h3 class="domicilios__subtitulo">Formas de pago</h3>
+          <ul class="lista-pagos">
+            <li><strong>En línea con Wompi.</strong> Tarjeta, PSE, Nequi, Botón Bancolombia y otros medios.</li>
+            <li><strong>Por WhatsApp.</strong> Envías tu pedido por chat y acuerdas el pago ahí mismo.</li>
+          </ul>
+          <p class="domicilios__nota">Wompi es la plataforma de pagos de Bancolombia. El pago se hace en su página: nosotros no vemos ni guardamos los datos de tu tarjeta.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================================================
+         PREGUNTAS FRECUENTES
+         Qué es: acordeón con dudas comunes (details/summary, sin JS).
+         Función: resolver dudas; las mismas preguntas van en el JSON-LD
+                  FAQPage del <head>. Si cambias una, cámbiala en ambos.
+         Depende de: .pregunta en styles.css.
+         =========================================================== -->
+    <section class="preguntas" id="preguntas" aria-labelledby="preguntas-titulo">
+      <div class="contenedor contenedor--estrecho">
+        <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
+        <details class="pregunta">
+          <summary>¿Hacen domicilios?</summary>
+          <p>Sí, hacemos domicilios en Cartagena. Despachamos desde Ciudadela La Paz.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Cómo puedo pagar?</summary>
+          <p>Puedes pagar en línea con Wompi (tarjeta, PSE, Nequi, Botón Bancolombia y otros medios) o hacer tu pedido por WhatsApp y acordar el pago por chat.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Es seguro pagar en línea?</summary>
+          <p>Sí. El pago se hace en Wompi, la plataforma de pagos de Bancolombia. Estrellita House no ve ni guarda los datos de tu tarjeta.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Puedo devolver un producto?</summary>
+          <p>Sí. Tienes derecho de retracto durante los 5 días hábiles siguientes a la entrega, como establece la Ley 1480 de 2011. Revisa las condiciones en las <a href="politicas-de-compra.html">políticas de compra</a>.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===========================================================
+       PIE DE PÁGINA
+       Qué es: marca, contacto, enlaces legales, copyright y crédito.
+       Función: cierre de la página y acceso a las páginas legales.
+       Depende de: .pie y .footer-dev en styles.css; año en script.js.
+       =========================================================== -->
+  <footer class="pie">
+    <div class="contenedor pie__grid">
+      <div class="pie__marca">
+        <p class="pie__nombre">
+          <svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg>
+          Estrellita House
+        </p>
+        <p>Sábanas, cortinas y tapetes con diseños de temporada. Domicilios en Cartagena.</p>
+      </div>
+
+      <!-- ▼▼▼ ZONA EDITABLE · CONTACTO ▼▼▼
+           QUÉ CAMBIAR: el número de WhatsApp/teléfono y la ciudad.
+           CÓMO: cambia el texto entre > y < y el número del href tel:.
+           EJEMPLO: +57 300 844 7167  →  +57 300 000 0000
+           LÍMITE: el teléfono siempre con indicativo (+57).
+           ⚠ SE REPITE EN: href tel: de abajo, botón flotante de WhatsApp (wa.me),
+             js/script.js (CONFIG.whatsapp), JSON-LD "telephone" del <head>,
+             404.html y páginas legales. SI CAMBIA, HAY QUE CAMBIARLO EN TODOS.
+           NO TOCAR: nada fuera de esta zona.
+      -->
+      <div class="pie__columna">
+        <h2 class="pie__titulo">Contacto</h2>
+        <ul class="pie__lista">
+          <li>WhatsApp: <a href="tel:+573008447167" data-medir="clic_telefono">+57&nbsp;300&nbsp;844&nbsp;7167</a></li>
+          <li>Cartagena de Indias, Bolívar</li>
+        </ul>
+      </div>
+      <!-- ▲▲▲ FIN ZONA EDITABLE · CONTACTO ▲▲▲ -->
+
+      <div class="pie__columna">
+        <h2 class="pie__titulo">Legal</h2>
+        <ul class="pie__lista">
+          <li><a href="politicas-de-compra.html">Compras, envíos y devoluciones</a></li>
+          <li><a href="politicas-de-compra.html#pqr">PQR, retracto y reversión del pago</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+          <li><a href="cookies.html">Política de cookies</a></li>
+          <li><a href="terminos.html">Términos y condiciones</a></li>
+          <li><button type="button" class="enlace-boton" data-abrir-cookies>Configurar cookies</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="contenedor pie__base">
+      <p class="pie__copy">© <span data-anio>2026</span> Estrellita House. Todos los derechos reservados.</p>
+      <p class="footer-dev">
+        <span class="footer-dev-txt">Diseño y desarrollo:</span>
+        <span class="footer-dev-jx">JX</span>
+        <span class="footer-dev-co">Company</span>
+      </p>
+    </div>
+
+    <!-- ===========================================================
+         BOTÓN FLOTANTE DE WHATSAPP (el único botón de WhatsApp de la página)
+         Qué es: acceso directo al chat con mensaje ya escrito.
+         Depende de: .wa-flotante en styles.css; se oculta con el carrito abierto.
+         ⚠ El número se repite: ver la ZONA EDITABLE · CONTACTO del pie.
+         =========================================================== -->
+    <a class="wa-flotante" href="https://wa.me/573008447167?text=Hola%20Estrellita%20House%2C%20vi%20la%20p%C3%A1gina%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" data-medir="clic_whatsapp">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+  </footer>
+
+
+
+  <!-- ===========================================================
+       CARRITO (panel lateral / pantalla completa en móvil)
+       Qué es: productos agregados, total, datos de entrega y los dos
+               caminos para comprar: pagar en línea (Wompi) o pedir por WhatsApp.
+       Función: cerrar la venta. El botón "Pedir por WhatsApp" de aquí es parte
+                del pedido (lleva el detalle armado), no un botón de contacto más.
+       Depende de: script.js (módulos Carrito y Pedido); /api/wompi/firma
+                   (functions) para el pago en línea; .carrito en styles.css.
+       =========================================================== -->
+  <div class="carrito-fondo" id="carrito-fondo" hidden></div>
+  <div class="carrito" id="carrito" role="dialog" aria-modal="true" aria-labelledby="carrito-titulo" hidden>
+    <div class="carrito__cabeza">
+      <h2 class="carrito__titulo" id="carrito-titulo">Tu carrito</h2>
+      <button type="button" class="boton-cerrar" id="cerrar-carrito" aria-label="Cerrar el carrito">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="carrito__cuerpo">
+      <div class="carrito__vacio" id="carrito-vacio">
+        <p>Tu carrito está vacío.</p>
+        <a class="boton boton--secundario" href="#coleccion" data-cerrar-carrito>Ver la colección</a>
+      </div>
+
+      <ul class="carrito__lista" id="carrito-lista"></ul>
+
+      <div class="carrito__resumen" id="carrito-resumen" hidden>
+        <div class="resumen__fila"><span>Subtotal</span><strong id="carrito-subtotal">$0</strong></div>
+        <div class="resumen__fila"><span>Domicilio</span><span id="carrito-domicilio">Se confirma por WhatsApp</span></div>
+        <div class="resumen__fila resumen__fila--total"><span>Total</span><strong id="carrito-total">$0</strong></div>
+      </div>
+
+      <form class="pedido" id="form-pedido" novalidate hidden>
+        <fieldset class="pedido__datos">
+          <legend>Datos de entrega</legend>
+          <div class="campo">
+            <label for="pedido-nombre">Nombre y apellido</label>
+            <input id="pedido-nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required aria-describedby="error-nombre">
+            <p class="campo__error" id="error-nombre"></p>
+          </div>
+          <div class="campo">
+            <label for="pedido-celular">Celular</label>
+            <input id="pedido-celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="300 123 4567" required aria-describedby="error-celular">
+            <p class="campo__error" id="error-celular"></p>
+          </div>
+          <div class="campo">
+            <label for="pedido-barrio">Barrio</label>
+            <input id="pedido-barrio" name="barrio" type="text" autocomplete="address-level3" maxlength="60" required aria-describedby="error-barrio">
+            <p class="campo__error" id="error-barrio"></p>
+          </div>
+          <div class="campo">
+            <label for="pedido-direccion">Dirección</label>
+            <input id="pedido-direccion" name="direccion" type="text" autocomplete="address-line1" maxlength="120" required aria-describedby="error-direccion">
+            <p class="campo__error" id="error-direccion"></p>
+          </div>
+          <div class="campo">
+            <label for="pedido-indicaciones">Indicaciones para el domicilio <span class="campo__opcional">(opcional)</span></label>
+            <input id="pedido-indicaciones" name="indicaciones" type="text" maxlength="140" placeholder="Casa, apartamento, punto de referencia">
+          </div>
+          <div class="campo">
+            <label for="pedido-correo">Correo <span class="campo__opcional">(opcional, para el comprobante de pago)</span></label>
+            <input id="pedido-correo" name="correo" type="email" autocomplete="email" maxlength="100" aria-describedby="error-correo">
+            <p class="campo__error" id="error-correo"></p>
+          </div>
+        </fieldset>
+
+        <label class="casilla">
+          <input type="checkbox" id="pedido-autorizo" name="autorizo" required aria-describedby="error-autorizo">
+          <span>Autorizo el tratamiento de mis datos para gestionar mi pedido según la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a> y acepto las <a href="politicas-de-compra.html" target="_blank" rel="noopener">políticas de compra</a>.</span>
+        </label>
+        <p class="campo__error" id="error-autorizo"></p>
+
+        <div class="pedido__botones">
+          <button type="submit" class="boton boton--principal boton--ancho" data-metodo="wompi" id="boton-wompi">Pagar en línea</button>
+          <button type="submit" class="boton boton--whatsapp boton--ancho" data-metodo="whatsapp">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Pedir por WhatsApp
+          </button>
+        </div>
+        <p class="pedido__ayuda" id="pedido-ayuda">Pagar en línea te lleva a Wompi: tarjeta, PSE, Nequi, Botón Bancolombia y más. Pedir por WhatsApp abre el chat con tu pedido escrito.</p>
+        <p class="pedido__estado" id="pedido-estado" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===========================================================
+       RESULTADO DEL PAGO EN LÍNEA
+       Qué es: ventana que aparece al volver de Wompi (?id=… en la URL).
+       Función: mostrar si el pago quedó aprobado, pendiente o rechazado y
+                ofrecer el siguiente paso (coordinar la entrega por WhatsApp).
+       Depende de: /api/wompi/transaccion (functions) y script.js (RetornoPago).
+       =========================================================== -->
+  <div class="modal-fondo" id="pago-fondo" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pago-titulo" aria-describedby="pago-texto">
+      <div class="modal__icono" id="pago-icono" aria-hidden="true"></div>
+      <h2 class="modal__titulo" id="pago-titulo">Consultando tu pago…</h2>
+      <p class="modal__texto" id="pago-texto">Un momento, estamos revisando el estado de tu pago con Wompi.</p>
+      <div class="modal__acciones" id="pago-acciones"></div>
+    </div>
+  </div>
+
+  <!-- Mensaje corto de confirmación ("Agregado al carrito") -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- ===========================================================
+       BANNER DE COOKIES (Ley 1581 de 2012 y criterio de la SIC)
+       Qué es: aviso con Aceptar y Rechazar del mismo tamaño.
+       Función: nada de Google Analytics ni almacenamiento del carrito
+                hasta que la persona acepte. La decisión se puede cambiar
+                desde "Configurar cookies" en el pie.
+       Depende de: script.js (módulo Consentimiento) y .cookies en styles.css
+       =========================================================== -->
+  <div class="cookies" id="cookies" role="dialog" aria-modal="false" aria-labelledby="cookies-titulo" aria-describedby="cookies-texto" hidden>
+    <p class="cookies__titulo" id="cookies-titulo">Tu privacidad</p>
+    <p class="cookies__texto" id="cookies-texto">Usamos cookies de Google Analytics para saber cuántas personas visitan la página y el almacenamiento de tu navegador para recordar tu carrito. Solo se activan si aceptas. Detalles en la <a href="cookies.html">política de cookies</a>.</p>
+    <div class="cookies__botones">
+      <button type="button" class="boton boton--cookies" data-consentimiento="rechazado">Rechazar</button>
+      <button type="button" class="boton boton--cookies" data-consentimiento="aceptado">Aceptar</button>
+    </div>
+  </div>
+
+  <!-- Datos del catálogo para el carrito (los regenera functions/index.js) -->
+  <script type="application/json" id="catalogo-datos">{"colecciones":[{"id":"navidad","nombre":"Navidad","descripcion":"Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre."},{"id":"halloween","nombre":"Halloween","descripcion":"Calabazas y fantasmas para la noche de brujas. Últimos días."},{"id":"todo-el-ano","nombre":"Todo el año","descripcion":"Básicos suaves para cualquier temporada."}],"domicilio":{"modo":"acordar","valor":0,"texto":"Te confirmamos el valor del domicilio por WhatsApp según tu barrio."},"pagoEnLinea":true,"productos":[{"id":"p-sabanas-pinos-estrellas","nombre":"Juego de sábanas Pinos y estrellas","coleccion":"navidad","imagen":"img/productos/sabanas-pinos-y-estrellas-navidad.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":64900},{"nombre":"Semidoble 120 × 190 cm","precio":74900},{"nombre":"Doble 140 × 190 cm","precio":84900},{"nombre":"Queen 160 × 190 cm","precio":94900}]},{"id":"p-cortina-copos-nieve","nombre":"Cortina Copos de nieve","coleccion":"navidad","imagen":"img/productos/cortina-copos-de-nieve-navidad.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":54900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":99900}]},{"id":"p-tapete-feliz-navidad","nombre":"Tapete de entrada Feliz Navidad","coleccion":"navidad","imagen":"img/productos/tapete-entrada-feliz-navidad.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":32900},{"nombre":"60 × 90 cm","precio":49900}]},{"id":"p-mantel-cuadros-navidad","nombre":"Mantel Cuadros de Navidad","coleccion":"navidad","imagen":"img/productos/mantel-cuadros-de-navidad.webp","agotado":false,"variantes":[{"nombre":"Redondo 1,50 m","precio":59900},{"nombre":"Rectangular 1,50 × 2,20 m","precio":69900}]},{"id":"p-cojines-tejido-nordico","nombre":"Fundas de cojín Tejido nórdico","coleccion":"navidad","imagen":"img/productos/fundas-cojin-tejido-nordico.webp","agotado":false,"variantes":[{"nombre":"Par de fundas 45 × 45 cm","precio":36900}]},{"id":"p-sabanas-calabazas","nombre":"Juego de sábanas Calabazas","coleccion":"halloween","imagen":"img/productos/sabanas-calabazas-halloween.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900}]},{"id":"p-tapete-boo","nombre":"Tapete de entrada Boo!","coleccion":"halloween","imagen":"img/productos/tapete-entrada-boo-halloween.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":29900}]},{"id":"p-sabanas-rayas-suaves","nombre":"Juego de sábanas Rayas suaves","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-rayas-suaves.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900},{"nombre":"Queen 160 × 190 cm","precio":89900}]},{"id":"p-cortina-lino-arena","nombre":"Cortina blackout Lino arena","coleccion":"todo-el-ano","imagen":"img/productos/cortina-blackout-lino-arena.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":64900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":119900}]},{"id":"p-tapete-bano-algodon-nube","nombre":"Tapete de baño Algodón nube","coleccion":"todo-el-ano","imagen":"img/productos/tapete-bano-algodon-nube.webp","agotado":false,"variantes":[{"nombre":"45 × 70 cm","precio":27900}]},{"id":"p-sabanas-hojas-palma","nombre":"Juego de sábanas Hojas de palma","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-hojas-de-palma.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":62900},{"nombre":"Semidoble 120 × 190 cm","precio":72900},{"nombre":"Doble 140 × 190 cm","precio":82900},{"nombre":"Queen 160 × 190 cm","precio":92900}]}]}</script>
+  <script src="js/script.js" defer></script>
+</body>
+</html>

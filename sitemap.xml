@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Estrellita House — sitemap.xml
+     Solo la página principal: las legales y la 404 llevan noindex.
+     ⚠ Si cambia el dominio, actualizar <loc>. Actualizar <lastmod> en cada entrega. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://estrellita-house.pages.dev/</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

@@ -1,0 +1,42 @@
+# Estrellita House — robots.txt
+# Permite a buscadores y bots de IA leer la tienda, pero no el administrador
+# (/admin/) ni los endpoints de pago (/api/). Apunta al sitemap.
+# ⚠ Si cambia el dominio, actualizar la línea Sitemap.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Bots de IA — permitidos explícitamente
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://estrellita-house.pages.dev/sitemap.xml

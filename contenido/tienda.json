@@ -1,0 +1,38 @@
+{
+  "modo_muestra": true,
+  "aviso": {
+    "mostrar": false,
+    "texto": "Domicilios en Cartagena. Pide por WhatsApp o paga en línea."
+  },
+  "portada": {
+    "titulo": "Estrena sábanas y cortinas para diciembre",
+    "subtitulo": "Diseños de Navidad, Halloween y para todo el año, con domicilio en Cartagena. Pide por WhatsApp o paga en línea."
+  },
+  "colecciones": [
+    {
+      "id": "navidad",
+      "nombre": "Navidad",
+      "descripcion": "Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre.",
+      "mostrar": true
+    },
+    {
+      "id": "halloween",
+      "nombre": "Halloween",
+      "descripcion": "Calabazas y fantasmas para la noche de brujas. Últimos días.",
+      "mostrar": true
+    },
+    {
+      "id": "todo-el-ano",
+      "nombre": "Todo el año",
+      "descripcion": "Básicos suaves para cualquier temporada.",
+      "mostrar": true
+    }
+  ],
+  "coleccion_inicial": "navidad",
+  "domicilio": {
+    "modo": "acordar",
+    "valor": 0,
+    "texto": "Te confirmamos el valor del domicilio por WhatsApp según tu barrio."
+  },
+  "pago_en_linea": true
+}
