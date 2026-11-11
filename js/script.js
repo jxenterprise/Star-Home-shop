@@ -49,11 +49,16 @@
   const enlaceWhatsApp = (texto) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
 
   /** Abre WhatsApp en otra pestaña (en el celular abre la app). Si el
-   *  navegador bloquea la ventana, navega directo. */
+   *  navegador bloquea la ventana, navega directo.
+   *  Ojo: NO pasar 'noopener' a window.open: con esa opción el navegador
+   *  siempre devuelve null y el código creía que estaba bloqueada, así que
+   *  abría WhatsApp dos veces y la pestaña de la tienda se iba a WhatsApp
+   *  (corregido el 11 nov 2026). Se corta el vínculo con opener a mano. */
   function abrirWhatsApp(texto) {
     const url = enlaceWhatsApp(texto);
-    const ventana = window.open(url, '_blank', 'noopener');
-    if (!ventana) window.location.href = url;
+    const ventana = window.open(url, '_blank');
+    if (ventana) { try { ventana.opener = null; } catch (e) { /* nada */ } }
+    else window.location.href = url;
     return url;
   }
 
@@ -88,14 +93,18 @@
       const alto = banner && !banner.hidden ? banner.offsetHeight + 16 : 0;
       document.documentElement.style.setProperty('--alto-cookies', `${alto}px`);
     }
+    // body.cookies-abierto: en pantallas chicas el CSS esconde el botón flotante
+    // de WhatsApp mientras el banner está abierto (si no, queda encima del titular)
     function mostrar() {
       if (!banner) return;
       banner.hidden = false;
+      document.body.classList.add('cookies-abierto');
       requestAnimationFrame(ajustarAltura);
     }
     function ocultar() {
       if (!banner) return;
       banner.hidden = true;
+      document.body.classList.remove('cookies-abierto');
       ajustarAltura();
     }
     function decidir(valor) {
@@ -446,6 +455,9 @@
         : `${formatoCOP(sub)} <span class="resumen__extra">+ domicilio</span>`;
       const botonWompi = $('#boton-wompi');
       if (botonWompi) botonWompi.hidden = !Catalogo.datos.pagoEnLinea;
+      // Sin pago en línea (pausado o sin llaves de Wompi) la ayuda habla solo de WhatsApp
+      const ayuda = $('#pedido-ayuda');
+      if (ayuda && !Catalogo.datos.pagoEnLinea) ayuda.textContent = 'Pedir por WhatsApp abre el chat con tu pedido escrito. Por ahí acordamos el pago y el domicilio.';
     }
 
     function abrir() {

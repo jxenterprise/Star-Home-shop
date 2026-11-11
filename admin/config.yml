@@ -20,7 +20,7 @@
 
 backend:
   name: github
-  repo: USUARIO-GITHUB/estrellita-house          # {POR CONFIRMAR} usuario/repositorio real en GitHub
+  repo: jxenterprise/Star-Home-shop               # repositorio real conectado a Cloudflare Pages
   branch: main
   # URL del autenticador de Sveltia en Cloudflare Workers (ver README, "Administrador").
   # Mientras no exista, se puede entrar con un token de GitHub ("Sign in with token").
@@ -34,7 +34,7 @@ backend:
 
 app_title: Estrellita House · Administrador
 logo_url: /favicon.svg
-site_url: https://estrellita-house.pages.dev     # {POR CONFIRMAR} dominio final
+site_url: https://star-home-shop.pages.dev     # {POR CONFIRMAR} dominio final
 show_preview_links: false
 
 # Fotos de productos: se guardan en img/productos y se convierten SOLAS a WebP

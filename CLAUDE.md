@@ -2,13 +2,30 @@
 
 Contexto para cualquier chat futuro (Claude u otra IA) que vaya a editar este proyecto. Léelo completo antes de tocar código.
 
+## 📌 ESTADO ACTUAL (léelo primero — se actualiza en cada sesión)
+_Última actualización: 11 nov 2026._
+
+- **Versión en el código: v1.2** (se ve en la portada sobre el titular). Las etiquetas de git `v1.0`/`v1.2` NO se pudieron subir desde la sesión en la nube (bloqueo 403): las crea JX en GitHub → Releases (ver "VERSIONES"). Historial completo en `CHANGELOG.md`.
+- **Sitio en vivo:** `https://star-home-shop.pages.dev` (Cloudflare Pages, producción = rama `main`). Cada rama/PR tiene vista previa en `https://<rama>.star-home-shop.pages.dev` (el bot de Cloudflare la comenta en la PR).
+- **Repositorio:** `jxenterprise/Star-Home-shop`. Se trabaja en ramas `claude/…` + PR en borrador hacia `main`; JX fusiona.
+- **Sigue en Modo muestra** (catálogo simulado, `noindex`).
+- **Pago en línea:** apagado solo porque NO hay llaves de Wompi en Cloudflare (el botón aparece al cargarlas).
+- **Lo último que se hizo (v1.2):** revisión en iPhone/Android, dominio corregido, bug de WhatsApp doble, ajustes de móvil, 404, etiqueta de versión y esta documentación. Detalle en el MAPA DEL CÓDIGO.
+- **Preguntas abiertas a JX (de la revisión v1.2):**
+  1. Imagen para compartir (`og:image`) en JPG como excepción a la regla WebP: las fuentes no coinciden en si WhatsApp muestra WebP siempre. Pendiente su decisión o probar pegando el enlace en un chat.
+  2. ¿Ya hay cuenta y llaves de Wompi (pruebas)?
+  3. Montar el autenticador de Sveltia (`base_url` en `admin/config.yml`); mientras tanto `/admin` solo entra con token de GitHub.
+  4. En 320–390 px el selector de medida se ve cortado ("Sencilla 10…"); al tocarlo se ve completo. No se cambió; JX decide.
+  5. En el pie dice "WhatsApp:" pero el enlace es `tel:` (llama). Confirmar si debe abrir el chat.
+- **JX va a pedir funciones nuevas** en la próxima sesión: antes de tocar nada, leer este archivo completo y `CHANGELOG.md`.
+
 ## Qué es
 
 Landing de una sola página para **Estrellita House**, emprendimiento de la novia de JX en Cartagena (despacha desde Ciudadela La Paz, El Pozón) que vende **sábanas, cortinas, tapetes y decoración de temporada** (Navidad, Halloween y básicos para todo el año).
 
 - Proyecto de JX Company (lleva el crédito "Diseño y desarrollo: JX Company" en el pie).
 - Hecho con la skill `skill-jx-landing-pages-2026` (auditoría de 24 puntos).
-- Hosting: Cloudflare Pages, en la cuenta de JX (cliente básico). Dominio provisional: `estrellita-house.pages.dev` `{POR CONFIRMAR}`.
+- Hosting: Cloudflare Pages, en la cuenta de JX (cliente básico). Dominio actual: `star-home-shop.pages.dev` (si llega un dominio propio, cambiarlo en todos los sitios del punto 10 de pendientes). Repositorio: `jxenterprise/Star-Home-shop`, rama `main`.
 - Idioma: solo español.
 
 ### ⚠ El catálogo actual es SIMULADO
@@ -60,6 +77,7 @@ estrellita-house/
 ├── site.webmanifest
 ├── favicon.ico / favicon.svg / apple-touch-icon.png   (excepción técnica, no WebP)
 ├── CLAUDE.md / README.md
+├── CHANGELOG.md               historial de versiones (v1.0, v1.2…), la más nueva arriba
 ├── css/styles.css             todo el CSS (variables :root, mobile-first)
 ├── js/script.js               todo el JS (módulos comentados)
 ├── img/                       TODO en WebP
@@ -160,11 +178,12 @@ Cualquier sección, componente, botón o página que se agregue a futuro debe us
 - Modo de diseño usado: **2 — diseño libre** (JX eligió "Dame lo mejor").
 
 ## 🗂️ ÍNDICE DE ZONAS EDITABLES
-En este proyecto casi todo el contenido cambiante se edita desde el CMS (`/admin`). En `index.html` quedan solo dos zonas:
+En este proyecto casi todo el contenido cambiante se edita desde el CMS (`/admin`). En `index.html` quedan solo tres zonas:
 
 | Zona | Qué contiene | ¿Se repite? |
 |---|---|---|
 | `ZONA EDITABLE · TEXTOS` | Nota de precios / IVA bajo el catálogo | `terminos.html` (sección Precios) |
+| `ZONA EDITABLE · VERSIÓN` | Etiqueta `vX.Y` sobre el titular de la portada | `CHANGELOG.md` y la etiqueta de git (`git tag vX.Y`) |
 | `ZONA EDITABLE · CONTACTO` | WhatsApp/teléfono y ciudad del pie | `href tel:`, botón flotante `wa.me`, `js/script.js` (`CONFIG.whatsapp`), JSON-LD `telephone`, 404 y páginas legales |
 
 Productos, precios, colecciones, portada, aviso y domicilio **no** llevan zona: viven en `contenido/*.json` (CMS). La región `CATALOGO:INICIO/FIN` es una copia automática, no una zona editable.
@@ -172,7 +191,7 @@ Productos, precios, colecciones, portada, aviso y domicilio **no** llevan zona: 
 ## 🧭 MAPA DEL CÓDIGO
 _Registro de todo el código. Se suma, nunca se borra lo anterior._
 
-### 29 oct 2026 — Versión 1 (entrega inicial)
+### 29 oct 2026 — v1.0 · Versión 1 (entrega inicial)
 - **`index.html`** — secciones: aviso (`#aviso-tienda`, aside), cabecera sticky con menú y botón de carrito, portada (`#portada-titulo`/`#portada-subtitulo`, imagen LCP), colección (`#catalogo-pestanas`, `#coleccion-desc`, `#catalogo-grid` con `data-filtro`), cómo comprar (4 pasos), domicilios y pagos (`#domicilio-texto`), preguntas (details/summary + FAQPage en el `<head>`), pie (crédito JX con formato exacto), botón flotante de WhatsApp (dentro del `<footer>` por accesibilidad, fijo por CSS), carrito (`#carrito`, role=dialog), modal de pago (`#pago-fondo`), toast, banner de cookies, `#catalogo-datos` (JSON para el carrito). Depende de los id que usan `functions/index.js` y `js/script.js`.
 - **`css/styles.css`** — 16 bloques numerados (ver encabezado). El filtro de pestañas es `.catalogo:not([data-filtro="todas"]) .producto:not(.coincide) { display: none }`: el servidor marca `.coincide` en la colección inicial y el JS la mueve; funciona con colecciones nuevas sin tocar CSS.
 - **`js/script.js`** — IIFE con módulos: CONFIG, Consentimiento (banner), Almacen (localStorage solo con consentimiento), Analitica (GA4 con eventos `add_to_cart`, `begin_checkout`, `purchase`, `pedido_whatsapp`, `clic_whatsapp`, `clic_telefono`, `envio_formulario`), Toast, Menu, Catalogo (lee `#catalogo-datos`, pestañas accesibles con flechas), Carrito (líneas `{id, v, n}`, reconcilia con el catálogo vivo, foco atrapado), Pedido (validación, mensaje de WhatsApp, POST a `/api/wompi/firma`), RetornoPago (lee `?id=`, consulta `/api/wompi/transaccion`, estados APPROVED/PENDING/DECLINED/ERROR), PQR (radicado `PQR-AAAAMMDD-HHMM-XXXX` + WhatsApp).
@@ -182,6 +201,29 @@ _Registro de todo el código. Se suma, nunca se borra lo anterior._
 - **`admin/config.yml`** — dos singletons: Productos (lista con uuid, nombre, colección por relación, tipo, descripción, foto, alt, medidas y precios, etiqueta, agotado, mostrar) y Ajustes (modo muestra, aviso, portada, colecciones, colección inicial, domicilio, pago en línea). Fotos a WebP 1600 px.
 - **Accesibilidad aplicada:** el botón del carrito toma su nombre del texto ("Carrito" + `#carrito-n-texto` solo para lector de pantalla; en ≤500px "Carrito" se oculta a la vista pero se sigue leyendo); el aviso superior es un `<aside>` con etiqueta; el botón flotante de WhatsApp vive dentro del `<footer>` para quedar en un landmark; el carrito es `<div role="dialog">` con foco atrapado; en ≤360px el botón dice "Agregar" y el resto ("al carrito") queda solo para lector.
 - **Pruebas hechas:** emulador oficial de Cloudflare Pages (wrangler 4.156): inyección del catálogo con datos modificados, firma verificada con SHA-256 independiente, errores de validación, domicilio fijo, 404 propia y cabeceras de `_headers`; prueba de punta a punta del flujo en escritorio y móvil (24 verificaciones cada una, consola limpia); axe-core sin violaciones en todas las páginas y estados (carrito, menú, toast, banner); html-validate sin errores; `admin/config.yml` válido contra el esquema oficial de Sveltia; sin desbordes en 17 anchos de 320 a 1920 px; Lighthouse local: Accesibilidad 100, SEO 100 con el Modo muestra apagado (69 mientras está en noindex, a propósito).
+
+### 11 nov 2026 — v1.2 · Revisión en vivo (star-home-shop.pages.dev) y arreglos de móvil
+Revisado con perfiles reales de iPhone SE/12 mini/13/15 Pro Max, Galaxy S8/S9+/S24/A55/Z Flip/Z Fold, Pixel 7, Moto G4, iPad Mini, Galaxy Tab y horizontal: sin desbordes ni errores de consola. Arreglado:
+- **Dominio:** todo apuntaba a `estrellita-house.pages.dev` (no existe): canonical, og:image (la vista previa al compartir por WhatsApp salía sin imagen), JSON-LD, sitemap, robots, llms, `SITIO_URL` y `site_url`. Ahora `https://star-home-shop.pages.dev`.
+- **`admin/config.yml`:** `backend.repo` ahora es `jxenterprise/Star-Home-shop` (antes un marcador).
+- **Bug WhatsApp (`js/script.js → abrirWhatsApp`):** `window.open(url, '_blank', 'noopener')` SIEMPRE devuelve `null`, así que el código creía que estaba bloqueado: abría WhatsApp dos veces y la pestaña de la tienda se iba a WhatsApp (con cookies rechazadas se perdía el carrito). Ahora abre sin `noopener` y corta `opener` a mano.
+- **Pago en línea sin llaves:** `functions/index.js → wompiConfigurado(env)` apaga `pagoEnLinea` si faltan `WOMPI_PUBLIC_KEY`/`WOMPI_INTEGRITY_SECRET`: el botón "Pagar en línea" no sale y la ayuda del carrito habla solo de WhatsApp. Aparece solo cuando se carguen las llaves en Cloudflare.
+- **CSS:** `.contenedor`, aviso, menú móvil, carrito y cookies respetan `env(safe-area-inset-left/right)` (iPhone en horizontal, notch/isla); `.pie` con 96 px abajo en ≤900px para que el botón flotante no tape el crédito JX; `body.cookies-abierto` esconde el botón flotante mientras el banner está abierto en ≤600px de ancho o ≤520px de alto; banner de cookies con botones lado a lado también en ≤380px; enlaces del pie de 44 px de alto; `.boton--agregar` con `gap: .3em`.
+- **`404.html`:** rutas absolutas (`/css/…`, `/js/…`, `/privacidad`…): en URLs profundas (`/a/b/c`) salía sin estilos.
+
+- **Etiqueta de versión (v1.2):** `index.html` → `<p class="portada__version">` (ZONA EDITABLE · VERSIÓN, FUERA del `h1` porque el `h1` lo reescribe `functions/index.js`); `css/styles.css` → `.portada__version` (píldora `--estrella-suave` + estrella del logo, en el bloque 6) y retraso de animación para el 4.º hijo de `.portada__texto`. Nuevo `CHANGELOG.md`.
+- **Pruebas v1.2:** wrangler 4.160 local (sin llaves de Wompi → botón oculto; con llaves `pub_test_`/`test_integrity_` falsas → botón visible y `/api/wompi/firma` firma bien) + Playwright con 6 perfiles (iPhone SE, iPhone 13, Galaxy S24, Pixel 7, iPhone 13 horizontal, iPad Mini): WhatsApp se abre una sola vez y la tienda se queda, sin desbordes, consola limpia, 404 profunda con estilos. Repetido en la vista previa de Cloudflare de la rama: todo OK. La copia de respaldo del catálogo se regeneró y coincide con el render del servidor. Ojo: Chromium no reproduce el notch de iPhone; lo de `safe-area` conviene mirarlo en un iPhone real.
+
+## 🏷️ VERSIONES (cómo publicar una nueva)
+Numeración `vMAYOR.MENOR`: sube MENOR en cada entrega de arreglos o funciones; MAYOR solo con un cambio grande (rediseño, catálogo real con dominio propio, etc.). Historial: v1.0 (29 oct 2026, entrega inicial) → v1.2 (11 nov 2026, revisión móvil; no hubo v1.1 publicada).
+
+Al cerrar una entrega:
+1. Cambiar el número en la ZONA EDITABLE · VERSIÓN de `index.html` (y nada más del HTML).
+2. Agregar la entrega ARRIBA en `CHANGELOG.md` (fecha, qué se arregló, qué es nuevo).
+3. Actualizar "📌 ESTADO ACTUAL" y sumar la entrada en "🧭 MAPA DEL CÓDIGO" de este archivo.
+4. Commit, push de la rama y PR hacia `main`.
+5. Etiqueta: `git tag -a vX.Y -m "…"` sobre el commit de la entrega y `git push origin vX.Y`. Si la PR se fusiona con "squash", mover la etiqueta al commit de `main` (`git tag -fa vX.Y <commit> && git push -f origin vX.Y`). En GitHub → Releases se puede crear la versión a partir de la etiqueta con el texto del CHANGELOG.
+   ⚠ Desde las sesiones de Claude en la nube el push de etiquetas está BLOQUEADO (403 del proxy: solo se puede subir la rama de trabajo). En ese caso las crea JX en GitHub → **Releases → Draft a new release → Choose a tag** (escribir `vX.Y`, "Create new tag on publish"), con destino `main` después de fusionar la PR, y pega el texto de esa versión del CHANGELOG. `v1.0` va sobre el commit `f5f60a1` ("Add files via upload"; en el selector de destino → *Recent commits*).
 
 ## Herramienta: regenerar la copia de respaldo del catálogo
 Si cambias el render de las tarjetas o los JSON y quieres actualizar la copia estática de `index.html`, crea fuera del proyecto un archivo `copia.mjs` con este contenido y ejecútalo con Node 18+ (`node copia.mjs`), ajustando `RAIZ`:
