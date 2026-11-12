@@ -67,7 +67,7 @@ y un botón "Descargar catálogo" junto al título.
 - Lighthouse en celular: Rendimiento 95, Accesibilidad 100, Buenas prácticas
   100, SEO 100 (escritorio 97/100/100/100).
 
-**Ajuste del 12 nov 2026, 11:55 (revisando la página ya publicada)**
+**Ajuste del 12 nov 2026, 11:52 (revisando la página ya publicada)**
 - **Carga más rápido en el celular.** Medida en Cloudflare, la página daba 81/100
   en velocidad (95 en las pruebas). La causa: Cloudflare copiaba mal el enlace a
   las letras de Google y cada visita descargaba una hoja de letras dañada. Ahora
