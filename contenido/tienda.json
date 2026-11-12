@@ -1,30 +1,37 @@
 {
-  "modo_muestra": true,
+  "modo_muestra": false,
   "aviso": {
-    "mostrar": false,
-    "texto": "Haz tu pedido por WhatsApp."
+    "mostrar": true,
+    "texto": "✦ Especial Navidad 2026: cobijas y cortinas navideñas ✦"
   },
   "portada": {
-    "titulo": "Estrena sábanas y cortinas para diciembre",
-    "subtitulo": "Diseños de Navidad, Halloween y para todo el año en Cartagena. Arma tu pedido y envíalo por WhatsApp."
+    "titulo": "Sábanas, cobijas y cortinas para tu hogar",
+    "subtitulo": "Mira los diseños con calma, anota el código del que te enamore y pregúntanos por WhatsApp el precio y la disponibilidad. Estamos en Cartagena."
   },
+  "catalogo_pdf": "/catalogo/catalogo-star-home-2026.pdf",
   "colecciones": [
     {
       "id": "navidad",
-      "nombre": "Navidad",
-      "descripcion": "Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre.",
+      "nombre": "Especial Navidad",
+      "descripcion": "Cobijas y cortinas para llenar tu casa de magia esta temporada.",
       "mostrar": true
     },
     {
-      "id": "halloween",
-      "nombre": "Halloween",
-      "descripcion": "Calabazas y fantasmas para la noche de brujas. Últimos días.",
+      "id": "sabanas",
+      "nombre": "Sábanas",
+      "descripcion": "Diseños estampados por tamaño y satinadas de rayas en colores lisos.",
       "mostrar": true
     },
     {
-      "id": "todo-el-ano",
-      "nombre": "Todo el año",
-      "descripcion": "Básicos suaves para cualquier temporada.",
+      "id": "cortinas",
+      "nombre": "Cortinas",
+      "descripcion": "Colores lisos y jacquard con botones para vestir cada ventana. Las navideñas están en Especial Navidad.",
+      "mostrar": true
+    },
+    {
+      "id": "almohadas",
+      "nombre": "Almohadas",
+      "descripcion": "El complemento para que tu cama quede lista.",
       "mostrar": true
     }
   ],

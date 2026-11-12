@@ -1,9 +1,71 @@
-# Historial de versiones — Estrellita House
+# Historial de versiones — Star Home (antes "Estrellita House")
 
 Registro de cada entrega del sitio (`https://star-home-shop.pages.dev`).
 La más nueva va arriba. Cada versión tiene su etiqueta en git (`git tag vX.Y`)
 y el mismo número se muestra en la portada (ZONA EDITABLE · VERSIÓN de `index.html`).
 Cómo publicar una versión nueva: ver "Versiones" en `CLAUDE.md`.
+
+---
+
+## v1.4 — 12 nov 2026, 11:15 (hora de Colombia) · Star Home: catálogo real sin precios, logo y colores de la marca
+
+JX mandó las 83 fotos reales (ZIP "Star Home"), el logo de la empresa y su
+catálogo en PDF ("Catálogo Star Home 2026"). Pidió: subir los productos SIN
+precio (los clientes preguntan por WhatsApp), que se vean bien y se puedan
+elegir bien en el celular, el logo de Star Home en la web y en las fotos (donde
+estaba el del proveedor, como hizo en su PDF), la web con los colores del logo
+y un botón "Descargar catálogo" junto al título.
+
+**Nuevo**
+- **La web ahora se llama Star Home** (es la marca del logo; "Estrellita" es la
+  dueña). Logo en la cabecera, la portada, el pie, el ícono del celular y la
+  imagen que sale al compartir el enlace.
+- **81 productos reales** con los nombres y códigos del PDF: 17 cobijas navideñas
+  (CB-01 a CB-17), 10 cortinas navideñas (CT-01 a CT-10), 32 sábanas estampadas
+  (SB-01 a SB-32: sencilla, doble, queen y king), 9 satinadas de rayas (SB-33 a
+  SB-41), 9 cortinas clásicas (CT-11 a CT-19), 3 jacquard (CT-20 a CT-22) y
+  almohadas (AL-01). **Sin precios**: cada tarjeta dice "Medida…" y "Consultar".
+- **Secciones como el PDF**: Especial Navidad, Sábanas, Cortinas, Almohadas y
+  Ver todo, con **filtros** por tipo o tamaño (Cobijas / Cortinas navideñas;
+  Sencilla / Doble / Queen / King / Satinadas; Clásicas / Jacquard).
+- **Botón "Consultar"** en cada producto: abre WhatsApp con el nombre, el
+  código, la medida y un enlace a la foto ya escritos.
+- **Visor de fotos a pantalla completa, tipo carrusel**: al tocar una foto se ve
+  en grande; se pasa al siguiente diseño deslizando el dedo, con flechas o con
+  el teclado; el botón "atrás" del celular lo cierra. Enlace directo a cada
+  producto (`/#p-sb-09`).
+- **"Mi lista"** (estrella ☆ en cada foto): junta varios diseños y los consulta
+  en un solo mensaje de WhatsApp con códigos y cantidades (reemplaza el carrito
+  con precios de la v1.3; conserva la confirmación al quitar).
+- **"Descargar catálogo (PDF · 14 MB)"** junto al título; el PDF se puede
+  cambiar desde el administrador.
+- **Colores y letras de la marca**: dorado, rosa y crema del logo con el negro
+  café de "Home"; tipografías del PDF (Cormorant Garamond, Montserrat y Great
+  Vibes). Bloque "¿Buscas algo más?" y "Cómo pedir" en 3 pasos, como el PDF.
+- **Fotos**: tu logo de Star Home va encima del logo del proveedor (ÉVORA,
+  VELUNA, Duvellar Home y su teléfono), en el mismo lugar y con el mismo estilo
+  que en tu PDF, pero sobre las fotos originales en alta resolución. Todas en
+  WebP: foto grande (máx. 1400 px) y miniatura cuadrada (480 px) por producto.
+
+**Cambiado**
+- Modo muestra **apagado**: sin barra "Catálogo de muestra" y Google ya puede
+  mostrar la página. La barra de arriba ahora anuncia el Especial Navidad 2026.
+- Datos para Google: lista de productos sin la ficha "Product" (Google la pide
+  con precio y daría error en Search Console).
+- Administrador (`/admin`): productos con código, tipo, sección, grupo, medida,
+  foto, miniatura y precio OPCIONAL; ajuste "Catálogo en PDF"; archivos de hasta
+  25 MB. Validado contra el esquema oficial de Sveltia CMS 0.263.0.
+- Páginas legales, 404, `llms.txt`, manifest y textos al día con Star Home y
+  con los precios por WhatsApp.
+
+**Revisado**
+- 140 pruebas automáticas en 19 pantallas (iPhone SE a 15 Pro Max, Galaxy S8 a
+  S24, Fold, Flip, Pixel, Moto G4, iPad, Galaxy Tab, horizontales y
+  escritorio): sin desbordes, sin errores en consola, todo el flujo (pestañas,
+  filtros, visor, deslizar, atrás, Mi lista, mensajes de WhatsApp, PDF, 404).
+- Accesibilidad sin fallas (axe-core) y HTML válido en las 7 páginas.
+- Lighthouse en celular: Rendimiento 95, Accesibilidad 100, Buenas prácticas
+  100, SEO 100 (escritorio 97/100/100/100).
 
 ---
 

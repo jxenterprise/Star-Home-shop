@@ -1,13 +1,13 @@
 {
-  "name": "Estrellita House",
-  "short_name": "Estrellita",
-  "description": "Sábanas, cortinas y tapetes de temporada en Cartagena. Pedidos por WhatsApp.",
+  "name": "Star Home",
+  "short_name": "Star Home",
+  "description": "Textiles para tu hogar en Cartagena: sábanas, cobijas, cortinas y almohadas. Pedidos por WhatsApp.",
   "lang": "es-CO",
   "start_url": "/",
   "scope": "/",
   "display": "browser",
-  "background_color": "#F3F5F9",
-  "theme_color": "#1C2541",
+  "background_color": "#FBF7F3",
+  "theme_color": "#2A1E1C",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
