@@ -77,8 +77,8 @@ y un botón "Descargar catálogo" junto al título.
 - El logo de la portada se ve desde el primer instante (antes empezaba invisible
   y Google lo contaba tarde).
 - Política de cookies: se quitó "Google Fonts" de los servicios de terceros.
-- Resultado en la vista previa de Cloudflare: celular 95–99 (antes 81),
-  escritorio 100, y las 140 pruebas en orden.
+- Resultado en producción: velocidad en celular 99/100 (antes 81) y 100 en
+  escritorio; accesibilidad, buenas prácticas y SEO 100; las 140 pruebas en orden.
 
 ---
 
