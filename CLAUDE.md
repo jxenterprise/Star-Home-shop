@@ -121,6 +121,7 @@ Star-Home-shop/
 ├── terminos.html              términos + propiedad intelectual (precios por WhatsApp)
 ├── politicas-de-compra.html   compras, entregas, retracto, garantía, reversión + formulario PQR
 ├── _headers                   caché (css/js/contenido sin caché; img 1 día; PDF 1 hora; fonts 1 año) + seguridad
+│                              + noindex para CLAUDE.md, README.md y CHANGELOG.md (Cloudflare los publica)
 ├── robots.txt                 permite bots de IA; bloquea /admin/
 ├── sitemap.xml                solo "/" (legales con noindex)
 ├── llms.txt                   mapa del sitio para IA
@@ -210,6 +211,7 @@ Star-Home-shop/
 - **v1.4 — WhatsApp sigue sin verde** (decisión de JX en v1.3): botones "Consultar" y flotante en el café de la marca (`--marca`), el flotante con anillo dorado. El PDF sí usa verde; la web no.
 - **v1.4 — Modo muestra apagado** (Google indexa): los productos ya son reales. JX no contestó esa pregunta; se apaga y prende desde `/admin` → Ajustes.
 - **v1.4 (ajuste) — Letras propias en `/fonts`, no Google Fonts** (12 nov 2026): (1) la cabecera `Link` que arma Cloudflare con el `&amp;` sin decodificar pedía una hoja de letras rota en cada visita; (2) son dos conexiones menos en el celular (`fonts.googleapis.com` y `fonts.gstatic.com`); (3) privacidad: la IP del visitante ya no va a Google (se quitó de `cookies.html`); (4) con precarga casi nunca se ve el cambio de letra (CLS 0). Son los mismos archivos que entregaba Google (licencia SIL OFL 1.1, que permite alojarlos). En la portada se precargan las 3 DESPUÉS del logo y el CSS: con HTTP/2 y HTTP/3, Cloudflare entrega primero el logo.
+- **v1.4 (ajuste) — Documentación con `noindex`:** Cloudflare publica TODO lo que está en la raíz, así que `/CLAUDE.md`, `/README.md` y `/CHANGELOG.md` se pueden abrir en la web. `_headers` les pone `X-Robots-Tag: noindex, nofollow` para que Google no los muestre. Ojo: el repositorio de GitHub es **público**, así que estas notas ya se pueden leer allí; se le recomendó a JX hacerlo privado (Cloudflare Pages y Sveltia funcionan igual con un repo privado).
 - **v1.4 (ajuste) — Logo de la portada desde 40 % de opacidad, sin retraso:** es el elemento LCP; si empieza invisible, Chrome no lo cuenta hasta que aparece y la carga medida se corre ~0,3 s.
 - **v1.4 — `content-visibility` en las tarjetas:** las que están fuera de pantalla no se dibujan (Lighthouse celular 93–95 → 95–97). Efecto secundario arreglado: al tocar un enlace interno se dibujan todas antes de desplazarse (clase `.dibujar-todo`), si no, el menú aterrizaba corrido.
 
@@ -332,6 +334,7 @@ Revisión de producción tras fusionar la PR #2 (Lighthouse celular 81). PR #3.
 - **`<head>` de las 6 páginas:** fuera los `preconnect`, el `preload as=style`, la hoja con `media="print" onload` y el `<noscript>` de Google. En su lugar `<link rel="preload" as="font" type="font/woff2" href="fonts/…" crossorigin>`: las 3 en `index.html` (después del logo y el CSS) y Cormorant + Montserrat en las legales y la 404 (esta con rutas `/fonts/…`). Los `<link>` con `crossorigin` o `fetchpriority` no generan cabecera `Link` en Cloudflare: ahora la página no lleva ninguna.
 - **`_headers`:** `/fonts/*` → `Cache-Control: public, max-age=31536000, immutable`.
 - **`cookies.html`:** fuera la viñeta "Google Fonts" de "Servicios de terceros que no ponen cookies aquí".
+- **`_headers`:** `X-Robots-Tag: noindex, nofollow` en `/CLAUDE.md`, `/README.md` y `/CHANGELOG.md` (Cloudflare los publica por estar en la raíz).
 - **Pruebas:**
   - `fuentes2.js` (6 páginas, local y vista previa): 0 peticiones a Google, cada `.woff2` una sola vez (la precarga se reutiliza), las 3 caras `loaded`, sin avisos.
   - Batería v1.4 (ahora también falla con avisos de consola): 140/140 en local y en la vista previa.
