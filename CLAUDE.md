@@ -3,7 +3,7 @@
 Contexto para cualquier chat futuro (Claude u otra IA) que vaya a editar este proyecto. Léelo completo antes de tocar código.
 
 ## 📌 ESTADO ACTUAL (léelo primero — se actualiza en cada sesión)
-_Última actualización: 12 nov 2026, 11:55 (hora de Colombia). Lee también "📍 DÓNDE NOS QUEDAMOS", justo debajo._
+_Última actualización: 12 nov 2026, 12:00 (hora de Colombia). Lee también "📍 DÓNDE NOS QUEDAMOS", justo debajo._
 
 - **Marca: STAR HOME** (desde v1.4). Es el nombre del logo de la empresa (foto `1.jpeg` del ZIP y portada del PDF). "Estrellita" es la dueña (la novia de JX); "Estrellita House" fue un nombre provisional de v1.0–v1.3. En el código quedan nombres internos viejos a propósito: claves del navegador `eh_consentimiento_v1` (para no volver a preguntar las cookies) y los id/clases `carrito` del panel "Mi lista".
 - **Versión en el código y en producción: v1.4** (catálogo real sin precios, logo y colores de la marca) + su **ajuste del mediodía** (PR #3): letras propias en `/fonts` y logo de la portada visible desde el primer instante. Se ve en la portada sobre el titular. Historial en `CHANGELOG.md`.
@@ -24,10 +24,11 @@ _Última actualización: 12 nov 2026, 11:55 (hora de Colombia). Lee también "�
 ## 📍 DÓNDE NOS QUEDAMOS (bitácora con fecha y hora — hora de Colombia, UTC−5)
 _Lo más nuevo arriba. Cada sesión agrega su entrada aquí antes de terminar._
 
-### 12 nov 2026, 11:15–11:55 — v1.4 (ajuste): revisión en producción, cabecera `Link` rota y letras propias
+### 12 nov 2026, 11:15–12:00 — v1.4 (ajuste): revisión en producción, cabecera `Link` rota y letras propias
 - **Qué pasó:** al medir producción después de fusionar la PR #2, Lighthouse celular dio **81** (95 en local; FCP 2,9 s, LCP 4,2 s). Causa: Cloudflare Pages arma sola la cabecera HTTP `Link` (Early Hints) con los `<link rel="preload|preconnect">` del HTML, copiando el `href` TAL CUAL, sin convertir `&amp;` en `&`. Cada visita pedía una hoja de Google Fonts rota (solo Cormorant, 5,8 KB de más, prioridad máxima) y Chrome avisaba "preloaded but not used". La batería de pruebas no lo veía porque solo contaba errores de consola; ahora también cuenta los avisos (`warning`).
 - **Qué se hizo:** letras propias en `/fonts` (los mismos archivos de Google, idénticos byte a byte, mismos pesos: se ven igual) con precarga; fuera las 2 conexiones a Google (y "Google Fonts" de `cookies.html`); el logo de la portada (elemento LCP) ahora entra desde 40 % de opacidad y sin retraso.
 - **Resultado en la vista previa real de Cloudflare:** celular **95–99**/100/100 (FCP 1,0 s, LCP 2,0–2,2 s, CLS 0), escritorio **100**/100/100 (SEO 69 solo por el `noindex` de las vistas previas); 140/140 pruebas; anclas a 84 px exactos. Capturas local contra producción en iPhone 13: 0 píxeles distintos.
+- **Producción verificada (PR #3 fusionada a las 11:52, `main` = `4c6d343`):** Lighthouse celular **99/100/100/100** en 3 corridas (FCP 0,9–1,0 s, LCP 2,1 s, TBT 30–70 ms, CLS 0) y escritorio **100/100/100/100**; 140/140 pruebas; anclas a 84 px; las 6 páginas sin peticiones a Google; `/CLAUDE.md` con `noindex`; `robots` de la portada en `index, follow`. Ojo: justo después del despliegue Cloudflare mandó UNA vez un `103 Early Hints` con la cabecera vieja guardada para `/privacidad`; a la siguiente visita ya no (su caché de Early Hints se refresca sola).
 - **SIGUIENTE:** lo mismo de la entrada de abajo (JX dijo que después hablan de cosas nuevas). PR #3 → `main` con autorización de JX ("subes a github y push y cloudflare despliegue"; "no pares hasta terminar y quede todo perfecto"). La etiqueta `v1.4` la crea JX en GitHub → Releases sobre el último commit de `main`.
 
 ### 12 nov 2026, 00:20–11:15 — v1.4: Star Home, catálogo real sin precios (sesión en la nube)
@@ -327,7 +328,7 @@ Pedido de JX: fotos reales (ZIP) + PDF "Catálogo Star Home 2026"; sin precios; 
   - Lighthouse celular 95/100/100/100 (LCP 2,4 s, TBT ~150–190 ms, CLS 0) y escritorio 97/100/100/100.
   - **Vista previa real de Cloudflare** (rama `claude/cool-newton-ux61it`, PR #2): las mismas 140 comprobaciones dan TODO OK y los enlaces del menú aterrizan exactos. Lighthouse ahí da SEO 69 solo porque Cloudflare pone `x-robots-tag: noindex` a las vistas previas (en producción no).
 
-### 12 nov 2026, 11:55 — v1.4 (ajuste) · Letras propias en /fonts y fuera la cabecera `Link` rota
+### 12 nov 2026, 11:52 — v1.4 (ajuste) · Letras propias en /fonts y fuera la cabecera `Link` rota
 Revisión de producción tras fusionar la PR #2 (Lighthouse celular 81). PR #3.
 - **`fonts/`** (nuevo): `cormorant-garamond-v21-latin.woff2` (variable 300–700), `montserrat-v31-latin.woff2` (variable 100–900) y `great-vibes-v21-latin.woff2`, bajados de Google Fonts (subconjunto latin, mismo MD5 que sirve Google) + `LICENCIAS.txt` (copyright de cada una + texto de la SIL OFL 1.1).
 - **`css/styles.css`:** bloque 1 = "Tipografías propias y variables": 3 `@font-face` con `font-display: swap`, el `unicode-range` latin de Google y los MISMOS pesos que pedía la web (Cormorant `500 700`, Montserrat `400 700`, Great Vibes `400`), para que pesos fuera de rango (p. ej. 800 en `.portada__version`) se vean igual que antes. Rutas `../fonts/…` (sirven también con `file://`). Portada: `.portada__arte > *` sin `animation-delay` y `@keyframes aparecer-arte` desde `opacity: .4`.
@@ -401,4 +402,4 @@ Si la dueña sube una foto desde `/admin`, el CMS solo la pasa a WebP (1600 px):
 - Recomendar a la dueña reclamar su ficha de **Google Business Profile** como **Star Home** (negocio que atiende en Cartagena, sin dirección pública) y mantener el NAP idéntico (nombre, teléfono).
 - **Fotos del proveedor:** confirmar con Duvellar Home, ÉVORA y VELUNA que están de acuerdo con usar sus fotos con el logo de Star Home, o pedirles fotos sin marca (se cambian desde `/admin`).
 - **Si cambia el PDF del catálogo:** subirlo desde `/admin` → Ajustes → Catálogo en PDF (máx. 25 MB). El botón muestra el peso solo si Cloudflare lo informa; si no, queda el texto "PDF · 14 MB" de `index.html` (cambiarlo a mano si el PDF nuevo pesa distinto).
-- Correr PageSpeed Insights (pagespeed.web.dev) tras cada despliegue grande. v1.4 con letras propias, en la vista previa de Cloudflare: celular 95–99, escritorio 100 (Accesibilidad y Buenas prácticas 100; SEO 100 en producción).
+- Correr PageSpeed Insights (pagespeed.web.dev) tras cada despliegue grande. v1.4 con letras propias, en producción (12 nov 2026): celular 99/100/100/100, escritorio 100/100/100/100.

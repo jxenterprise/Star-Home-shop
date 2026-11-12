@@ -33,7 +33,7 @@ Cómo llegar: abre el archivo, busca `ZONA EDITABLE` con Ctrl+F, cambia solo lo 
 - SEO: title, description, canonical, Open Graph, Twitter Card, JSON-LD (WebSite, HomeGoodsStore, FAQPage y lista de productos), sitemap, robots que permite bots de IA y `llms.txt`.
 - Páginas legales: privacidad, cookies, términos y políticas de compra con **retracto, garantía, reversión del pago y formulario PQR con número de radicado**.
 - Banner de cookies con Aceptar y Rechazar del mismo tamaño; Google Analytics 4 solo después de aceptar.
-- Responsive de 280 px (celulares plegables) a TV, accesible (sin violaciones en axe-core), botones de 44–48 px, respeta "reducir movimiento". Lighthouse en Cloudflare: celular 95–99, escritorio 100 (Accesibilidad y Buenas prácticas 100).
+- Responsive de 280 px (celulares plegables) a TV, accesible (sin violaciones en axe-core), botones de 44–48 px, respeta "reducir movimiento". Lighthouse en producción: celular 99/100/100/100, escritorio 100/100/100/100.
 - Letras propias en `/fonts` (las del PDF, sin Google Fonts): carga más rápida en el celular y sin enviar la IP del visitante a terceros.
 
 ---
