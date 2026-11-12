@@ -67,6 +67,19 @@ y un botón "Descargar catálogo" junto al título.
 - Lighthouse en celular: Rendimiento 95, Accesibilidad 100, Buenas prácticas
   100, SEO 100 (escritorio 97/100/100/100).
 
+**Ajuste del 12 nov 2026, 11:55 (revisando la página ya publicada)**
+- **Carga más rápido en el celular.** Medida en Cloudflare, la página daba 81/100
+  en velocidad (95 en las pruebas). La causa: Cloudflare copiaba mal el enlace a
+  las letras de Google y cada visita descargaba una hoja de letras dañada. Ahora
+  las tres letras del PDF (los mismos archivos, se ven igual) se guardan en la
+  propia web (`/fonts`): ya no hay que conectarse a Google, la dirección IP del
+  visitante no se envía a terceros y el texto no "salta" al cargar.
+- El logo de la portada se ve desde el primer instante (antes empezaba invisible
+  y Google lo contaba tarde).
+- Política de cookies: se quitó "Google Fonts" de los servicios de terceros.
+- Resultado en la vista previa de Cloudflare: celular 95–99 (antes 81),
+  escritorio 100, y las 140 pruebas en orden.
+
 ---
 
 ## v1.3 — 11 nov 2026, 23:40 (hora de Colombia) · Solo WhatsApp (sin pago en línea ni domicilios)

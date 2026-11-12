@@ -18,6 +18,12 @@
 /img/*
   Cache-Control: public, max-age=86400
 
+# Tipografías propias (Cormorant Garamond, Montserrat y Great Vibes): el nombre
+# lleva la versión (v21, v31…). Si alguna cambia se sube con OTRO nombre (y se
+# cambia en styles.css y en las precargas del <head>), así que se guardan un año
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Catálogo en PDF: se puede reemplazar desde /admin con el mismo nombre, por
 # eso solo se guarda una hora (Google sí lo puede indexar: atrae clientes)
 /catalogo/*
@@ -27,6 +33,17 @@
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-cache
+
+# Documentación interna: Cloudflare la publica porque está en la raíz del
+# proyecto. Que Google no la muestre en los resultados de la tienda
+/CLAUDE.md
+  X-Robots-Tag: noindex, nofollow
+
+/README.md
+  X-Robots-Tag: noindex, nofollow
+
+/CHANGELOG.md
+  X-Robots-Tag: noindex, nofollow
 
 # Cabeceras de seguridad básicas para todo el sitio
 /*
