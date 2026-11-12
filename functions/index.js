@@ -318,19 +318,22 @@ async function leerJSON(context, ruta) {
   return r.json();
 }
 
-// Tamaño del PDF del catálogo (para mostrarlo en el botón). Primero pregunta con
-// HEAD; si esa respuesta no trae el tamaño, pide solo el primer byte y lee el
-// total de "content-range" (o de "content-length"). Si todo falla, sin tamaño.
+// Tamaño del PDF del catálogo (para mostrarlo en el botón "PDF · 14 MB").
+// En Cloudflare Pages el HEAD no trae el tamaño y el Range no se respeta, así
+// que se pide el archivo, se lee "content-length" y se corta la descarga.
+// Se guarda en memoria del servidor: solo la primera visita de cada instancia
+// lo mide (al cambiar el PDF hay un despliegue nuevo y se vuelve a medir).
+// Si no se puede medir, el botón conserva el texto que trae index.html.
+const pesosPdf = new Map();
 async function tamanoArchivo(context, ruta) {
+  if (pesosPdf.has(ruta)) return pesosPdf.get(ruta);
   try {
     const url = new URL(ruta, context.request.url).toString();
-    const cabeza = await context.env.ASSETS.fetch(new Request(url, { method: 'HEAD' }));
-    const largo = Number(cabeza.headers.get('content-length')) || 0;
-    if (cabeza.ok && largo > 1) return largo;
-    const r = await context.env.ASSETS.fetch(new Request(url, { headers: { Range: 'bytes=0-0' } }));
-    const total = Number((r.headers.get('content-range') || '').split('/')[1]) || Number(r.headers.get('content-length')) || 0;
+    const r = await context.env.ASSETS.fetch(new Request(url, { method: 'GET' }));
+    const total = Number(r.headers.get('content-length')) || 0;
     if (r.body) await r.body.cancel();
-    return r.ok && total > 1 ? total : 0;
+    if (r.ok && total > 1) { pesosPdf.set(ruta, total); return total; }
+    return 0;
   } catch (e) {
     return 0;
   }
