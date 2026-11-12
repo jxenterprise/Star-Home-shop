@@ -48,16 +48,17 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
-  <!-- Tipografías de Google Fonts (las mismas del catálogo PDF), carga NO bloqueante:
-       Cormorant Garamond (títulos), Montserrat (texto) y Great Vibes (letra cursiva de adorno) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Great+Vibes&amp;family=Montserrat:wght@400..700&amp;display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Great+Vibes&amp;family=Montserrat:wght@400..700&amp;display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Great+Vibes&amp;family=Montserrat:wght@400..700&amp;display=swap"></noscript>
-
   <link rel="preload" as="image" href="img/logo-star-home-600.webp" imagesrcset="img/logo-star-home-600.webp 600w, img/logo-star-home.webp 1000w" imagesizes="(min-width: 901px) 440px, 78vw" fetchpriority="high">
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Tipografías del catálogo PDF servidas desde esta web (/fonts, con @font-face en
+       css/styles.css): Cormorant Garamond (títulos), Montserrat (texto) y Great Vibes
+       (letra cursiva de adorno). Las tres salen en la portada, por eso se precargan las
+       tres; así casi nunca se ve el cambio de letra. En fuentes, crossorigin es obligatorio
+       y el nombre del archivo debe ser IGUAL al de styles.css. -->
+  <link rel="preload" as="font" type="font/woff2" href="fonts/cormorant-garamond-v21-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/montserrat-v31-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/great-vibes-v21-latin.woff2" crossorigin>
 
   <!-- JSON-LD del negocio: WebSite + tienda de artículos para el hogar + preguntas frecuentes.
        ⚠ Teléfono y URL se repiten aquí: si cambian, actualizarlos también en este bloque. -->
