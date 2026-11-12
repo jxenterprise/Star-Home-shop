@@ -3,10 +3,11 @@
 Contexto para cualquier chat futuro (Claude u otra IA) que vaya a editar este proyecto. Léelo completo antes de tocar código.
 
 ## 📌 ESTADO ACTUAL (léelo primero — se actualiza en cada sesión)
-_Última actualización: 12 nov 2026, 11:15 (hora de Colombia). Lee también "📍 DÓNDE NOS QUEDAMOS", justo debajo._
+_Última actualización: 12 nov 2026, 11:55 (hora de Colombia). Lee también "📍 DÓNDE NOS QUEDAMOS", justo debajo._
 
 - **Marca: STAR HOME** (desde v1.4). Es el nombre del logo de la empresa (foto `1.jpeg` del ZIP y portada del PDF). "Estrellita" es la dueña (la novia de JX); "Estrellita House" fue un nombre provisional de v1.0–v1.3. En el código quedan nombres internos viejos a propósito: claves del navegador `eh_consentimiento_v1` (para no volver a preguntar las cookies) y los id/clases `carrito` del panel "Mi lista".
-- **Versión en el código y en producción: v1.4** (catálogo real sin precios, logo y colores de la marca). Se ve en la portada sobre el titular. Historial en `CHANGELOG.md`.
+- **Versión en el código y en producción: v1.4** (catálogo real sin precios, logo y colores de la marca) + su **ajuste del mediodía** (PR #3): letras propias en `/fonts` y logo de la portada visible desde el primer instante. Se ve en la portada sobre el titular. Historial en `CHANGELOG.md`.
+- **Letras propias (desde el ajuste de v1.4):** Cormorant Garamond, Montserrat y Great Vibes se sirven desde `/fonts` con `@font-face` (inicio de `css/styles.css`) y se precargan en el `<head>`. Ya NO se usa Google Fonts. Si algún día se vuelve a poner un enlace con `&` en un `<link rel="preload|preconnect">`, va con `&` SIN escapar: Cloudflare copia ese `href` tal cual a la cabecera `Link` (ver bitácora).
 - **Sitio en vivo:** `https://star-home-shop.pages.dev` (Cloudflare Pages, producción = rama `main`). Cada rama/PR tiene vista previa en `https://<rama>.star-home-shop.pages.dev`.
 - **Repositorio:** `jxenterprise/Star-Home-shop`.
 - **Flujo de trabajo:** JX trabaja a veces en su carpeta local de VS Code (rama `main`) y a veces con Claude en la nube (rama `claude/…` + PR + fusión a `main`). **NUNCA se sube a GitHub sin que JX lo autorice expresamente** (en esta sesión lo autorizó: "subes a github y push y cloudflare despliegue"). Antes de empezar: `git fetch` + `git status`, porque el CMS (`/admin`) y otras sesiones también hacen commits en `main`. En la nube el push de etiquetas (`git push origin vX.Y`) está bloqueado: las crea JX en GitHub → Releases.
@@ -22,6 +23,12 @@ _Última actualización: 12 nov 2026, 11:15 (hora de Colombia). Lee también "�
 
 ## 📍 DÓNDE NOS QUEDAMOS (bitácora con fecha y hora — hora de Colombia, UTC−5)
 _Lo más nuevo arriba. Cada sesión agrega su entrada aquí antes de terminar._
+
+### 12 nov 2026, 11:15–11:55 — v1.4 (ajuste): revisión en producción, cabecera `Link` rota y letras propias
+- **Qué pasó:** al medir producción después de fusionar la PR #2, Lighthouse celular dio **81** (95 en local; FCP 2,9 s, LCP 4,2 s). Causa: Cloudflare Pages arma sola la cabecera HTTP `Link` (Early Hints) con los `<link rel="preload|preconnect">` del HTML, copiando el `href` TAL CUAL, sin convertir `&amp;` en `&`. Cada visita pedía una hoja de Google Fonts rota (solo Cormorant, 5,8 KB de más, prioridad máxima) y Chrome avisaba "preloaded but not used". La batería de pruebas no lo veía porque solo contaba errores de consola; ahora también cuenta los avisos (`warning`).
+- **Qué se hizo:** letras propias en `/fonts` (los mismos archivos de Google, idénticos byte a byte, mismos pesos: se ven igual) con precarga; fuera las 2 conexiones a Google (y "Google Fonts" de `cookies.html`); el logo de la portada (elemento LCP) ahora entra desde 40 % de opacidad y sin retraso.
+- **Resultado en la vista previa real de Cloudflare:** celular **95–99**/100/100 (FCP 1,0 s, LCP 2,0–2,2 s, CLS 0), escritorio **100**/100/100 (SEO 69 solo por el `noindex` de las vistas previas); 140/140 pruebas; anclas a 84 px exactos. Capturas local contra producción en iPhone 13: 0 píxeles distintos.
+- **SIGUIENTE:** lo mismo de la entrada de abajo (JX dijo que después hablan de cosas nuevas). PR #3 → `main` con autorización de JX ("subes a github y push y cloudflare despliegue"; "no pares hasta terminar y quede todo perfecto"). La etiqueta `v1.4` la crea JX en GitHub → Releases sobre el último commit de `main`.
 
 ### 12 nov 2026, 00:20–11:15 — v1.4: Star Home, catálogo real sin precios (sesión en la nube)
 - **Qué mandó JX:** ZIP "Star Home" con 83 fotos (81 productos + el logo `1.jpeg` + una repetida: `25.png` y `26` son la misma) y su PDF "Catálogo Star Home 2026" (41 páginas, 14 MB) con nombres, códigos y secciones. Pidió: productos SIN precio (la dueña quiere que pregunten por WhatsApp), "que se vean bien y se puedan seleccionar bien" (carrusel o lo mejor), el logo de Star Home en la web y en las fotos "ahí mismo donde está el otro logo" (como en su PDF), la web con los colores del logo y un botón "Descargar catálogo" junto al título.
@@ -113,7 +120,7 @@ Star-Home-shop/
 ├── cookies.html               política de cookies + tabla (eh_consentimiento_v1, sh_lista_v1)
 ├── terminos.html              términos + propiedad intelectual (precios por WhatsApp)
 ├── politicas-de-compra.html   compras, entregas, retracto, garantía, reversión + formulario PQR
-├── _headers                   caché (css/js/contenido sin caché; img 1 día; PDF 1 hora) + seguridad
+├── _headers                   caché (css/js/contenido sin caché; img 1 día; PDF 1 hora; fonts 1 año) + seguridad
 ├── robots.txt                 permite bots de IA; bloquea /admin/
 ├── sitemap.xml                solo "/" (legales con noindex)
 ├── llms.txt                   mapa del sitio para IA
@@ -122,8 +129,10 @@ Star-Home-shop/
 ├── apple-touch-icon.png       logo de Star Home 180×180 (excepción técnica)
 ├── CLAUDE.md / README.md / CHANGELOG.md
 ├── .gitignore                 .wrangler/, node_modules/, .dev.vars
-├── css/styles.css             todo el CSS (variables :root, mobile-first, 16 bloques)
+├── css/styles.css             todo el CSS (@font-face + variables :root, mobile-first, 16 bloques)
 ├── js/script.js               todo el JS (módulos comentados)
+├── fonts/                     letras propias woff2, subconjunto latin (Cormorant Garamond v21,
+│                              Montserrat v31, Great Vibes v21) + LICENCIAS.txt (SIL OFL 1.1)
 ├── catalogo/
 │   └── catalogo-star-home-2026.pdf     el PDF de JX (14 MB) del botón "Descargar catálogo"
 ├── img/                       TODO en WebP
@@ -160,6 +169,7 @@ Star-Home-shop/
 | Textos legales | directamente en cada `.html` | JX |
 | GA4 (Measurement ID) | `js/script.js` → `CONFIG.ga4` | JX |
 | Repositorio y autenticador del CMS | `admin/config.yml` → `backend` | JX |
+| Letras (tipografías) | archivos en `fonts/` + `@font-face` al inicio de `css/styles.css` + precargas del `<head>` de las 6 páginas (el nombre del archivo debe coincidir en los tres sitios; si cambia la letra, nombre nuevo por la caché de 1 año) | JX |
 
 ## {POR CONFIRMAR} pendientes
 
@@ -199,6 +209,8 @@ Star-Home-shop/
 - **v1.4 — Colores y letras del logo/PDF:** JX pidió "la web con los mismos colores del logo". Se tomaron también las tipografías de su PDF para que web y catálogo se vean iguales.
 - **v1.4 — WhatsApp sigue sin verde** (decisión de JX en v1.3): botones "Consultar" y flotante en el café de la marca (`--marca`), el flotante con anillo dorado. El PDF sí usa verde; la web no.
 - **v1.4 — Modo muestra apagado** (Google indexa): los productos ya son reales. JX no contestó esa pregunta; se apaga y prende desde `/admin` → Ajustes.
+- **v1.4 (ajuste) — Letras propias en `/fonts`, no Google Fonts** (12 nov 2026): (1) la cabecera `Link` que arma Cloudflare con el `&amp;` sin decodificar pedía una hoja de letras rota en cada visita; (2) son dos conexiones menos en el celular (`fonts.googleapis.com` y `fonts.gstatic.com`); (3) privacidad: la IP del visitante ya no va a Google (se quitó de `cookies.html`); (4) con precarga casi nunca se ve el cambio de letra (CLS 0). Son los mismos archivos que entregaba Google (licencia SIL OFL 1.1, que permite alojarlos). En la portada se precargan las 3 DESPUÉS del logo y el CSS: con HTTP/2 y HTTP/3, Cloudflare entrega primero el logo.
+- **v1.4 (ajuste) — Logo de la portada desde 40 % de opacidad, sin retraso:** es el elemento LCP; si empieza invisible, Chrome no lo cuenta hasta que aparece y la carga medida se corre ~0,3 s.
 - **v1.4 — `content-visibility` en las tarjetas:** las que están fuera de pantalla no se dibujan (Lighthouse celular 93–95 → 95–97). Efecto secundario arreglado: al tocar un enlace interno se dibujan todas antes de desplazarse (clase `.dibujar-todo`), si no, el menú aterrizaba corrido.
 
 
@@ -221,7 +233,7 @@ Cualquier sección, componente, botón o página que se agregue a futuro debe us
   - `--crema: #FBF7F3` fondo general · `--blanco: #FFFFFF` · `--lino: #F3ECE6` fondo de fotos · `--hilo: #E7DAD3` bordes
   - `--tinta: #33272A` texto · `--tinta-2: #5E4F4C` secundario · `--tinta-3: #6F605C` notas · `--error: #A3262E`
   - **WhatsApp NO usa verde** (decisión de JX, v1.3): botones en `--marca`.
-- Tipografías (las del PDF): **Cormorant Garamond** 500–700 (títulos, nombres de producto), **Montserrat** 400–700 (texto, botones, etiquetas en mayúsculas espaciadas) y **Great Vibes** (letra cursiva SOLO de adorno: lema "Textiles para tu hogar", "¿Buscas algo más?", lema del pie). Google Fonts, carga no bloqueante.
+- Tipografías (las del PDF): **Cormorant Garamond** 500–700 (títulos, nombres de producto), **Montserrat** 400–700 (texto, botones, etiquetas en mayúsculas espaciadas) y **Great Vibes** (letra cursiva SOLO de adorno: lema "Textiles para tu hogar", "¿Buscas algo más?", lema del pie). Servidas desde `/fonts` (antes Google Fonts) con `@font-face` y precarga; mismos pesos.
 - Escala: h1 portada `clamp(2.45rem, 1.55rem + 3.9vw, 4.5rem)`; h2 `clamp(2.1rem, 1.55rem + 2.2vw, 3.2rem)`; cuerpo 1rem/1.65; nombre en tarjeta 1.28rem (1.06–1.14 en celulares chicos).
 - Radios: `--radio-s: 10px`, `--radio-m: 16px` (tarjetas), `--radio-l: 24px` (bloques), botones `999px` (píldora).
 - Sombras: `--sombra-1` suave, `--sombra-2` paneles flotantes, `--sombra-oro` marco del logo. Sin brillos ni neones.
@@ -313,6 +325,21 @@ Pedido de JX: fotos reales (ZIP) + PDF "Catálogo Star Home 2026"; sin precios; 
   - Lighthouse celular 95/100/100/100 (LCP 2,4 s, TBT ~150–190 ms, CLS 0) y escritorio 97/100/100/100.
   - **Vista previa real de Cloudflare** (rama `claude/cool-newton-ux61it`, PR #2): las mismas 140 comprobaciones dan TODO OK y los enlaces del menú aterrizan exactos. Lighthouse ahí da SEO 69 solo porque Cloudflare pone `x-robots-tag: noindex` a las vistas previas (en producción no).
 
+### 12 nov 2026, 11:55 — v1.4 (ajuste) · Letras propias en /fonts y fuera la cabecera `Link` rota
+Revisión de producción tras fusionar la PR #2 (Lighthouse celular 81). PR #3.
+- **`fonts/`** (nuevo): `cormorant-garamond-v21-latin.woff2` (variable 300–700), `montserrat-v31-latin.woff2` (variable 100–900) y `great-vibes-v21-latin.woff2`, bajados de Google Fonts (subconjunto latin, mismo MD5 que sirve Google) + `LICENCIAS.txt` (copyright de cada una + texto de la SIL OFL 1.1).
+- **`css/styles.css`:** bloque 1 = "Tipografías propias y variables": 3 `@font-face` con `font-display: swap`, el `unicode-range` latin de Google y los MISMOS pesos que pedía la web (Cormorant `500 700`, Montserrat `400 700`, Great Vibes `400`), para que pesos fuera de rango (p. ej. 800 en `.portada__version`) se vean igual que antes. Rutas `../fonts/…` (sirven también con `file://`). Portada: `.portada__arte > *` sin `animation-delay` y `@keyframes aparecer-arte` desde `opacity: .4`.
+- **`<head>` de las 6 páginas:** fuera los `preconnect`, el `preload as=style`, la hoja con `media="print" onload` y el `<noscript>` de Google. En su lugar `<link rel="preload" as="font" type="font/woff2" href="fonts/…" crossorigin>`: las 3 en `index.html` (después del logo y el CSS) y Cormorant + Montserrat en las legales y la 404 (esta con rutas `/fonts/…`). Los `<link>` con `crossorigin` o `fetchpriority` no generan cabecera `Link` en Cloudflare: ahora la página no lleva ninguna.
+- **`_headers`:** `/fonts/*` → `Cache-Control: public, max-age=31536000, immutable`.
+- **`cookies.html`:** fuera la viñeta "Google Fonts" de "Servicios de terceros que no ponen cookies aquí".
+- **Pruebas:**
+  - `fuentes2.js` (6 páginas, local y vista previa): 0 peticiones a Google, cada `.woff2` una sola vez (la precarga se reutiliza), las 3 caras `loaded`, sin avisos.
+  - Batería v1.4 (ahora también falla con avisos de consola): 140/140 en local y en la vista previa.
+  - Anclas a 84 px exactos; html-validate sin errores (7 archivos).
+  - Capturas local contra producción: iPhone 13 portada y términos 0 píxeles distintos; en escritorio, alturas idénticas al milésimo de píxel.
+  - Lighthouse en la vista previa: celular 99/95/97 en 3 corridas (FCP 1,0 s, LCP 2,0–2,2 s, CLS 0) y escritorio 100.
+  - En local (wrangler sirve HTTP/1.1) Lighthouse simula el logo y las letras compartiendo ancho de banda y da LCP ~2,8 s; en Cloudflare (HTTP/2 y HTTP/3) no pasa. Para medir velocidad, usar la vista previa o producción, no el local.
+
 ## 🏷️ VERSIONES (cómo publicar una nueva)
 Numeración `vMAYOR.MENOR`: sube MENOR en cada entrega de arreglos o funciones; MAYOR solo con un cambio grande (rediseño, catálogo real con dominio propio, etc.). Historial: v1.0 (29 oct 2026, entrega inicial) → v1.2 (11 nov 2026, revisión móvil; no hubo v1.1 publicada) → v1.3 (11 nov 2026, solo WhatsApp) → v1.4 (12 nov 2026, Star Home: catálogo real sin precios).
 
@@ -371,4 +398,4 @@ Si la dueña sube una foto desde `/admin`, el CMS solo la pasa a WebP (1600 px):
 - Recomendar a la dueña reclamar su ficha de **Google Business Profile** como **Star Home** (negocio que atiende en Cartagena, sin dirección pública) y mantener el NAP idéntico (nombre, teléfono).
 - **Fotos del proveedor:** confirmar con Duvellar Home, ÉVORA y VELUNA que están de acuerdo con usar sus fotos con el logo de Star Home, o pedirles fotos sin marca (se cambian desde `/admin`).
 - **Si cambia el PDF del catálogo:** subirlo desde `/admin` → Ajustes → Catálogo en PDF (máx. 25 MB). El botón muestra el peso solo si Cloudflare lo informa; si no, queda el texto "PDF · 14 MB" de `index.html` (cambiarlo a mano si el PDF nuevo pesa distinto).
-- Correr PageSpeed Insights tras cada despliegue grande (v1.4 en local: celular 95/100/100/100, escritorio 97/100/100/100).
+- Correr PageSpeed Insights (pagespeed.web.dev) tras cada despliegue grande. v1.4 con letras propias, en la vista previa de Cloudflare: celular 95–99, escritorio 100 (Accesibilidad y Buenas prácticas 100; SEO 100 en producción).

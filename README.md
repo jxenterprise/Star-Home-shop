@@ -33,7 +33,8 @@ Cómo llegar: abre el archivo, busca `ZONA EDITABLE` con Ctrl+F, cambia solo lo 
 - SEO: title, description, canonical, Open Graph, Twitter Card, JSON-LD (WebSite, HomeGoodsStore, FAQPage y lista de productos), sitemap, robots que permite bots de IA y `llms.txt`.
 - Páginas legales: privacidad, cookies, términos y políticas de compra con **retracto, garantía, reversión del pago y formulario PQR con número de radicado**.
 - Banner de cookies con Aceptar y Rechazar del mismo tamaño; Google Analytics 4 solo después de aceptar.
-- Responsive de 280 px (celulares plegables) a TV, accesible (sin violaciones en axe-core), botones de 44–48 px, respeta "reducir movimiento". Lighthouse celular 95/100/100/100.
+- Responsive de 280 px (celulares plegables) a TV, accesible (sin violaciones en axe-core), botones de 44–48 px, respeta "reducir movimiento". Lighthouse en Cloudflare: celular 95–99, escritorio 100 (Accesibilidad y Buenas prácticas 100).
+- Letras propias en `/fonts` (las del PDF, sin Google Fonts): carga más rápida en el celular y sin enviar la IP del visitante a terceros.
 
 ---
 
@@ -44,6 +45,7 @@ index.html · 404.html · privacidad.html · cookies.html · terminos.html · po
 _headers · robots.txt · sitemap.xml · llms.txt · site.webmanifest
 favicon.ico · favicon.svg · apple-touch-icon.png
 css/styles.css · js/script.js
+fonts/          letras propias (Cormorant Garamond, Montserrat, Great Vibes) + LICENCIAS.txt
 img/            todo WebP: logo en 3 tamaños, imagen para compartir y productos en img/productos/
                 (foto grande <ref>-<nombre>.webp + miniatura <ref>-<nombre>-mini.webp)
 catalogo/       catalogo-star-home-2026.pdf (botón "Descargar catálogo")
