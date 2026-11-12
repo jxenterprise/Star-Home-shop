@@ -1,4 +1,4 @@
-# Estrellita House — robots.txt
+# Star Home — robots.txt
 # Permite a buscadores y bots de IA leer la tienda, pero no el administrador
 # (/admin/). Apunta al sitemap. (Desde v1.3 ya no existe /api/: no hay pago en línea.)
 # ⚠ Si cambia el dominio, actualizar la línea Sitemap.

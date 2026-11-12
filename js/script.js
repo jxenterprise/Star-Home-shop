@@ -1,41 +1,47 @@
 /* ============================================================================
-   Estrellita House — js/script.js
+   Star Home — js/script.js
    Todo el JavaScript del sitio (landing, páginas legales y 404). Vanilla, sin
    librerías. Cada módulo revisa si su HTML existe antes de arrancar, así el
    mismo archivo sirve en todas las páginas sin errores en consola.
 
    Módulos (en orden):
      1. CONFIG ............ datos que se configuran a mano (WhatsApp, GA4)
-     2. Utilidades ......... $, formato de pesos, escape de texto
+     2. Utilidades ......... $, escape de texto, WhatsApp, foco
      3. Consentimiento ..... banner de cookies (Aceptar / Rechazar)
-     4. Almacen ............ guarda el carrito SOLO si la persona aceptó
+     4. Almacen ............ guarda "Mi lista" SOLO si la persona aceptó
      5. Analitica .......... GA4, que solo carga tras aceptar cookies
-     6. Toast .............. aviso corto "Agregado al carrito"
+     6. Toast .............. aviso corto "Agregado a tu lista"
      7. Menu ............... hamburguesa en ≤900px
-     8. Catalogo ........... pestañas de colección, medidas y precios
-     9. Carrito ............ panel lateral, cantidades y total
-    10. Pedido ............. nombre + autorización y envío del pedido por WhatsApp
-    11. PQR ................ formulario con número de radicado (políticas)
-    12. Arranque
+     8. Catalogo ........... pestañas, filtros (tipo/tamaño) y clics de tarjetas
+     9. Visor .............. foto en grande a pantalla completa, tipo carrusel
+    10. Lista .............. "Mi lista": diseños marcados con la estrella
+    11. Pedido ............. nombre + autorización y consulta de la lista por WhatsApp
+    12. PQR ................ formulario con número de radicado (políticas)
+    13. Arranque
    Depende de: los id del index.html y #catalogo-datos (lo escribe
-   functions/index.js). Desde v1.3 no hay pago en línea ni domicilios:
-   todo el pedido, con su total, se envía por WhatsApp.
+   functions/index.js). Desde v1.4 el catálogo es real y SIN PRECIOS: cada
+   producto se consulta por WhatsApp (botón "Consultar" de la tarjeta, que es
+   un enlace real armado en el servidor) o en grupo desde "Mi lista".
    ========================================================================== */
 (() => {
   'use strict';
 
   /* ==========================================================================
      1. CONFIG — lo único que se edita a mano aquí
-     ⚠ whatsapp se repite en index.html (ZONA EDITABLE · CONTACTO), 404 y legales.
+     ⚠ whatsapp se repite en index.html (ZONA EDITABLE · CONTACTO), en
+     functions/index.js (WHATSAPP), en 404 y en las páginas legales.
      ========================================================================== */
   const CONFIG = {
-    tienda: 'Estrellita House',
+    tienda: 'Star Home',
     whatsapp: '573008447167',      // formato internacional, sin + ni espacios
     ga4: 'G-XXXXXXXXXX',           // {POR CONFIRMAR} Measurement ID de Google Analytics 4
+    // La clave del consentimiento viene de cuando la web se llamaba Estrellita
+    // House: se deja igual para no volver a preguntarle a quien ya decidió.
     claveConsentimiento: 'eh_consentimiento_v1',
-    claveCarrito: 'eh_carrito_v1',
-    // Claves que usaba el pago en línea (hasta v1.2): se borran del navegador al cargar
-    clavesViejas: ['eh_pedido_wompi_v1', 'eh_compras_medidas_v1'],
+    claveLista: 'sh_lista_v1',
+    // Claves viejas (pago en línea hasta v1.2 y carrito con precios hasta v1.3):
+    // se borran del navegador al cargar.
+    clavesViejas: ['eh_pedido_wompi_v1', 'eh_compras_medidas_v1', 'eh_carrito_v1'],
     maxCantidad: 20
   };
 
@@ -47,6 +53,7 @@
   const formatoCOP = (n) => '$' + String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   const escapar = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const enlaceWhatsApp = (texto) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
+  const MEDIDA_POR_WHATSAPP = 'Medida: consúltala por WhatsApp';
 
   /** Abre WhatsApp en otra pestaña (en el celular abre la app). Si el
    *  navegador bloquea la ventana, navega directo.
@@ -62,8 +69,8 @@
     return url;
   }
 
-  /** Mantiene el foco dentro de un panel (carrito, ventana de pago) mientras
-   *  está abierto, para quien navega con teclado o lector de pantalla. */
+  /** Mantiene el foco dentro de un panel ("Mi lista") mientras está abierto,
+   *  para quien navega con teclado o lector de pantalla. */
   function atraparFoco(panel, evento) {
     if (evento.key !== 'Tab') return;
     const enfocables = $$('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])', panel)
@@ -75,10 +82,17 @@
     else if (!evento.shiftKey && document.activeElement === ultimo) { evento.preventDefault(); primero.focus(); }
   }
 
+  /** ¿El toque cayó FUERA de la tarjeta de un <dialog>? (en su fondo oscuro).
+   *  Hace falta porque e.target === dialogo también es cierto en su relleno. */
+  function toqueFuera(dialogo, e) {
+    const r = dialogo.getBoundingClientRect();
+    return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+  }
+
   /* ==========================================================================
      3. CONSENTIMIENTO (banner de cookies)
      Colombia (Ley 1581 de 2012 y criterio de la SIC): nada de analítica ni
-     almacenamiento del carrito hasta que la persona acepte. Aceptar y
+     almacenamiento de la lista hasta que la persona acepte. Aceptar y
      Rechazar pesan lo mismo. La decisión se guarda (es lo mínimo necesario
      para respetarla) y se puede cambiar con "Configurar cookies" del pie.
      ========================================================================== */
@@ -124,13 +138,13 @@
   })();
 
   /* ==========================================================================
-     4. ALMACEN — guarda el carrito en el navegador SOLO con consentimiento.
+     4. ALMACEN — guarda "Mi lista" en el navegador SOLO con consentimiento.
      Sin consentimiento todo vive en memoria (se pierde al recargar).
      ========================================================================== */
   const Almacen = (() => {
     const memoria = new Map();
     const hayLocal = (() => {
-      try { localStorage.setItem('__eh', '1'); localStorage.removeItem('__eh'); return true; } catch (e) { return false; }
+      try { localStorage.setItem('__sh', '1'); localStorage.removeItem('__sh'); return true; } catch (e) { return false; }
     })();
     const permitido = () => hayLocal && Consentimiento.estado() === 'aceptado';
     if (hayLocal) CONFIG.clavesViejas.forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
@@ -153,7 +167,7 @@
       // Al rechazar: se borra del navegador (queda en memoria mientras la página siga abierta)
       limpiarNavegador() {
         if (!hayLocal) return;
-        [CONFIG.claveCarrito].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
+        [CONFIG.claveLista].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
       }
     };
   })();
@@ -161,8 +175,9 @@
   /* ==========================================================================
      5. ANALITICA (Google Analytics 4)
      No carga nada si el ID sigue en {POR CONFIRMAR} o si no hay consentimiento.
-     Eventos: clic_whatsapp, clic_telefono, add_to_cart, pedido_whatsapp y
-     envio_formulario (PQR).
+     Eventos: consulta_whatsapp (botón Consultar), agregar_lista, ver_foto,
+     lista_whatsapp (consultar la lista), descarga_catalogo, clic_whatsapp,
+     clic_telefono y envio_formulario (PQR).
      ========================================================================== */
   const Analitica = (() => {
     const valido = /^G-[A-Z0-9]{6,}$/.test(CONFIG.ga4) && CONFIG.ga4 !== 'G-XXXXXXXXXX';
@@ -258,95 +273,338 @@
   }
 
   /* ==========================================================================
-     8. CATALOGO — lee los datos que dejó el servidor en #catalogo-datos,
-     maneja las pestañas de colección y el cambio de medida/precio.
+     8. CATALOGO — lee los datos que dejó el servidor en #catalogo-datos y
+     maneja las pestañas (secciones), los filtros por tipo o tamaño y los
+     clics de las tarjetas (foto → visor, estrella → lista, Consultar → mide).
+     El filtro visible lo hace el CSS: .producto sin .coincide se esconde.
      ========================================================================== */
   const Catalogo = (() => {
     const datos = { productos: [], colecciones: [] };
     const nodo = $('#catalogo-datos');
     if (nodo) {
-      try { Object.assign(datos, JSON.parse(nodo.textContent || '{}')); } catch (e) { /* sin datos: el carrito queda vacío */ }
+      try { Object.assign(datos, JSON.parse(nodo.textContent || '{}')); } catch (e) { /* sin datos: catálogo vacío */ }
     }
+    if (!Array.isArray(datos.productos)) datos.productos = [];
+    if (!Array.isArray(datos.colecciones)) datos.colecciones = [];
     const porId = new Map(datos.productos.map((p) => [p.id, p]));
     const producto = (id) => porId.get(id) || null;
 
-    function iniciarPestanas() {
-      const contenedor = $('#catalogo-pestanas');
-      const grid = $('#catalogo-grid');
-      const descripcion = $('#coleccion-desc');
-      if (!contenedor || !grid) return;
-      const pestanas = $$('[role="tab"]', contenedor);
+    const grid = $('#catalogo-grid');
+    const contPestanas = $('#catalogo-pestanas');
+    const contFiltros = $('#catalogo-filtros');
+    const descripcion = $('#coleccion-desc');
+    let coleccion = grid ? grid.dataset.filtro || 'todas' : 'todas';
+    let grupo = 'todos';
+    const pestanas = contPestanas ? $$('[role="tab"]', contPestanas) : [];
 
-      function activar(pestana, enfocar) {
-        const id = pestana.dataset.coleccion;
-        pestanas.forEach((p) => {
-          const elegida = p === pestana;
-          p.setAttribute('aria-selected', String(elegida));
-          p.tabIndex = elegida ? 0 : -1;
-        });
-        grid.dataset.filtro = id;
-        grid.setAttribute('aria-labelledby', pestana.id);
-        let orden = 0;
-        $$('.producto', grid).forEach((tarjeta) => {
-          const coincide = id === 'todas' || tarjeta.dataset.coleccion === id;
-          tarjeta.classList.toggle('coincide', coincide);
-          tarjeta.classList.remove('entra');
-          if (coincide) {
-            void tarjeta.offsetWidth; // reinicia la animación
-            tarjeta.style.setProperty('--i', String(orden++));
-            tarjeta.classList.add('entra');
-          }
-        });
-        if (descripcion) {
-          descripcion.textContent = id === 'todas'
-            ? 'Todos los diseños disponibles.'
-            : ((datos.colecciones.find((c) => c.id === id) || {}).descripcion || '');
+    // Grupos (Cobijas / Cortinas, Sencilla / Doble…) de una colección, en orden
+    function gruposDe(idColeccion) {
+      const mapa = new Map();
+      datos.productos.filter((p) => p.coleccion === idColeccion).forEach((p) => {
+        if (!mapa.has(p.grupoId)) mapa.set(p.grupoId, { id: p.grupoId, nombre: p.grupo || 'Otros', n: 0 });
+        mapa.get(p.grupoId).n += 1;
+      });
+      return [...mapa.values()];
+    }
+
+    function pintarFiltros() {
+      if (!contFiltros) return;
+      const grupos = coleccion === 'todas' ? [] : gruposDe(coleccion);
+      if (grupos.length < 2) { contFiltros.innerHTML = ''; contFiltros.hidden = true; return; }
+      const total = grupos.reduce((s, g) => s + g.n, 0);
+      const boton = (id, nombre, n) => `<button type="button" class="filtro" data-grupo="${escapar(id)}" aria-pressed="${id === grupo}">${escapar(nombre)} <span class="filtro__n">${n}</span></button>`;
+      contFiltros.innerHTML = [boton('todos', 'Todo', total), ...grupos.map((g) => boton(g.id, g.nombre, g.n))].join('');
+      contFiltros.hidden = false;
+    }
+
+    function textoDescripcion() {
+      if (coleccion === 'todas') return 'Todos los diseños disponibles.';
+      return (datos.colecciones.find((c) => c.id === coleccion) || {}).descripcion || '';
+    }
+
+    // Marca con .coincide las tarjetas que se ven (pestaña + filtro) y las anima
+    function aplicar(animar) {
+      if (!grid) return;
+      grid.dataset.filtro = coleccion;
+      let orden = 0;
+      $$('.producto', grid).forEach((tarjeta) => {
+        const coincide = (coleccion === 'todas' || tarjeta.dataset.coleccion === coleccion)
+          && (grupo === 'todos' || tarjeta.dataset.grupo === grupo);
+        tarjeta.classList.toggle('coincide', coincide);
+        tarjeta.classList.remove('entra');
+        if (coincide && animar && orden < 12) {
+          void tarjeta.offsetWidth; // reinicia la animación
+          tarjeta.style.setProperty('--i', String(orden));
+          tarjeta.classList.add('entra');
         }
-        if (enfocar) pestana.focus();
+        if (coincide) orden += 1;
+      });
+      if (descripcion) descripcion.textContent = textoDescripcion();
+    }
+
+    function activarPestana(pestana, enfocar) {
+      coleccion = pestana.dataset.coleccion;
+      grupo = 'todos';
+      pestanas.forEach((p) => {
+        const elegida = p === pestana;
+        p.setAttribute('aria-selected', String(elegida));
+        p.tabIndex = elegida ? 0 : -1;
+      });
+      if (grid) grid.setAttribute('aria-labelledby', pestana.id);
+      pintarFiltros();
+      aplicar(true);
+      if (enfocar) pestana.focus();
+    }
+
+    function elegirGrupo(id) {
+      grupo = id;
+      if (contFiltros) $$('.filtro', contFiltros).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.grupo === id)));
+      aplicar(true);
+    }
+
+    // Ids de los productos que se ven ahora, en el orden de la página (para el visor)
+    function visibles() {
+      if (!grid) return [];
+      return $$('.producto', grid).filter((t) => t.offsetParent !== null || t.classList.contains('coincide')).map((t) => t.dataset.id);
+    }
+
+    // Deja a la vista un producto (para los enlaces directos /#p-<id>): cambia a
+    // su pestaña si hace falta y quita el filtro.
+    function mostrarProducto(id) {
+      const p = producto(id);
+      if (!p) return false;
+      const dentro = (coleccion === 'todas' || p.coleccion === coleccion) && (grupo === 'todos' || p.grupoId === grupo);
+      if (!dentro) {
+        const pestana = pestanas.find((b) => b.dataset.coleccion === p.coleccion) || pestanas.find((b) => b.dataset.coleccion === 'todas');
+        if (pestana) activarPestana(pestana, false);
       }
+      return true;
+    }
 
-      pestanas.forEach((p) => p.addEventListener('click', () => activar(p)));
+    function iniciar() {
+      if (!grid) return;
+      pintarFiltros();
+      pestanas.forEach((p) => p.addEventListener('click', () => activarPestana(p)));
       // Teclado: flechas, Inicio y Fin (patrón de pestañas accesibles)
-      contenedor.addEventListener('keydown', (e) => {
-        const i = pestanas.indexOf(document.activeElement);
-        if (i < 0) return;
-        const mapa = { ArrowRight: (i + 1) % pestanas.length, ArrowLeft: (i - 1 + pestanas.length) % pestanas.length, Home: 0, End: pestanas.length - 1 };
-        if (e.key in mapa) { e.preventDefault(); activar(pestanas[mapa[e.key]], true); }
-      });
-    }
-
-    function iniciarTarjetas() {
-      $$('.producto__compra').forEach((form) => {
-        const id = form.dataset.producto;
-        const selector = $('select[name="variante"]', form);
-        const precio = form.closest('.producto') ? $('[data-precio-visible]', form.closest('.producto')) : null;
-        if (selector && precio) {
-          selector.addEventListener('change', () => {
-            const p = producto(id);
-            const v = p && p.variantes[Number(selector.value)];
-            if (v) precio.textContent = formatoCOP(v.precio);
-          });
-        }
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const p = producto(id);
-          if (!p || p.agotado) return;
-          const campo = selector || $('input[name="variante"]', form);
-          Carrito.agregar(id, Number(campo ? campo.value : 0) || 0, 1);
+      if (contPestanas) {
+        contPestanas.addEventListener('keydown', (e) => {
+          const i = pestanas.indexOf(document.activeElement);
+          if (i < 0) return;
+          const mapa = { ArrowRight: (i + 1) % pestanas.length, ArrowLeft: (i - 1 + pestanas.length) % pestanas.length, Home: 0, End: pestanas.length - 1 };
+          if (e.key in mapa) { e.preventDefault(); activarPestana(pestanas[mapa[e.key]], true); }
         });
+      }
+      if (contFiltros) {
+        contFiltros.addEventListener('click', (e) => {
+          const b = e.target.closest('.filtro');
+          if (b) elegirGrupo(b.dataset.grupo);
+        });
+      }
+      // Clics de las tarjetas (delegados en el grid)
+      grid.addEventListener('click', (e) => {
+        const ver = e.target.closest('[data-ver]');
+        if (ver) { Visor.abrir(ver.dataset.ver, ver); return; }
+        const estrella = e.target.closest('[data-lista]');
+        if (estrella) { Lista.alternar(estrella.dataset.lista); return; }
+        const consultar = e.target.closest('[data-consultar]');
+        if (consultar) {
+          const p = producto(consultar.dataset.consultar);
+          if (p) Analitica.medir('consulta_whatsapp', { item_id: p.referencia, item_name: p.nombre, ubicacion: 'tarjeta' });
+        }
       });
     }
 
-    return { datos, producto, iniciar() { iniciarPestanas(); iniciarTarjetas(); } };
+    return { datos, producto, visibles, mostrarProducto, iniciar };
   })();
 
   /* ==========================================================================
-     9. CARRITO — panel lateral con productos, cantidades y el total del pedido.
-     Cada línea guarda { id, v: índice de la medida, n: cantidad }.
-     Al cargar se cruza con el catálogo vivo: si un producto o medida ya no
-     existe o se agotó, sale del carrito; los precios siempre son los actuales.
+     9. VISOR — la foto del producto en grande, a pantalla completa, tipo
+     carrusel: se pasa al siguiente diseño deslizando el dedo, con las flechas
+     de la pantalla o con las del teclado. Recorre los productos que se ven en
+     el catálogo (pestaña y filtro activos).
+     · Usa <dialog> nativo: atrapa el foco y Escape lo cierra solo.
+     · Agrega una entrada al historial (#p-<id>): el botón "atrás" del celular
+       cierra el visor en vez de salirse de la página.
+     · Enlace directo: /#p-cb-01 abre el visor en ese producto (lo trae el
+       mensaje de WhatsApp de "Consultar", para que la tienda vea la foto).
      ========================================================================== */
-  const Carrito = (() => {
+  const Visor = (() => {
+    const dialogo = $('#visor');
+    const foto = $('#visor-foto');
+    let ids = [];
+    let indice = 0;
+    let origen = null;          // elemento que abrió el visor (vuelve el foco ahí)
+    let conHistoria = false;    // ¿se agregó una entrada al historial al abrir?
+    const disponible = Boolean(dialogo && typeof dialogo.showModal === 'function' && foto);
+
+    function idActual() { return ids[indice]; }
+
+    function hashDe(id) { return `#p-${id}`; }
+
+    function pintar() {
+      const p = Catalogo.producto(idActual());
+      if (!p) return;
+      foto.classList.remove('visor__foto--lista');
+      foto.onload = () => foto.classList.add('visor__foto--lista');
+      foto.src = p.imagen;
+      foto.alt = p.alt || p.nombre;
+      if (foto.complete) foto.classList.add('visor__foto--lista');
+      $('#visor-ref').textContent = `Ref. ${p.referencia}`;
+      $('#visor-nombre').textContent = p.nombre;
+      $('#visor-detalle').textContent = [p.tipo, p.medida || MEDIDA_POR_WHATSAPP, p.precio ? formatoCOP(p.precio) : ''].filter(Boolean).join(' · ');
+      $('#visor-contador').textContent = `${indice + 1} de ${ids.length}`;
+      // El botón Consultar usa el MISMO enlace de la tarjeta (armado en el servidor)
+      const consultar = $('#visor-consultar');
+      const enlaceTarjeta = $(`#p-${CSS.escape(p.id)} [data-consultar]`);
+      consultar.hidden = Boolean(p.agotado);
+      consultar.href = enlaceTarjeta ? enlaceTarjeta.href : enlaceWhatsApp(`¡Hola, ${CONFIG.tienda}! ✨\nMe interesa este producto:\n*${p.nombre}* (${p.tipo})\nRef. ${p.referencia}\n¿Me confirman precio y disponibilidad? ¡Gracias!`);
+      pintarEstrella();
+      // Flechas: se esconden si solo hay un producto
+      $$('.visor__flecha', dialogo).forEach((b) => { b.hidden = ids.length < 2; });
+      // Precarga las fotos vecinas para que el carrusel vaya fluido
+      [indice - 1, indice + 1].forEach((i) => {
+        const vecino = Catalogo.producto(ids[(i + ids.length) % ids.length]);
+        if (vecino) { const im = new Image(); im.src = vecino.imagen; }
+      });
+      if (conHistoria) history.replaceState({ visor: true }, '', hashDe(p.id));
+    }
+
+    // Botón "Agregar a mi lista" del visor (refleja si ya está en la lista)
+    function pintarEstrella() {
+      if (!disponible || !dialogo.open) return;
+      const p = Catalogo.producto(idActual());
+      const boton = $('#visor-lista');
+      if (!p || !boton) return;
+      const enLista = Lista.tiene(p.id);
+      boton.hidden = Boolean(p.agotado);
+      boton.setAttribute('aria-pressed', String(enLista));
+      $('#visor-lista-texto').textContent = enLista ? 'En mi lista' : 'Agregar a mi lista';
+    }
+
+    function mover(paso) {
+      if (ids.length < 2) return;
+      indice = (indice + paso + ids.length) % ids.length;
+      foto.classList.remove('visor__foto--entra-izq', 'visor__foto--entra-der');
+      void foto.offsetWidth;
+      foto.classList.add(paso > 0 ? 'visor__foto--entra-der' : 'visor__foto--entra-izq');
+      pintar();
+    }
+
+    function abrir(id, boton, opciones = {}) {
+      if (!disponible) return;
+      if (!Catalogo.producto(id)) return;
+      ids = Catalogo.visibles();
+      if (!ids.includes(id)) ids = Catalogo.datos.productos.map((p) => p.id);
+      indice = Math.max(0, ids.indexOf(id));
+      origen = boton || null;
+      if (!dialogo.open) {
+        dialogo.showModal();
+        document.body.classList.add('visor-abierto');
+        // Entrada en el historial: así "atrás" cierra el visor
+        conHistoria = opciones.historia !== false;
+        if (conHistoria) history.pushState({ visor: true }, '', hashDe(id));
+      }
+      pintar();
+      $('[data-visor="cerrar"]', dialogo).focus();
+      const p = Catalogo.producto(id);
+      Analitica.medir('ver_foto', { item_id: p.referencia, item_name: p.nombre });
+    }
+
+    function cerrar() { if (disponible && dialogo.open) dialogo.close(); }
+
+    function alCerrar() {
+      document.body.classList.remove('visor-abierto');
+      const idCerrado = idActual();
+      if (conHistoria && history.state && history.state.visor) {
+        conHistoria = false;
+        history.back(); // quita el #p-<id> que puso el visor
+      } else if (/^#p-/.test(location.hash)) {
+        history.replaceState(history.state, '', location.pathname + location.search);
+      }
+      conHistoria = false;
+      // Devuelve el foco a la tarjeta de donde se abrió (o a la del producto que se estaba viendo)
+      const destino = origen && document.contains(origen) ? origen : $(`#p-${CSS.escape(idCerrado || '')} [data-ver]`);
+      if (destino) destino.focus({ preventScroll: true });
+      origen = null;
+    }
+
+    function iniciar() {
+      if (!disponible) return;
+      dialogo.addEventListener('close', alCerrar);
+      dialogo.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-visor]');
+        if (b) {
+          if (b.dataset.visor === 'cerrar') cerrar();
+          if (b.dataset.visor === 'anterior') mover(-1);
+          if (b.dataset.visor === 'siguiente') mover(1);
+          return;
+        }
+        if (e.target === dialogo && toqueFuera(dialogo, e)) cerrar();
+      });
+      dialogo.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); mover(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); mover(-1); }
+      });
+      $('#visor-lista').addEventListener('click', () => Lista.alternar(idActual()));
+      $('#visor-consultar').addEventListener('click', () => {
+        const p = Catalogo.producto(idActual());
+        if (p) Analitica.medir('consulta_whatsapp', { item_id: p.referencia, item_name: p.nombre, ubicacion: 'visor' });
+      });
+
+      // Deslizar con el dedo (o el mouse) sobre la foto
+      const escena = $('#visor-escena');
+      let inicio = null;
+      escena.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button')) return;
+        inicio = { x: e.clientX, y: e.clientY };
+      });
+      escena.addEventListener('pointerup', (e) => {
+        if (!inicio) return;
+        const dx = e.clientX - inicio.x;
+        const dy = e.clientY - inicio.y;
+        inicio = null;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) mover(dx < 0 ? 1 : -1);
+      });
+      escena.addEventListener('pointercancel', () => { inicio = null; });
+
+      // Botón "atrás" del celular o del navegador: cierra el visor
+      window.addEventListener('popstate', () => {
+        if (dialogo.open && !(history.state && history.state.visor)) {
+          conHistoria = false;
+          dialogo.close();
+        }
+      });
+
+      // Enlace directo /#p-<id>: abre el visor en ese producto, al cargar la
+      // página o si el # cambia con la página ya abierta (p. ej. un enlace a otro producto)
+      function abrirDesdeEnlace() {
+        const m = location.hash.match(/^#p-([a-z0-9_-]+)$/i);
+        if (!m || dialogo.open) return;
+        const id = m[1].toLowerCase();
+        if (!Catalogo.mostrarProducto(id)) return;
+        requestAnimationFrame(() => {
+          const tarjeta = $(`#p-${CSS.escape(id)}`);
+          if (tarjeta) tarjeta.scrollIntoView({ block: 'center' });
+          abrir(id, tarjeta ? $('[data-ver]', tarjeta) : null, { historia: false });
+        });
+      }
+      abrirDesdeEnlace();
+      window.addEventListener('hashchange', abrirDesdeEnlace);
+    }
+
+    return { abrir, cerrar, iniciar, pintarEstrella, abierto: () => disponible && dialogo.open };
+  })();
+
+  /* ==========================================================================
+     10. LISTA — "Mi lista": los diseños que el cliente marca con la estrella.
+     Cada línea guarda { id, n: cantidad }. SIN PRECIOS (v1.4): sirve para
+     preguntar por varios productos en un solo mensaje de WhatsApp.
+     Al cargar se cruza con el catálogo vivo: si un producto ya no existe o se
+     agotó, sale de la lista.
+     El panel conserva los id/clases "carrito" de versiones anteriores
+     (#carrito, #abrir-carrito, .carrito__…) para no romper los estilos.
+     ========================================================================== */
+  const Lista = (() => {
     const panel = $('#carrito');
     const fondo = $('#carrito-fondo');
     const botonAbrir = $('#abrir-carrito');
@@ -355,43 +613,62 @@
     let ultimoFoco = null;
 
     function reconciliar() {
-      lineas = lineas
+      const vistos = new Set();
+      lineas = (Array.isArray(lineas) ? lineas : [])
         .filter((l) => {
-          const p = Catalogo.producto(l.id);
-          return p && !p.agotado && p.variantes[l.v];
+          const p = l && Catalogo.producto(l.id);
+          if (!p || p.agotado || vistos.has(l.id)) return false;
+          vistos.add(l.id);
+          return true;
         })
-        .map((l) => ({ id: l.id, v: l.v, n: Math.min(CONFIG.maxCantidad, Math.max(1, Math.round(l.n) || 1)) }));
+        .map((l) => ({ id: l.id, n: Math.min(CONFIG.maxCantidad, Math.max(1, Math.round(l.n) || 1)) }));
     }
-    function guardar() { Almacen.guardar(CONFIG.claveCarrito, lineas); }
-    function detalle() {
-      return lineas.map((l) => {
-        const p = Catalogo.producto(l.id);
-        const v = p.variantes[l.v];
-        return { ...l, producto: p, variante: v, total: v.precio * l.n };
-      });
-    }
-    const totalPedido = () => detalle().reduce((s, l) => s + l.total, 0);
+    function guardar() { Almacen.guardar(CONFIG.claveLista, lineas); }
+    function detalle() { return lineas.map((l) => ({ ...l, producto: Catalogo.producto(l.id) })); }
+    const tiene = (id) => lineas.some((l) => l.id === id);
     const unidades = () => lineas.reduce((s, l) => s + l.n, 0);
 
-    function agregar(id, v, n) {
+    // Estrellas de las tarjetas: llenas si el producto está en la lista
+    function pintarEstrellas() {
+      $$('[data-lista]').forEach((b) => {
+        const p = Catalogo.producto(b.dataset.lista);
+        if (!p) return;
+        const en = tiene(p.id);
+        b.setAttribute('aria-pressed', String(en));
+        b.setAttribute('aria-label', `${en ? 'Quitar' : 'Agregar'} ${p.nombre} (${p.referencia}) ${en ? 'de' : 'a'} mi lista`);
+        b.title = en ? 'Quitar de mi lista' : 'Agregar a mi lista';
+      });
+      Visor.pintarEstrella();
+    }
+
+    function saltarContador() {
+      if (!contador) return;
+      contador.classList.remove('salta');
+      void contador.offsetWidth;
+      contador.classList.add('salta');
+    }
+
+    // Estrella (tarjeta o visor): agrega o quita el producto
+    function alternar(id) {
       const p = Catalogo.producto(id);
-      if (!p || !p.variantes[v]) return;
-      const existente = lineas.find((l) => l.id === id && l.v === v);
-      if (existente) existente.n = Math.min(CONFIG.maxCantidad, existente.n + n);
-      else lineas.push({ id, v, n });
+      if (!p || p.agotado) return;
+      const i = lineas.findIndex((l) => l.id === id);
+      // Dentro del visor el aviso quedaría detrás de la foto: ahí basta con el
+      // botón, que cambia a "En mi lista"
+      const avisar = !Visor.abierto();
+      if (i >= 0) {
+        lineas.splice(i, 1);
+        guardar();
+        pintar();
+        if (avisar) Toast.mostrar(`Quitado de tu lista: ${p.nombre}`);
+        return;
+      }
+      lineas.push({ id, n: 1 });
       guardar();
       pintar();
-      if (contador) {
-        contador.classList.remove('salta');
-        void contador.offsetWidth;
-        contador.classList.add('salta');
-      }
-      Toast.mostrar(`Agregado: ${p.nombre}`, 'Ver carrito', abrir);
-      Analitica.medir('add_to_cart', {
-        currency: 'COP',
-        value: p.variantes[v].precio * n,
-        items: [{ item_id: id, item_name: p.nombre, item_variant: p.variantes[v].nombre, price: p.variantes[v].precio, quantity: n }]
-      });
+      saltarContador();
+      if (avisar) Toast.mostrar(`Agregado a tu lista: ${p.nombre}`, 'Ver lista', abrir);
+      Analitica.medir('agregar_lista', { item_id: p.referencia, item_name: p.nombre });
     }
     function cambiar(indice, delta) {
       const l = lineas[indice];
@@ -409,28 +686,28 @@
       if (siguiente) siguiente.focus();
     }
 
-    /* Confirmación antes de sacar un producto del carrito (botón "Quitar" o
-       "−" con 1 unidad): así un toque por error no borra nada. Usa <dialog>
-       nativo (#confirmar-quitar, fuera de #carrito para que su Escape no
-       cierre el carrito): showModal() atrapa el foco y Escape cancela solo.
-       Si el navegador es tan viejo que no tiene <dialog>, usa confirm(). */
+    /* Confirmación antes de sacar un producto de la lista (basura o "−" con 1
+       unidad): así un toque por error no borra nada. Usa <dialog> nativo
+       (#confirmar-quitar, fuera de #carrito para que su Escape no cierre la
+       lista): showModal() atrapa el foco y Escape cancela solo. Si el
+       navegador es tan viejo que no tiene <dialog>, usa confirm(). */
     const dialogo = $('#confirmar-quitar');
     let porQuitar = null;   // índice de la línea que espera confirmación
     let origen = null;      // botón que abrió la pregunta (vuelve el foco ahí si cancelan)
 
     function pedirConfirmacion(indice, boton) {
       const l = detalle()[indice];
-      if (!l) return;
-      const descripcion = `${l.producto.nombre} · ${l.variante.nombre}${l.n > 1 ? ` · ${l.n} unidades` : ''}`;
+      if (!l || !l.producto) return;
+      const descripcion = `${l.producto.nombre} · Ref. ${l.producto.referencia}${l.n > 1 ? ` · ${l.n} unidades` : ''}`;
       if (!dialogo || typeof dialogo.showModal !== 'function') {
-        if (window.confirm(`¿Quitar del carrito? ${descripcion}`)) quitar(indice);
+        if (window.confirm(`¿Quitar de tu lista? ${descripcion}`)) quitar(indice);
         return;
       }
       porQuitar = indice;
       origen = boton || null;
       $('#confirmar-texto', dialogo).textContent = descripcion;
       const foto = $('#confirmar-foto', dialogo);
-      if (foto) foto.src = l.producto.imagen;
+      if (foto) foto.src = l.producto.miniatura || l.producto.imagen;
       dialogo.returnValue = '';
       dialogo.showModal();
       $('[data-confirmar="no"]', dialogo).focus(); // lo seguro queda enfocado
@@ -441,13 +718,7 @@
       dialogo.addEventListener('click', (e) => {
         const b = e.target.closest('[data-confirmar]');
         if (b) dialogo.close(b.dataset.confirmar);
-        else if (e.target === dialogo) {
-          // El <dialog> también es el objetivo del clic en su relleno blanco: solo
-          // se cancela si el toque cae FUERA de la tarjeta (en el fondo oscuro)
-          const r = dialogo.getBoundingClientRect();
-          const fuera = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
-          if (fuera) dialogo.close('no');
-        }
+        else if (e.target === dialogo && toqueFuera(dialogo, e)) dialogo.close('no');
       });
       dialogo.addEventListener('close', () => {
         const indice = porQuitar;
@@ -457,12 +728,14 @@
         origen = null;
       });
     }
-    // Dibuja la lista, el resumen y el contador de la cabecera
+
+    // Dibuja la lista, el resumen, el contador de la cabecera y las estrellas
     function pintar() {
       const total = unidades();
-      if (contador) contador.textContent = String(total);
+      if (contador) contador.textContent = String(lineas.length);
       const textoLector = $('#carrito-n-texto'); // lo que oye el lector de pantalla
-      if (textoLector) textoLector.textContent = total ? `, ${total} ${total === 1 ? 'producto' : 'productos'}` : ', vacío';
+      if (textoLector) textoLector.textContent = lineas.length ? `, ${lineas.length} ${lineas.length === 1 ? 'producto' : 'productos'}` : ', vacía';
+      pintarEstrellas();
       if (!panel) return;
       const lista = $('#carrito-lista');
       const vacio = $('#carrito-vacio');
@@ -472,30 +745,37 @@
       vacio.hidden = hay;
       resumen.hidden = !hay;
       form.hidden = !hay;
-      lista.innerHTML = detalle().map((l, i) => `
+      lista.innerHTML = detalle().map((l, i) => {
+        const p = l.producto;
+        const detalleTexto = [p.tipo, p.medida].filter(Boolean).join(' · ');
+        return `
         <li class="item">
-          <img class="item__foto" src="${escapar(l.producto.imagen)}" alt="" width="68" height="68" loading="lazy">
+          <img class="item__foto" src="${escapar(p.miniatura || p.imagen)}" alt="" width="68" height="68" loading="lazy">
           <div>
-            <p class="item__nombre">${escapar(l.producto.nombre)}</p>
-            <p class="item__variante">${escapar(l.variante.nombre)} · ${formatoCOP(l.variante.precio)} c/u</p>
+            <p class="item__ref">Ref. ${escapar(p.referencia)}</p>
+            <p class="item__nombre">${escapar(p.nombre)}</p>
+            ${detalleTexto ? `<p class="item__variante">${escapar(detalleTexto)}</p>` : ''}
             <div class="item__fila">
-              <div class="cantidad" role="group" aria-label="Cantidad de ${escapar(l.producto.nombre)}">
+              <div class="cantidad" role="group" aria-label="Cantidad de ${escapar(p.nombre)}">
                 <button type="button" data-accion="menos" data-i="${i}" aria-label="Quitar una unidad">−</button>
                 <output aria-live="polite">${l.n}</output>
                 <button type="button" data-accion="mas" data-i="${i}" aria-label="Agregar una unidad"${l.n >= CONFIG.maxCantidad ? ' disabled' : ''}>+</button>
               </div>
-              <span class="item__precio">${formatoCOP(l.total)}</span>
+              ${p.precio ? `<span class="item__precio">${formatoCOP(p.precio * l.n)}</span>` : ''}
             </div>
-            <button type="button" class="item__quitar" data-accion="quitar" data-i="${i}" aria-label="Quitar ${escapar(l.producto.nombre)} del carrito" title="Quitar del carrito">
+            <button type="button" class="item__quitar" data-accion="quitar" data-i="${i}" aria-label="Quitar ${escapar(p.nombre)} de mi lista" title="Quitar de mi lista">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/></svg>
             </button>
           </div>
-        </li>`).join('');
-      $('#carrito-total').textContent = formatoCOP(totalPedido());
+        </li>`;
+      }).join('');
+      const productos = `${lineas.length} ${lineas.length === 1 ? 'producto' : 'productos'}`;
+      $('#carrito-total').textContent = total > lineas.length ? `${productos} · ${total} unidades` : productos;
     }
 
     function abrir() {
       if (!panel) return;
+      Visor.cerrar();
       ultimoFoco = document.activeElement;
       panel.hidden = false;
       fondo.hidden = false;
@@ -514,8 +794,7 @@
     }
 
     function iniciar() {
-      const guardado = Almacen.leer(CONFIG.claveCarrito);
-      lineas = Array.isArray(guardado) ? guardado : [];
+      lineas = Almacen.leer(CONFIG.claveLista) || [];
       reconciliar();
       pintar();
       if (!panel) return;
@@ -532,7 +811,7 @@
         if (b) {
           const i = Number(b.dataset.i);
           if (b.dataset.accion === 'mas') cambiar(i, 1);
-          // "−" con 1 unidad también saca el producto: pide confirmación igual que "Quitar"
+          // "−" con 1 unidad también saca el producto: pide confirmación igual que la basura
           if (b.dataset.accion === 'menos') { if (lineas[i] && lineas[i].n <= 1) pedirConfirmacion(i, b); else cambiar(i, -1); }
           if (b.dataset.accion === 'quitar') pedirConfirmacion(i, b);
         }
@@ -540,14 +819,14 @@
       });
     }
 
-    return { iniciar, agregar, abrir, detalle, totalPedido, lineas: () => lineas.slice() };
+    return { iniciar, alternar, abrir, tiene, detalle, lineas: () => lineas.slice() };
   })();
 
   /* ==========================================================================
-     10. PEDIDO — todo se hace por WhatsApp (desde v1.3 no hay pago en línea
-     ni domicilios). Valida el nombre y la autorización de datos, arma el
-     mensaje con cada producto (medida, cantidad y valor) y el TOTAL, y abre
-     el chat de la tienda con el mensaje ya escrito. El pago y la entrega se
+     11. PEDIDO — consultar "Mi lista" por WhatsApp. Valida el nombre y la
+     autorización de datos, arma el mensaje con cada producto (nombre, tipo,
+     código, medida y cantidad) y abre el chat de la tienda con todo escrito.
+     La tienda responde con precios y disponibilidad; el pago y la entrega se
      acuerdan en ese chat.
      ========================================================================== */
   const Pedido = (() => {
@@ -572,7 +851,7 @@
     function validar(d) {
       const errores = {};
       if (d.nombre.length < 3) errores.nombre = 'Escribe tu nombre y apellido.';
-      if (!d.autorizo) errores.autorizo = 'Para enviar el pedido necesitamos tu autorización.';
+      if (!d.autorizo) errores.autorizo = 'Para enviar la consulta necesitamos tu autorización.';
       return errores;
     }
 
@@ -587,50 +866,36 @@
       if (primero) { const el = $(`#pedido-${primero}`); if (el) el.focus(); }
     }
 
-    /* Mensaje de WhatsApp (v1.3): cada producto en su bloque, con el nombre en
-       negrita (*texto* es negrita en WhatsApp), y el total al final. Para no
-       repetir precios:
-       · Un solo producto: no lleva precio propio, solo el Total (y el valor
-         por unidad si pidió varias).
-       · Varios productos: cada uno lleva su valor y abajo va el Total. */
+    /* Mensaje de WhatsApp (v1.4, sin precios): cada producto en su bloque, con
+       el nombre en negrita (*texto* es negrita en WhatsApp), su tipo, código,
+       medida y cantidad. Con varios productos van numerados. */
     function textoPedido(d) {
-      const lineas = Carrito.detalle();
-      const unidades = lineas.reduce((s, l) => s + l.n, 0);
-      const variosProductos = lineas.length > 1;
+      const lineas = Lista.detalle();
+      const varios = lineas.length > 1;
       const bloques = lineas.map((l, i) => {
-        const r = [`${variosProductos ? `${i + 1}. ` : ''}*${l.producto.nombre}*`, `Medida: ${l.variante.nombre}`];
-        if (variosProductos) {
-          r.push(l.n > 1
-            ? `Cantidad: ${l.n} × ${formatoCOP(l.variante.precio)} = ${formatoCOP(l.total)}`
-            : `Precio: ${formatoCOP(l.total)}`);
-        } else if (l.n > 1) {
-          r.push(`Cantidad: ${l.n} (${formatoCOP(l.variante.precio)} c/u)`);
-        }
-        return r.join('\n');
+        const p = l.producto;
+        const datos = [`Ref. ${p.referencia}`, p.medida ? `Medida: ${p.medida}` : '', l.n > 1 ? `Cantidad: ${l.n}` : ''].filter(Boolean).join(' · ');
+        return [`${varios ? `${i + 1}. ` : ''}*${p.nombre}*${p.tipo ? ` (${p.tipo})` : ''}`, datos].join('\n');
       });
       return [
         `¡Hola, ${CONFIG.tienda}! ✨`,
-        'Quiero hacer este pedido:',
+        varios ? 'Me interesan estos productos:' : 'Me interesa este producto:',
         '',
         bloques.join('\n\n'),
         '',
-        `*Total: ${formatoCOP(Carrito.totalPedido())}*${unidades > 1 ? ` (${unidades} unidades)` : ''}`,
-        '',
         `A nombre de: ${d.nombre}`,
-        '¿Me confirman disponibilidad, forma de pago y entrega? ¡Gracias!'
+        '¿Me confirman precio y disponibilidad? ¡Gracias!'
       ].join('\n');
     }
 
     function enviar(d) {
-      Analitica.medir('pedido_whatsapp', {
-        currency: 'COP',
-        value: Carrito.totalPedido(),
-        items: Carrito.detalle().map((l) => ({ item_id: l.id, item_name: l.producto.nombre, item_variant: l.variante.nombre, price: l.variante.precio, quantity: l.n }))
+      Analitica.medir('lista_whatsapp', {
+        items: Lista.detalle().map((l) => ({ item_id: l.producto.referencia, item_name: l.producto.nombre, quantity: l.n }))
       });
       const url = abrirWhatsApp(textoPedido(d));
       if (estado) {
         estado.classList.remove('es-error');
-        estado.innerHTML = `Abrimos WhatsApp con tu pedido. Envía el mensaje para confirmarlo. <a href="${escapar(url)}" target="_blank" rel="noopener">¿No se abrió? Toca aquí.</a>`;
+        estado.innerHTML = `Abrimos WhatsApp con tu lista. Envía el mensaje para que te respondamos. <a href="${escapar(url)}" target="_blank" rel="noopener">¿No se abrió? Toca aquí.</a>`;
       }
     }
 
@@ -646,7 +911,7 @@
       });
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (!Carrito.lineas().length) return;
+        if (!Lista.lineas().length) return;
         const d = leer();
         const errores = validar(d);
         mostrarErrores(errores);
@@ -660,7 +925,7 @@
   })();
 
   /* ==========================================================================
-     11. PQR — formulario de peticiones, quejas, reclamos, retracto, garantía y
+     12. PQR — formulario de peticiones, quejas, reclamos, retracto, garantía y
      reversión del pago (politicas-de-compra.html). Genera un número de
      radicado con fecha y hora y lo envía por WhatsApp para dejar registro.
      ========================================================================== */
@@ -715,7 +980,7 @@
   }
 
   /* ==========================================================================
-     12. ARRANQUE (el script va con defer: el HTML ya está listo)
+     13. ARRANQUE (el script va con defer: el HTML ya está listo)
      ========================================================================== */
   Consentimiento.iniciar();
   if (Consentimiento.estado() === 'aceptado') Analitica.cargar();
@@ -726,9 +991,21 @@
 
   iniciarMenu();
   Catalogo.iniciar();
-  Carrito.iniciar();
+  Lista.iniciar();
+  Visor.iniciar();
   Pedido.iniciar();
   iniciarPQR();
+
+  /* Enlaces internos (#coleccion, #como-pedir, #preguntas…): las tarjetas del
+     catálogo se dibujan solo al acercarse (content-visibility en el CSS) y cambian
+     de alto al dibujarse, así que el desplazamiento suave quedaba corrido. Antes
+     de que el navegador calcule el destino se dibujan todas una vez (clase
+     .dibujar-todo); desde ahí el navegador recuerda sus altos reales. */
+  document.addEventListener('click', (e) => {
+    const enlace = e.target.closest('a[href^="#"]');
+    const grid = $('#catalogo-grid');
+    if (enlace && enlace.getAttribute('href').length > 1 && grid) grid.classList.add('dibujar-todo');
+  }, true);
 
   $$('[data-anio]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
   $$('[data-medir]').forEach((el) => el.addEventListener('click', () => Analitica.medir(el.dataset.medir, { ubicacion: el.className || 'enlace' })));

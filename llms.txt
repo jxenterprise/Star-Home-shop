@@ -1,12 +1,13 @@
-# Estrellita House
+# Star Home
 
-> Tienda en Cartagena de Indias (Colombia) de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con colecciones de Navidad, Halloween y para todo el año. Pedidos por WhatsApp: el carrito arma el pedido con el total y el pago y la entrega se acuerdan por chat.
+> Tienda en Cartagena de Indias (Colombia) de textiles para el hogar: sábanas (sencilla, doble, queen, king y satinadas de rayas), cobijas navideñas, cortinas (navideñas, clásicas y jacquard) y almohadas. Catálogo 2026 sin precios publicados: cada producto tiene un código de referencia (por ejemplo SB-09) y el precio y la disponibilidad se confirman por WhatsApp.
 
 ## Secciones
-- [Inicio](https://star-home-shop.pages.dev/): colección de temporada con precios en pesos colombianos y carrito de compras.
-- [Colección](https://star-home-shop.pages.dev/#coleccion): productos por temporada con medidas y precios.
-- [Cómo comprar](https://star-home-shop.pages.dev/#como-comprar): cuatro pasos, de elegir el diseño a confirmar el pedido por WhatsApp.
-- [Preguntas frecuentes](https://star-home-shop.pages.dev/#preguntas): cómo pedir, pagar, recibir y devolver.
+- [Inicio](https://star-home-shop.pages.dev/): portada con el catálogo 2026 y el botón para descargarlo en PDF.
+- [Catálogo](https://star-home-shop.pages.dev/#coleccion): productos por sección (Especial Navidad, Sábanas, Cortinas, Almohadas), con código de referencia, tipo y medida.
+- [Catálogo en PDF](https://star-home-shop.pages.dev/catalogo/catalogo-star-home-2026.pdf): el mismo catálogo para descargar.
+- [Cómo pedir](https://star-home-shop.pages.dev/#como-pedir): tres pasos, de elegir el diseño a recibir la respuesta por WhatsApp.
+- [Preguntas frecuentes](https://star-home-shop.pages.dev/#preguntas): cómo pedir, precios, pago, entrega, catálogo y devoluciones.
 
 ## Políticas
 - [Compras, entregas y devoluciones](https://star-home-shop.pages.dev/politicas-de-compra): pago, entrega, retracto, garantía, reversión del pago y PQR.
@@ -18,5 +19,6 @@
 - Ciudad: Cartagena de Indias, Bolívar, Colombia
 
 ## Notas
-- Venta solo por WhatsApp; no hay pagos en línea.
+- Venta solo por WhatsApp; no hay pagos en línea ni precios publicados.
+- Enlace directo a un producto: https://star-home-shop.pages.dev/#p-<código en minúsculas>, por ejemplo #p-sb-09.
 - Sitio desarrollado por JX Company.

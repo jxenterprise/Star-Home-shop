@@ -1,37 +1,39 @@
-# Estrellita House — Tienda de sábanas, cortinas y tapetes en Cartagena
+# Star Home — Textiles para tu hogar en Cartagena
 
-Landing de una sola página con catálogo por temporadas, carrito y pedido por WhatsApp (con el total calculado), más un administrador para que la dueña cambie productos y precios sin depender del desarrollador.
+Landing de una sola página con el **catálogo 2026** de Star Home: sábanas, cobijas navideñas, cortinas y almohadas. **Sin precios publicados**: cada producto tiene su código (por ejemplo `SB-09`) y un botón **Consultar** que abre WhatsApp con el producto ya escrito. Incluye un administrador para que la dueña cambie productos y fotos sin depender del desarrollador.
 
-**Versión actual: v1.3** (11 nov 2026). Próximo paso: catálogo con las fotos reales de la vendedora (ver "📍 DÓNDE NOS QUEDAMOS" en `CLAUDE.md`) · En vivo: <https://star-home-shop.pages.dev> · Historial de cambios: [`CHANGELOG.md`](CHANGELOG.md)
-
-> ⚠ **Catálogo de muestra.** Los productos, fotos y precios actuales son simulados mientras llega el material real. La página está en **Modo muestra**: muestra un aviso arriba y no se indexa en Google. Se apaga desde el administrador.
+**Versión actual: v1.4** (12 nov 2026) · En vivo: <https://star-home-shop.pages.dev> · Historial de cambios: [`CHANGELOG.md`](CHANGELOG.md) · Contexto completo para quien edite: [`CLAUDE.md`](CLAUDE.md)
 
 ---
 
 ## Zonas editables (cambios a mano en el código)
 
-Casi todo se cambia desde el administrador (`/admin`). En el código solo quedan dos zonas marcadas:
+Casi todo se cambia desde el administrador (`/admin`). En el código solo quedan tres zonas marcadas en `index.html`:
 
-| Zona | Qué cambia | Archivo | ¿Se repite? |
-|---|---|---|---|
-| `ZONA EDITABLE · TEXTOS` | Nota de precios / IVA | `index.html` | Sí: sección Precios de `terminos.html` |
-| `ZONA EDITABLE · CONTACTO` | WhatsApp y ciudad del pie | `index.html` | Sí: `tel:`, botón flotante `wa.me`, `js/script.js` (`CONFIG.whatsapp`), JSON-LD, 404 y páginas legales |
+| Zona | Qué cambia | ¿Se repite? |
+|---|---|---|
+| `ZONA EDITABLE · VERSIÓN` | La etiqueta `v1.4` sobre el titular | Sí: `CHANGELOG.md` y la etiqueta de git |
+| `ZONA EDITABLE · TEXTOS` | La nota bajo el catálogo ("Imágenes de referencia… Precios y disponibilidad por WhatsApp") | Sí: `terminos.html` (secciones 2 y 3) |
+| `ZONA EDITABLE · CONTACTO` | WhatsApp y ciudad del pie | Sí: `tel:`, botón flotante y "¿Buscas algo más?" (`wa.me`), `js/script.js` (`CONFIG.whatsapp`), `functions/index.js` (`WHATSAPP`), JSON-LD, 404 y páginas legales |
 
-Cómo llegar: abre el archivo, busca `ZONA EDITABLE` con Ctrl+F, cambia solo lo que dice el comentario y guarda. Si el sitio está conectado a GitHub, al guardar el cambio (commit) Cloudflare publica solo en 1–2 minutos.
+Cómo llegar: abre el archivo, busca `ZONA EDITABLE` con Ctrl+F, cambia solo lo que dice el comentario y guarda.
 
 ---
 
 ## Características
 
-- Catálogo por colecciones (Navidad, Halloween, Todo el año y las que se creen), con medidas y precio por medida.
-- Carrito con cantidades y total; se recuerda en el navegador solo si la persona acepta cookies.
-- Venta **solo por WhatsApp**: la persona escribe su nombre y se abre el chat con cada producto, su medida, la cantidad, el valor y el **total** ya escritos. El pago y la entrega se acuerdan por chat. No hay pago en línea ni domicilios (se retiraron en v1.3; ver más abajo cómo volver a tenerlos).
-- Administrador **Sveltia CMS** en español: productos, fotos (se convierten solas a WebP), colecciones, portada y aviso.
+- **81 productos reales** del catálogo PDF, organizados como el PDF: **Especial Navidad** (cobijas y cortinas navideñas), **Sábanas** (sencilla, doble, queen, king y satinadas de rayas), **Cortinas** (clásicas y jacquard) y **Almohadas**, con filtros por tipo o tamaño.
+- **Consultar por WhatsApp** en cada producto: abre el chat con el nombre, el código, la medida y un enlace a la foto.
+- **Foto en grande a pantalla completa**, tipo carrusel: se desliza con el dedo o con flechas; el botón "atrás" del celular la cierra. Enlace directo a cada producto: `https://star-home-shop.pages.dev/#p-sb-09`.
+- **Mi lista** (estrella ☆ en cada foto): el cliente junta varios diseños y pregunta por todos en un solo mensaje. Se recuerda en el navegador solo si acepta cookies.
+- **Descargar catálogo** (PDF de 14 MB) junto al título.
+- Identidad de la marca: logo de Star Home, colores del logo (dorado, rosa, crema y negro café) y las letras del catálogo PDF.
+- Administrador **Sveltia CMS** en español: productos, fotos (se convierten solas a WebP), secciones, portada, aviso y PDF.
 - HTML real en el código fuente (lo leen Google y los bots de IA), sin frameworks ni build step.
-- SEO completo: title, description, canonical, Open Graph, Twitter Card, JSON-LD (WebSite, HomeGoodsStore, FAQPage, productos con Offer), sitemap, robots que permite bots de IA y `llms.txt`.
+- SEO: title, description, canonical, Open Graph, Twitter Card, JSON-LD (WebSite, HomeGoodsStore, FAQPage y lista de productos), sitemap, robots que permite bots de IA y `llms.txt`.
 - Páginas legales: privacidad, cookies, términos y políticas de compra con **retracto, garantía, reversión del pago y formulario PQR con número de radicado**.
 - Banner de cookies con Aceptar y Rechazar del mismo tamaño; Google Analytics 4 solo después de aceptar.
-- Responsive de 320 px a TV, accesible (sin violaciones en axe-core), 48 px mínimo en botones, respeta "reducir movimiento".
+- Responsive de 280 px (celulares plegables) a TV, accesible (sin violaciones en axe-core), botones de 44–48 px, respeta "reducir movimiento". Lighthouse celular 95/100/100/100.
 
 ---
 
@@ -42,43 +44,38 @@ index.html · 404.html · privacidad.html · cookies.html · terminos.html · po
 _headers · robots.txt · sitemap.xml · llms.txt · site.webmanifest
 favicon.ico · favicon.svg · apple-touch-icon.png
 css/styles.css · js/script.js
-img/            (todo WebP; productos en img/productos/)
+img/            todo WebP: logo en 3 tamaños, imagen para compartir y productos en img/productos/
+                (foto grande <ref>-<nombre>.webp + miniatura <ref>-<nombre>-mini.webp)
+catalogo/       catalogo-star-home-2026.pdf (botón "Descargar catálogo")
 contenido/      catalogo.json y tienda.json (los edita el administrador)
 admin/          index.html y config.yml (Sveltia CMS)
 functions/      index.js (catálogo vivo en la página)
-CLAUDE.md · README.md
+CLAUDE.md · README.md · CHANGELOG.md
 ```
 
 ---
 
 ## Ver la página en tu computador
 
-**Con todo funcionando (catálogo vivo y pago de prueba):** necesitas Node.js 18 o superior.
+**Con todo funcionando (catálogo vivo):** necesitas Node.js 18 o superior.
 
 ```bash
-cd estrellita-house
-npx wrangler pages dev .
+npx wrangler pages dev . --port 8788
 ```
 
-Abre la dirección que aparece (normalmente `http://localhost:8788`).
+Abre `http://localhost:8788`.
 
-**Solo para mirar el diseño:** `python3 -m http.server 8000` dentro de la carpeta y abre `http://localhost:8000`. Se ve la copia de respaldo del catálogo y el botón "Pagar en línea" avisa que no está activo.
+**Solo para mirar el diseño:** abre `index.html` directamente o usa `python3 -m http.server 8000`. Se ve la copia de respaldo del catálogo (idéntica a la del servidor).
 
 ---
 
-## Publicar en Cloudflare Pages (paso a paso)
+## Publicar en Cloudflare Pages
 
-1. **GitHub:** crea un repositorio (por ejemplo `estrellita-house`) y sube todos los archivos de esta carpeta.
-2. **Cloudflare → Workers & Pages → Create → Pages → Connect to Git** y elige el repositorio.
-   - Framework preset: **None**.
-   - Build command: **vacío**.
-   - Build output directory: **vacío** (la raíz del proyecto).
-   - Cloudflare detecta solo la carpeta `functions/`.
-3. **Variables de entorno** (Settings → Environment variables), en *Production* con las llaves de producción y en *Preview* con las de pruebas:
-   - `WOMPI_PUBLIC_KEY`
-   - `WOMPI_INTEGRITY_SECRET` (márcala como cifrada / *Encrypt*)
-4. Guarda y despliega. La dirección será `https://<nombre-del-proyecto>.pages.dev`. Si el nombre no es `estrellita-house`, cambia la URL en todos los lugares de la sección **Dominio** de abajo.
-5. Sitio nuevo: verifica la propiedad en **Google Search Console** y envía `sitemap.xml` cuando apagues el Modo muestra. No borres nunca el archivo de verificación de Google.
+Ya está conectado: cada cambio que llega a la rama `main` de GitHub (desde VS Code, desde Claude o desde `/admin`) se publica solo en ~30 s a 2 min.
+
+Si hubiera que crearlo de nuevo: **Cloudflare → Workers & Pages → Create → Pages → Connect to Git**, elige el repositorio, Framework preset **None**, Build command y Build output **vacíos** (la raíz). Cloudflare detecta solo la carpeta `functions/`. No necesita variables de entorno.
+
+Google: verifica la página en **Google Search Console** y envía `sitemap.xml` (la página ya es indexable). No borres nunca el archivo de verificación de Google.
 
 ### Dominio propio (cuando lo compren)
 
@@ -88,28 +85,37 @@ Cambiar la URL `https://star-home-shop.pages.dev` en: `index.html` (canonical, o
 
 ## Administrador (`/admin`) — guía para la dueña
 
-**Entrar:** ve a `https://tu-pagina/admin` e inicia sesión con tu cuenta de GitHub (es gratis; JX te agrega como colaboradora del repositorio).
+**Entrar:** ve a `https://star-home-shop.pages.dev/admin` e inicia sesión con tu cuenta de GitHub (JX te agrega como colaboradora del repositorio).
 
-**Agregar un producto:** *Productos* → *Agregar producto* → llena nombre, colección, tipo, descripción corta, foto, "Qué se ve en la foto" y al menos una medida con su precio (en pesos, sin puntos: `84900`). Guarda. En 1–2 minutos sale en la página.
+**Agregar un producto:** *Productos* → *Agregar producto* → llena:
+- **Código de referencia** (ej. `SB-42`: CB cobijas, CT cortinas, SB sábanas, AL almohadas),
+- **Nombre del diseño** y **Tipo** (ej. "Sábana estampada"),
+- **Sección** (Especial Navidad, Sábanas…) y **Grupo** (el filtro: Sencilla, Doble, Queen, King, Satinadas de rayas, Clásicas…; escríbelo igual que en los demás productos de ese grupo),
+- **Medida** (opcional; si la dejas vacía sale "Medida: consúltala por WhatsApp"),
+- **Foto** (y, si quieres, una **foto pequeña cuadrada**) y "Qué se ve en la foto".
 
-**Cambiar un precio:** abre el producto → *Medidas y precios* → cambia el número → Guardar.
+Guarda. En 1–2 minutos sale en la página.
 
-**Agotado u oculto:** marca *Agotado* (se ve pero no se puede comprar) o apaga *Mostrar en la página* (desaparece sin borrarlo).
+**Precio:** déjalo **vacío** (se da por WhatsApp). Si algún día lo llenas, se muestra en la tarjeta.
+
+**Agotado u oculto:** marca *Agotado* (se ve pero no se puede consultar) o apaga *Mostrar en la página* (desaparece sin borrarlo).
 
 **Orden:** arrastra los productos en la lista; ese es el orden en la página.
 
-**Temporadas:** *Ajustes de la tienda* → *Colecciones*. Crea una nueva (código sin tildes ni espacios, por ejemplo `san-valentin`), y elige cuál se ve primero en *Colección que se ve primero*.
+**Secciones:** *Ajustes de la tienda* → *Secciones (pestañas)*. Crea una nueva (código sin tildes ni espacios, por ejemplo `san-valentin`) y elige cuál se ve primero.
 
-**Portada y aviso:** en *Ajustes* cambias el título grande, el texto de abajo y la barra de aviso de arriba.
+**Portada, aviso y PDF:** en *Ajustes* cambias el título grande, el texto de abajo, la barra de aviso de arriba y el **Catálogo en PDF** del botón "Descargar catálogo" (máx. 25 MB).
 
-**Modo muestra:** apágalo cuando estén los productos y precios reales. Así desaparece el aviso y Google puede mostrar la página.
+**Modo muestra:** está apagado (catálogo real). Encenderlo pone la barra "Catálogo de muestra" y esconde la página de Google.
+
+> Las fotos que subas desde el administrador se convierten solas a WebP, pero no les pone el logo de Star Home ni crea la miniatura: si quieres que queden igual a las de la v1.4 (con el logo encima del del proveedor), pídeselo a JX/Claude (está explicado en `CLAUDE.md` → "Herramienta: fotos nuevas con el logo de Star Home").
 
 ### Configurar el inicio de sesión (lo hace JX una sola vez)
 
 1. Despliega el autenticador oficial **Sveltia CMS Authenticator** en Cloudflare Workers (botón "Deploy to Cloudflare Workers" en `github.com/sveltia/sveltia-cms-auth`). Te da una URL `https://sveltia-cms-auth.<tu-subdominio>.workers.dev`.
 2. En GitHub → Settings → Developer settings → **OAuth Apps → New**: callback `https://sveltia-cms-auth.<tu-subdominio>.workers.dev/callback`. Genera el *Client secret*.
 3. En el Worker agrega las variables `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (cifrada) y `ALLOWED_DOMAINS` (el dominio de la página).
-4. En `admin/config.yml` pon el repositorio real en `repo:` y la URL del Worker en `base_url:`.
+4. En `admin/config.yml` pon la URL del Worker en `base_url:` (el repositorio ya está).
 5. Agrega a la dueña como colaboradora del repositorio en GitHub.
 
 Mientras tanto se puede entrar con un token personal de GitHub (opción *Sign in with token* del administrador).
@@ -118,7 +124,7 @@ Mientras tanto se puede entrar con un token personal de GitHub (opción *Sign in
 
 ## Pago en línea y domicilios (retirados en v1.3)
 
-Desde la v1.3 (11 nov 2026) la tienda vende **solo por WhatsApp**: es un emprendimiento pequeño y por ahora no hace domicilios en todo Cartagena. El código del pago en línea con **Wompi** (Web Checkout con firma de integridad, `functions/api/wompi/`) y el del **domicilio** (fijo o por barrio, desde el administrador) se borraron, pero siguen guardados en GitHub en la etiqueta **`v1.2`**. Para volver a tenerlos se recuperan desde esa versión; antes de activar Wompi hay que corregir las fallas anotadas en la memoria de JX/Claude (la consulta de la transacción necesita la llave privada, entre otras).
+La tienda vende **solo por WhatsApp**. El código del pago en línea con **Wompi** y el de **domicilios** se borró en la v1.3, pero sigue en GitHub en la etiqueta **`v1.2`** por si se vuelve a necesitar.
 
 ---
 
@@ -128,18 +134,18 @@ Desde la v1.3 (11 nov 2026) la tienda vende **solo por WhatsApp**: es un emprend
 2. Pégalo en `js/script.js` → `CONFIG.ga4`.
 3. Solo se activa si la persona acepta cookies.
 
-Qué mirar: en **Informes → Adquisición** ves de dónde llega la gente (Google, Instagram, WhatsApp, directo). En **Informes → Interacción → Eventos**: `clic_whatsapp`, `add_to_cart` (agregó al carrito), `begin_checkout` (fue a pagar), `purchase` (pago aprobado), `pedido_whatsapp` (envió el pedido por chat) y `envio_formulario` (PQR).
+Eventos que verás en **Informes → Interacción → Eventos**: `consulta_whatsapp` (tocó Consultar), `ver_foto` (abrió una foto en grande), `agregar_lista`, `lista_whatsapp` (consultó su lista), `descarga_catalogo` (descargó el PDF), `clic_whatsapp`, `clic_telefono` y `envio_formulario` (PQR).
 
 ---
 
 ## Ficha de Google (Google Business Profile)
 
-La ficha de Google hace que el negocio aparezca en Google Maps y en búsquedas como "sábanas en Cartagena". Recomendado:
+Hace que el negocio aparezca en Google Maps y en búsquedas como "sábanas en Cartagena":
 
-- Reclamar y verificar la ficha de **Estrellita House** y enlazar esta página.
+- Reclamar y verificar la ficha de **Star Home** y enlazar esta página.
 - Como no hay local abierto al público, configurarla como negocio que **atiende en una zona** (Cartagena) sin mostrar dirección.
 - Usar exactamente el mismo nombre y teléfono que la página (coherencia NAP).
-- Subir fotos reales, categoría correcta y horario de atención.
+- Subir fotos reales, el logo, categoría correcta y horario de atención.
 
 ---
 
@@ -147,23 +153,23 @@ La ficha de Google hace que el negocio aparezca en Google Maps y en búsquedas c
 
 - Todo el historial vive en GitHub: cada cambio del administrador es un commit. Para descargar una copia: **Code → Download ZIP**.
 - Cloudflare guarda los despliegues anteriores: en *Deployments* puedes volver a una versión anterior con un clic.
-- Cada entrega tiene su etiqueta en GitHub (`v1.0`, `v1.2`…): en **Tags** se descarga el ZIP exacto de esa versión. Qué cambió en cada una está en `CHANGELOG.md`.
+- Cada entrega tiene su etiqueta en GitHub (`v1.0`, `v1.2`, `v1.3`, `v1.4`): en **Tags** se descarga el ZIP exacto de esa versión.
 
 ---
 
 ## Propiedad
 
-El código fuente y el contenido de esta página son **propiedad de Estrellita House**. Se entregan todos los archivos sin minificar.
-**Dominio y hosting:** por ser cliente básico, el sitio está en la cuenta de Cloudflare de JX Company. Para transferirlo: se pasa el repositorio de GitHub a la cuenta de la dueña (*Settings → Transfer*), se crea el proyecto de Pages en su cuenta de Cloudflare conectado a ese repositorio, se copian las variables de Wompi y se mueve el dominio.
+El código fuente y el contenido de esta página son **propiedad de Star Home**. Se entregan todos los archivos sin minificar. Las fotos de producto son del proveedor (con el logo de Star Home encima, por decisión de la tienda): conviene tener su autorización.
+**Dominio y hosting:** por ser cliente básico, el sitio está en la cuenta de Cloudflare de JX Company. Para transferirlo: se pasa el repositorio de GitHub a la cuenta de la dueña (*Settings → Transfer*), se crea el proyecto de Pages en su cuenta de Cloudflare conectado a ese repositorio y se mueve el dominio.
 **Credenciales a entregar** cuando existan: Cloudflare, dominio, GitHub, GA4 y Search Console.
 
 ---
 
 ## Pendientes `{POR CONFIRMAR}`
 
-Ver la lista completa en `CLAUDE.md`. Resumen: nombre exacto, catálogo real, IVA, datos legales del responsable, medios de pago por WhatsApp, forma y tiempo de entrega, cambios, garantía, ID de GA4, autenticador del CMS, redes sociales y horario.
+Ver la lista completa en `CLAUDE.md`. Resumen: IVA, datos legales del responsable, medios de pago por WhatsApp, forma y tiempo de entrega, cambios, garantía, ID de GA4, autenticador del CMS, redes sociales, horario, permiso del proveedor para las fotos y medidas reales de cortinas, satinadas y almohadas.
 
-> Los textos legales son una base profesional, no asesoría legal. Deben revisarlos un abogado antes de publicar con productos reales.
+> Los textos legales son una base profesional, no asesoría legal. Deben revisarlos un abogado.
 
 ---
 

@@ -1,15 +1,15 @@
 # yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
 # ============================================================================
-# Estrellita House — admin/config.yml
+# Star Home — admin/config.yml
 # Configuración del administrador (Sveltia CMS).
 #
 # Qué edita la dueña desde /admin:
-#   · Productos  → contenido/catalogo.json (nombre, colección, foto, medidas,
-#                  precios, etiqueta, agotado, mostrar/ocultar)
-#   · Ajustes    → contenido/tienda.json (modo muestra, aviso, portada y
-#                  colecciones)
-# Desde v1.3 (11 nov 2026) no hay pago en línea ni domicilios: todo el pedido
-# se hace por WhatsApp, así que esos ajustes se quitaron del administrador.
+#   · Productos  → contenido/catalogo.json (código, nombre, tipo, sección,
+#                  grupo/filtro, medida, fotos, etiqueta, agotado, mostrar).
+#                  SIN PRECIOS desde v1.4: el precio se da por WhatsApp. El
+#                  campo "Precio" es opcional y, si se llena, se muestra.
+#   · Ajustes    → contenido/tienda.json (modo muestra, aviso, portada,
+#                  catálogo en PDF y secciones/pestañas)
 # Cada vez que guarda, el CMS hace un commit en GitHub y Cloudflare Pages
 # vuelve a publicar la página sola en 1–2 minutos. functions/index.js pinta
 # los cambios dentro del HTML.
@@ -17,7 +17,8 @@
 # Lo que NO está aquí a propósito (lo cambia JX, porque toca JSON-LD y SEO):
 # número de WhatsApp, dominio, textos legales y diseño.
 #
-# ⚠ Antes de usarlo hay que completar los datos marcados {POR CONFIRMAR}.
+# Validado contra el esquema oficial de @sveltia/cms 0.263.0 (12 nov 2026).
+# ⚠ Falta el autenticador (base_url) marcado {POR CONFIRMAR}.
 # ============================================================================
 
 backend:
@@ -34,19 +35,20 @@ backend:
     uploadMedia: 'Administrador: sube foto {{path}}'
     deleteMedia: 'Administrador: borra foto {{path}}'
 
-app_title: Estrellita House · Administrador
+app_title: Star Home · Administrador
 logo_url: /favicon.svg
 site_url: https://star-home-shop.pages.dev     # {POR CONFIRMAR} dominio final
 show_preview_links: false
 
 # Fotos de productos: se guardan en img/productos y se convierten SOLAS a WebP
 # al subirlas (regla de JX: todas las imágenes en WebP), máx. 1600 px.
+# El PDF del catálogo va aparte, en /catalogo (ver Ajustes → Catálogo en PDF).
 media_folder: img/productos
 public_folder: /img/productos
 media_libraries:
   default:
     config:
-      max_file_size: 15000000
+      max_file_size: 26214400   # 25 MB: el límite por archivo de Cloudflare Pages (el PDF del catálogo pesa ~14 MB)
       slugify_filename: true
       transformations:
         raster_image:
@@ -75,8 +77,8 @@ singletons:
         widget: list
         add_to_top: true
         collapsed: true
-        summary: '{{fields.nombre}}'
-        thumbnail: imagen
+        summary: '{{fields.referencia}} · {{fields.nombre}}'
+        thumbnail: miniatura
         hint: 'El orden de esta lista es el orden en que salen en la página. Arrastra para reordenar.'
         fields:
           - name: id
@@ -85,65 +87,74 @@ singletons:
             prefix: 'p-'
             use_b32_encoding: true
             read_only: true
-            hint: 'Se crea solo. No se cambia (lo usa el carrito).'
-          - name: nombre
-            label: Nombre del producto
+            hint: 'Se crea solo. No se cambia (lo usan "Mi lista" y los enlaces directos a la foto).'
+          - name: referencia
+            label: Código de referencia
             widget: string
-            maxlength: 60
-            hint: 'Ej.: Juego de sábanas Pinos y estrellas'
+            maxlength: 8
+            pattern: ['^[A-Z]{2,4}-[0-9]{2,3}$', 'Formato: letras en mayúscula, guion y número. Ej.: SB-42']
+            hint: 'El que ve el cliente y escribe por WhatsApp. CB = cobijas, CT = cortinas, SB = sábanas, AL = almohadas. Ej.: SB-42'
+          - name: nombre
+            label: Nombre del diseño
+            widget: string
+            maxlength: 48
+            hint: 'Ej.: Corazones Rosa. En las satinadas y cortinas lisas va el color: Azul cielo, Fucsia…'
+          - name: tipo
+            label: Tipo de producto
+            widget: string
+            maxlength: 40
+            hint: 'Sale debajo del nombre. Ej.: Sábana estampada, Cobija navideña, Cortina clásica, Almohada blanca'
           - name: coleccion
-            label: Colección
+            label: Sección (pestaña)
             widget: relation
             collection: _singletons
             file: tienda
             value_field: 'colecciones.*.id'
             display_fields: ['colecciones.*.nombre']
             search_fields: ['colecciones.*.nombre']
-            hint: 'Las colecciones se crean en Ajustes de la tienda.'
-          - name: categoria
-            label: Tipo de producto
-            widget: select
-            options: [Sábanas, Cortinas, Tapetes, Cojines, Manteles, Toallas, Decoración, Otros]
-          - name: descripcion
-            label: Descripción corta
-            widget: text
-            maxlength: 160
-            hint: 'Máx. 160 caracteres: cómo es y qué incluye.'
+            hint: 'Las secciones se crean en Ajustes de la tienda.'
+          - name: grupo
+            label: Grupo (filtro dentro de la sección)
+            widget: string
+            maxlength: 32
+            hint: 'Escríbelo IGUAL en todos los productos del mismo grupo. Ej.: Sencilla, Doble, Queen, King, Satinadas de rayas, Cobijas navideñas, Clásicas, Jacquard'
+          - name: medida
+            label: Medida o tamaño
+            widget: string
+            required: false
+            maxlength: 40
+            hint: 'Opcional. Ej.: Tamaño doble o 190 × 215 cm. Si lo dejas vacío sale "Medida: consúltala por WhatsApp".'
+          - name: precio
+            label: Precio en pesos (opcional)
+            widget: number
+            value_type: int
+            required: false
+            min: 1000
+            step: 100
+            hint: 'Déjalo VACÍO: el precio se da por WhatsApp. Si lo llenas (sin puntos, ej. 84900), se muestra en la tarjeta.'
           - name: imagen
             label: Foto
             widget: image
             choose_url: false
             accept: 'image/*'
-            hint: 'Ideal cuadrada y con buena luz. Se convierte sola a WebP.'
+            hint: 'La foto completa que se ve en grande. Se convierte sola a WebP.'
+          - name: miniatura
+            label: Foto pequeña cuadrada (opcional)
+            widget: image
+            required: false
+            choose_url: false
+            accept: 'image/*'
+            hint: 'Opcional: versión cuadrada y liviana para la tarjeta (600 × 600). Si la dejas vacía se usa la foto de arriba.'
           - name: alt
             label: Qué se ve en la foto
             widget: string
-            maxlength: 140
-            hint: 'Ej.: Juego de sábanas azul con pinos verdes, doblado. Lo usan Google y los lectores de pantalla.'
-          - name: variantes
-            label: Medidas y precios
-            label_singular: medida
-            widget: list
-            min: 1
-            summary: '{{fields.nombre}} · ${{fields.precio}}'
-            fields:
-              - name: nombre
-                label: Medida o presentación
-                widget: string
-                maxlength: 40
-                hint: 'Ej.: Doble 140 × 190 cm'
-              - name: precio
-                label: Precio en pesos (sin puntos)
-                widget: number
-                value_type: int
-                min: 1000
-                step: 100
-                hint: 'Ej.: 84900'
+            maxlength: 160
+            hint: 'Ej.: Juego de sábanas doble rosado con corazones, sobre una cama. Lo usan Google y los lectores de pantalla.'
           - name: etiqueta
             label: Etiqueta en la foto
             widget: select
             required: false
-            options: ['Nuevo', 'Últimos días', 'Pocas unidades', 'Oferta']
+            options: ['Nuevo', 'Últimos días', 'Pocas unidades', 'Oferta', 'Especial Navidad']
             hint: 'Opcional.'
           - name: agotado
             label: Agotado
@@ -166,23 +177,32 @@ singletons:
       - name: modo_muestra
         label: Modo muestra
         widget: boolean
-        default: true
-        hint: 'Encendido: arriba sale "Catálogo de muestra" y Google no indexa la página. Apágalo cuando estén los productos y precios reales.'
+        default: false
+        hint: 'Encendido: arriba sale "Catálogo de muestra" y Google no indexa la página. Apagado (lo normal): catálogo real.'
       - name: aviso
         label: Aviso superior
         widget: object
         fields:
           - { name: mostrar, label: Mostrar aviso, widget: boolean, default: false }
-          - { name: texto, label: Texto del aviso, widget: string, maxlength: 90, required: false, hint: 'Ej.: Ya llegó la colección de Navidad' }
+          - { name: texto, label: Texto del aviso, widget: string, maxlength: 90, required: false, hint: 'Ej.: ✦ Especial Navidad 2026: cobijas y cortinas navideñas ✦' }
       - name: portada
         label: Portada
         widget: object
         fields:
           - { name: titulo, label: Título grande, widget: string, maxlength: 60 }
           - { name: subtitulo, label: Texto debajo del título, widget: text, maxlength: 180 }
+      - name: catalogo_pdf
+        label: Catálogo en PDF
+        widget: file
+        required: false
+        choose_url: false
+        accept: 'application/pdf'
+        media_folder: /catalogo
+        public_folder: /catalogo
+        hint: 'El PDF del botón "Descargar catálogo" de la portada (máx. 25 MB). Si lo dejas vacío, el botón no sale.'
       - name: colecciones
-        label: Colecciones (temporadas)
-        label_singular: colección
+        label: Secciones (pestañas)
+        label_singular: sección
         widget: list
         summary: '{{fields.nombre}}'
         hint: 'El orden de esta lista es el orden de las pestañas.'
@@ -196,7 +216,7 @@ singletons:
           - { name: descripcion, label: Descripción corta, widget: string, maxlength: 140 }
           - { name: mostrar, label: Mostrar, widget: boolean, default: true }
       - name: coleccion_inicial
-        label: Colección que se ve primero
+        label: Sección que se ve primero
         widget: relation
         collection: _singletons
         file: tienda

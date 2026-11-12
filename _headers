@@ -1,4 +1,4 @@
-# Estrellita House — _headers (Cloudflare Pages)
+# Star Home — _headers (Cloudflare Pages)
 # Ojo: estas reglas aplican a los archivos estáticos. La página principal "/"
 # la entrega functions/index.js, que pone sus propias cabeceras.
 
@@ -12,6 +12,16 @@
 # Datos del catálogo que edita el administrador
 /contenido/*
   Cache-Control: no-cache
+
+# Fotos de productos y logo: no cambian de nombre al editarlas (si cambia una
+# foto, el CMS sube un archivo nuevo), así que se pueden guardar un día
+/img/*
+  Cache-Control: public, max-age=86400
+
+# Catálogo en PDF: se puede reemplazar desde /admin con el mismo nombre, por
+# eso solo se guarda una hora (Google sí lo puede indexar: atrae clientes)
+/catalogo/*
+  Cache-Control: public, max-age=3600
 
 # Administrador: fuera de Google y sin caché
 /admin/*

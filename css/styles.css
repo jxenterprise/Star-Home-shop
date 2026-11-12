@@ -1,47 +1,55 @@
 /* ============================================================================
-   Estrellita House — css/styles.css
+   Star Home — css/styles.css
    Todo el estilo de la landing, las páginas legales y la 404.
-   Diseño: Modo 2 (diseño libre). Identidad: noche + estrella. El azul noche
-   evoca el cuarto a la hora de dormir (sábanas) y la estrella viene del nombre.
-   Los colores fuertes de temporada (rojo, verde, naranja) viven SOLO en las
-   fotos de producto; la interfaz es un fondo tranquilo que las deja lucir.
+   Identidad (v1.4, 12 nov 2026): los colores del LOGO de Star Home —dorado,
+   rosa y crema, con el negro café de la palabra "Home"— y las tipografías del
+   catálogo PDF de la marca (Cormorant Garamond, Montserrat y Great Vibes).
+   Los colores fuertes de los diseños (rojo, verde, azul…) viven SOLO en las
+   fotos de producto; la interfaz es un fondo cálido y tranquilo que las deja lucir.
 
    Orden del archivo:
-     1. Variables (:root)          8. Cómo comprar
-     2. Base y accesibilidad       9. Preguntas frecuentes
-     3. Utilidades y botones      10. Pie de página y crédito JX Company
-     4. Aviso superior            11. WhatsApp flotante, carrito y toast
-     5. Cabecera y menú           12. Banner de cookies
-     6. Portada                   13. Páginas legales y 404
-     7. Colección y tarjetas      14. Responsive (todos los breakpoints)
-                                  15. Movimiento reducido
-   v1.3: el botón de WhatsApp va en azul noche (color de la marca, no verde)
-   y se retiraron los estilos de Domicilios y pagos y de la ventana de pago.
+     1. Variables (:root)          9. Preguntas frecuentes
+     2. Base y accesibilidad      10. Pie de página y crédito JX Company
+     3. Utilidades y botones      11. WhatsApp flotante, Mi lista y toast
+     4. Aviso superior            12. Visor de fotos (pantalla completa)
+     5. Cabecera y menú           13. Banner de cookies
+     6. Portada                   14. Páginas legales y 404
+     7. Catálogo y tarjetas       15. Responsive (todos los breakpoints)
+     8. Cómo pedir                16. Movimiento reducido
    Ojo: los colores salen SIEMPRE de las variables :root; no meter hex sueltos.
    ========================================================================== */
 
 /* ===========================================================
    1. VARIABLES
+   Contrastes medidos (WCAG): --marca, --tinta, --tinta-2, --tinta-3,
+   --oro-texto, --rosa-texto y --error pasan 4.5:1 sobre blanco, crema,
+   rosa suave y oro suave. --oro y --rosa son SOLO decorativos (no texto).
    =========================================================== */
 :root {
-  /* Paleta (1 marca + 1 acento + neutros) */
-  --noche: #1C2541;          /* marca: titulares, botones principales, pie */
-  --noche-700: #26325A;      /* hover de botones oscuros */
-  --noche-600: #34447A;      /* bordes activos */
-  --estrella: #F2C14E;       /* acento: estrella, etiquetas, contador */
-  --estrella-suave: #FBEFCB; /* fondos suaves del acento */
-  --algodon: #F3F5F9;        /* fondo de secciones alternas */
+  /* Paleta del logo de Star Home */
+  --marca: #2A1E1C;          /* negro café ("Home" del logo): titulares, botones, pie */
+  --marca-700: #3B2B28;      /* hover de botones oscuros */
+  --marca-600: #5A4440;      /* bordes activos y foco */
+  --oro: #C9A24E;            /* dorado del logo: estrellas, filetes, adornos (no texto) */
+  --oro-claro: #E3C27A;      /* dorado claro: contadores, texto sobre el pie oscuro */
+  --oro-suave: #F6ECD8;      /* fondos suaves dorados */
+  --oro-texto: #8A6421;      /* dorado para texto pequeño (códigos, antetítulos) */
+  --rosa: #E8B4BE;           /* rosa del moño: detalles (no texto) */
+  --rosa-suave: #F8ECEE;     /* fondo de secciones rosadas */
+  --rosa-texto: #A0475D;     /* rosa para notas ("Medida: consúltala por WhatsApp") */
+  --crema: #FBF7F3;          /* fondo cálido de secciones */
   --blanco: #FFFFFF;
-  --lino: #E9EDF4;           /* fondo de las fotos de producto */
-  --hilo: #D6DCE7;           /* bordes finos */
-  --tinta: #222A43;          /* texto principal */
-  --tinta-2: #4E5775;        /* texto secundario (contraste 6.5:1 sobre algodón) */
-  --tinta-3: #646C8A;        /* notas pequeñas (≥4.7:1) */
+  --lino: #F3ECE6;           /* fondo de las fotos de producto */
+  --hilo: #E7DAD3;           /* bordes finos */
+  --tinta: #33272A;          /* texto principal */
+  --tinta-2: #5E4F4C;        /* texto secundario */
+  --tinta-3: #6F605C;        /* notas pequeñas */
   --error: #A3262E;
 
-  /* Tipografía (máx. 2 familias) */
-  --fuente-titulos: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-  --fuente-texto: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* Tipografía: las del catálogo PDF (máx. 3 familias) */
+  --fuente-titulos: 'Cormorant Garamond', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --fuente-texto: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fuente-cursiva: 'Great Vibes', 'Segoe Script', 'Brush Script MT', cursive;
 
   /* Medidas */
   --contenedor: 1200px;
@@ -49,8 +57,9 @@
   --radio-s: 10px;
   --radio-m: 16px;
   --radio-l: 24px;
-  --sombra-1: 0 1px 2px rgba(28, 37, 65, .06), 0 6px 16px rgba(28, 37, 65, .06);
-  --sombra-2: 0 12px 32px rgba(28, 37, 65, .16);
+  --sombra-1: 0 1px 2px rgba(42, 30, 28, .05), 0 8px 20px rgba(42, 30, 28, .06);
+  --sombra-2: 0 14px 36px rgba(42, 30, 28, .18);
+  --sombra-oro: 0 18px 40px rgba(138, 100, 33, .18);
   --alto-cookies: 0px;       /* lo ajusta script.js para subir el botón de WhatsApp */
 }
 
@@ -70,37 +79,38 @@ html {
 
 body {
   margin: 0;
-  background: var(--blanco);
+  background: var(--crema);
   color: var(--tinta);
   font-family: var(--fuente-texto);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* Al abrir el carrito se bloquea el scroll de fondo */
-body.sin-scroll { overflow: hidden; }
+/* Con "Mi lista" o el visor abiertos se bloquea el scroll de fondo */
+body.sin-scroll,
+body.visor-abierto { overflow: hidden; }
 
 img, svg { display: block; max-width: 100%; }
 img { height: auto; }
 
 h1, h2, h3 {
-  margin: 0 0 .5em;
-  color: var(--noche);
+  margin: 0 0 .45em;
+  color: var(--marca);
   font-family: var(--fuente-titulos);
   font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -.01em;
+  line-height: 1.08;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 
-h2 { font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.6rem); }
-h3 { font-size: 1.15rem; }
+h2 { font-size: clamp(2.1rem, 1.55rem + 2.2vw, 3.2rem); }
+h3 { font-size: 1.35rem; }
 
 p { margin: 0 0 1em; }
 
-a { color: var(--noche); text-underline-offset: .18em; }
+a { color: var(--marca); text-underline-offset: .18em; }
 
 button,
 input,
@@ -109,7 +119,7 @@ textarea { font: inherit; color: inherit; }
 
 /* Foco visible para quien navega con teclado */
 :focus-visible {
-  outline: 3px solid var(--noche-600);
+  outline: 3px solid var(--marca-600);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -123,7 +133,7 @@ textarea { font: inherit; color: inherit; }
   top: -60px;
   z-index: 200;
   padding: 12px 16px;
-  background: var(--noche);
+  background: var(--marca);
   color: var(--blanco);
   border-radius: var(--radio-s);
   font-weight: 700;
@@ -140,9 +150,15 @@ textarea { font: inherit; color: inherit; }
   white-space: nowrap; border: 0;
 }
 
+/* Sprite de íconos (al inicio del <body>): no ocupa espacio ni se ve */
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Estrella de 5 puntas del logo (decorativa) */
+.estrella-marca { fill: var(--oro); }
+
 /* ===========================================================
    3. UTILIDADES Y BOTONES
-   Botones con alto mínimo de 48px (dedo cómodo en celular).
+   Botones píldora con alto mínimo de 48px (dedo cómodo en celular).
    =========================================================== */
 .contenedor {
   width: 100%;
@@ -155,18 +171,32 @@ textarea { font: inherit; color: inherit; }
 }
 .contenedor--estrecho { max-width: 820px; }
 
+/* Antetítulo dorado en mayúsculas espaciadas (como "CATÁLOGO 2026" del PDF) */
+.seccion__antetitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  color: var(--oro-texto);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+.seccion__antetitulo::before { content: "✦"; color: var(--oro); letter-spacing: 0; }
+
 .boton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   min-height: 48px;
-  padding: 12px 22px;
+  padding: 12px 24px;
   border: 1.5px solid transparent;
   border-radius: 999px;
   font-family: var(--fuente-texto);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: .98rem;
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
@@ -177,19 +207,28 @@ textarea { font: inherit; color: inherit; }
 .boton svg { width: 20px; height: 20px; flex: none; }
 .boton--ancho { width: 100%; }
 
-.boton--principal { background: var(--noche); color: var(--blanco); }
-.boton--secundario { background: var(--blanco); color: var(--noche); border-color: var(--noche); }
-/* Ícono dentro de un botón (p. ej. el de WhatsApp en "Enviar pedido por WhatsApp"): toma el color del texto */
+.boton--principal { background: var(--marca); color: var(--blanco); }
+.boton--secundario { background: var(--blanco); color: var(--marca); border-color: var(--marca); }
+/* Ícono dentro de un botón (WhatsApp, descarga, estrella): toma el color del texto */
 .boton__icono { fill: currentColor; }
-.boton--agregar { width: 100%; gap: .3em; background: var(--noche); color: var(--blanco); padding: 12px 14px; font-size: .95rem; }
-.boton--cookies { background: var(--blanco); color: var(--noche); border-color: var(--noche); }
+.boton--descarga .boton__icono { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Texto pequeño dentro de un botón (p. ej. "PDF · 14 MB") */
+.boton__nota {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--tinta-3);
+  font-size: .76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.boton--cookies { background: var(--blanco); color: var(--marca); border-color: var(--marca); }
 
 /* Efectos hover solo en dispositivos que de verdad tienen hover */
 @media (hover: hover) {
   .boton--principal:hover:not(:disabled),
-  .boton--agregar:hover:not(:disabled) { background: var(--noche-700); }
+  .boton--consultar:hover { background: var(--marca-700); }
   .boton--secundario:hover,
-  .boton--cookies:hover { background: var(--algodon); }
+  .boton--cookies:hover { background: var(--oro-suave); }
   a:hover { text-decoration-thickness: 2px; }
 }
 
@@ -198,7 +237,7 @@ textarea { font: inherit; color: inherit; }
   align-items: center;
   min-height: 48px;
   padding: 0 4px;
-  color: var(--noche);
+  color: var(--marca);
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
@@ -218,10 +257,11 @@ textarea { font: inherit; color: inherit; }
    4. AVISO SUPERIOR (lo controla tienda.json desde el CMS)
    =========================================================== */
 .aviso {
-  background: var(--noche);
-  color: #E6E9F3;
-  font-size: .85rem;
+  background: var(--marca);
+  color: var(--oro-claro);
+  font-size: .82rem;
   font-weight: 600;
+  letter-spacing: .03em;
   text-align: center;
 }
 .aviso p {
@@ -245,7 +285,7 @@ textarea { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   gap: 20px;
-  min-height: 68px;
+  min-height: 70px;
 }
 
 .marca {
@@ -254,24 +294,25 @@ textarea { font: inherit; color: inherit; }
   gap: 10px;
   margin-right: auto;
   min-height: 48px;
-  color: var(--noche);
+  color: var(--marca);
   text-decoration: none;
 }
-.marca__estrella { width: 24px; height: 24px; fill: var(--estrella); flex: none; }
+/* Logo de Star Home en miniatura (como en el encabezado de cada página del PDF) */
+.marca__logo {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: 1px solid var(--oro);
+  border-radius: 11px;
+  background: var(--lino);
+  object-fit: cover;
+}
 .marca__nombre {
   font-family: var(--fuente-titulos);
-  font-weight: 600;
-  font-size: 1.35rem;
+  font-weight: 700;
+  font-size: 1.6rem;
   line-height: 1;
-  letter-spacing: -.01em;
   white-space: nowrap;
-}
-.marca__casa {
-  font-family: var(--fuente-texto);
-  font-size: .62em;
-  font-weight: 600;
-  letter-spacing: .12em;
-  color: var(--tinta-2);
 }
 
 .menu__lista {
@@ -285,36 +326,38 @@ textarea { font: inherit; color: inherit; }
   display: inline-flex;
   align-items: center;
   min-height: 48px;
-  padding: 0 12px;
+  padding: 0 14px;
   color: var(--tinta);
   font-weight: 600;
-  font-size: .95rem;
+  font-size: .93rem;
   text-decoration: none;
   border-radius: 999px;
 }
 @media (hover: hover) {
-  .menu__lista a:hover { color: var(--noche); background: var(--algodon); }
+  .menu__lista a:hover { color: var(--marca); background: var(--rosa-suave); }
 }
 
-.cabecera__acciones { display: flex; align-items: center; gap: 8px; }
+.cabecera__acciones { display: flex; flex: none; align-items: center; gap: 8px; }
 
+/* Botón "Mi lista" (los id/clases "carrito" vienen de versiones anteriores) */
 .boton-carrito {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 48px;
-  padding: 0 16px 0 14px;
-  border: 1.5px solid var(--noche);
+  padding: 0 14px 0 12px;
+  border: 1.5px solid var(--marca);
   border-radius: 999px;
   background: var(--blanco);
-  color: var(--noche);
+  color: var(--marca);
   font-weight: 700;
+  font-size: .93rem;
   cursor: pointer;
 }
 .boton-carrito svg {
   width: 22px; height: 22px;
-  fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round;
+  fill: var(--oro); stroke: var(--oro-texto); stroke-width: 1.2; stroke-linejoin: round;
 }
 .boton-carrito__n {
   display: inline-grid;
@@ -323,15 +366,15 @@ textarea { font: inherit; color: inherit; }
   height: 24px;
   padding: 0 6px;
   border-radius: 999px;
-  background: var(--estrella);
-  color: var(--noche);
-  font-size: .8rem;
+  background: var(--oro-claro);
+  color: var(--marca);
+  font-size: .78rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 .boton-carrito__n.salta { animation: salto .32s ease; }
 @keyframes salto { 40% { transform: scale(1.3); } }
-@media (hover: hover) { .boton-carrito:hover { background: var(--algodon); } }
+@media (hover: hover) { .boton-carrito:hover { background: var(--oro-suave); } }
 
 /* Hamburguesa (solo móvil) */
 .boton-menu {
@@ -351,7 +394,7 @@ textarea { font: inherit; color: inherit; }
   display: block;
   height: 2px;
   border-radius: 2px;
-  background: var(--noche);
+  background: var(--marca);
   transition: transform .25s ease, opacity .2s ease;
 }
 .boton-menu[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -360,50 +403,106 @@ textarea { font: inherit; color: inherit; }
 
 /* ===========================================================
    6. PORTADA
-   Texto a la izquierda e ilustración a la derecha (en móvil, apilados).
+   Texto a la izquierda y el logo enmarcado a la derecha (en móvil, apilados).
+   El marco blanco con filete dorado imita la portada del catálogo PDF.
    =========================================================== */
 .portada {
-  background: var(--algodon);
-  padding: clamp(28px, 5vw, 72px) 0 clamp(32px, 5vw, 72px);
+  background:
+    radial-gradient(120% 90% at 85% 10%, rgba(232, 180, 190, .35), transparent 60%),
+    linear-gradient(180deg, var(--rosa-suave), var(--crema));
+  padding: clamp(28px, 5vw, 72px) 0 clamp(36px, 5vw, 80px);
   overflow: hidden;
 }
 .portada__grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: clamp(20px, 4vw, 56px);
+  gap: clamp(24px, 4vw, 56px);
+}
+.portada__texto { min-width: 0; } /* nunca más ancho que la pantalla */
+.portada__lema {
+  margin: 0 0 2px;
+  color: var(--oro-texto);
+  font-family: var(--fuente-cursiva);
+  font-size: clamp(2.1rem, 1.6rem + 2vw, 3.1rem);
+  line-height: 1.15;
 }
 .portada__titulo {
   max-width: none; /* apilado ocupa todo el ancho; en escritorio (≥901px) se limita la medida */
-  margin-bottom: .4em;
-  font-size: clamp(2.35rem, 1.45rem + 3.9vw, 4.4rem);
-  line-height: 1.03;
-  letter-spacing: -.02em;
+  margin-bottom: .35em;
+  font-size: clamp(2.45rem, 1.55rem + 3.9vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.02;
 }
 .portada__sub {
   max-width: 34em;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
   color: var(--tinta-2);
-  font-size: clamp(1.02rem, .95rem + .35vw, 1.2rem);
+  font-size: clamp(.98rem, .93rem + .3vw, 1.12rem);
+}
+/* SÁBANAS ✦ COBIJAS ✦ CORTINAS ✦ ALMOHADAS (como la portada del PDF) */
+.portada__categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  margin: 0 0 26px;
+  padding: 0;
+  list-style: none;
+  color: var(--oro-texto);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.portada__categorias li + li::before {
+  content: "✦";
+  margin: 0 .7em 0 .5em;
+  color: var(--oro);
+  letter-spacing: 0;
 }
 .portada__acciones {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 20px;
+  gap: 12px 14px;
 }
-.portada__arte { display: flex; justify-content: center; }
-.portada__arte img {
-  width: auto;
-  max-width: 100%;
-  max-height: min(400px, 52vh);
+.portada__arte { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.portada__marco {
+  width: min(78vw, 440px);
+  padding: 10px;
+  border: 1px solid #E2CFA8;
+  border-radius: 26px;
+  background: var(--blanco);
+  box-shadow: var(--sombra-oro);
+}
+.portada__marco img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  object-fit: cover;
+}
+/* Sello "Catálogo 2026 · Especial Navidad" (píldora rosada del PDF) */
+.portada__sello {
+  margin: 0;
+  padding: 6px 18px;
+  border: 1px solid var(--rosa);
+  border-radius: 999px;
+  background: var(--rosa-suave);
+  color: var(--marca);
+  font-family: var(--fuente-titulos);
+  font-size: 1.12rem;
+  font-style: italic;
+  font-weight: 600;
 }
 
-/* Única entrada animada de la página: el titular y la ilustración al cargar */
+/* Única entrada animada de la página: el texto de la portada y el logo al cargar */
 .portada__texto > * { animation: aparecer .6s cubic-bezier(.2, .7, .2, 1) both; }
-.portada__texto > :nth-child(2) { animation-delay: .08s; }
-.portada__texto > :nth-child(3) { animation-delay: .16s; }
-.portada__texto > :nth-child(4) { animation-delay: .24s; }
+.portada__texto > :nth-child(2) { animation-delay: .06s; }
+.portada__texto > :nth-child(3) { animation-delay: .12s; }
+.portada__texto > :nth-child(4) { animation-delay: .18s; }
+.portada__texto > :nth-child(5) { animation-delay: .24s; }
+.portada__texto > :nth-child(6) { animation-delay: .3s; }
+.portada__texto > :nth-child(7) { animation-delay: .36s; }
 
 /* Etiqueta de versión del sitio sobre el titular (píldora con la estrella del logo).
    El número se cambia en la ZONA EDITABLE · VERSIÓN de index.html. */
@@ -411,41 +510,43 @@ textarea { font: inherit; color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   padding: 4px 12px 4px 9px;
   border-radius: 999px;
-  background: var(--estrella-suave);
-  color: var(--noche);
-  font-size: .78rem;
+  background: var(--oro-suave);
+  color: var(--marca);
+  font-size: .76rem;
   font-weight: 800;
   letter-spacing: .04em;
   font-variant-numeric: tabular-nums;
 }
-.portada__version .marca__estrella { width: 14px; height: 14px; }
-.portada__arte img { animation: aparecer-arte .9s .1s cubic-bezier(.2, .7, .2, 1) both; }
+.portada__version .estrella-marca { width: 14px; height: 14px; }
+.portada__arte > * { animation: aparecer-arte .9s .1s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes aparecer { from { opacity: 0; transform: translateY(14px); } }
 @keyframes aparecer-arte { from { opacity: 0; transform: translateY(18px) scale(.985); } }
 
 /* ===========================================================
-   7. COLECCIÓN Y TARJETAS DE PRODUCTO
-   Las pestañas filtran por temporada usando data-filtro en el grid
-   (lo pone el servidor) y data-coleccion en cada tarjeta.
+   7. CATÁLOGO Y TARJETAS DE PRODUCTO
+   Pestañas (secciones) + filtros (tipo o tamaño). El filtro lo hace el CSS:
+   el servidor y script.js marcan con .coincide las tarjetas que se ven.
    =========================================================== */
-.coleccion { padding: clamp(48px, 7vw, 96px) 0; }
-.coleccion__cabeza { max-width: 640px; margin-bottom: 24px; }
+.coleccion { padding: clamp(48px, 7vw, 96px) 0; background: var(--crema); }
+.coleccion__cabeza { max-width: 680px; margin-bottom: 24px; }
 .coleccion__intro { color: var(--tinta-2); margin: 0; }
 
-.pestanas {
+.pestanas,
+.filtros {
   display: flex;
   gap: 8px;
   margin: 0 calc(var(--margen) * -1);
   padding: 4px var(--margen) 8px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
-  scroll-padding-inline: var(--margen); /* la primera pestaña respeta el margen al deslizar */
+  scroll-padding-inline: var(--margen); /* el primer botón respeta el margen al deslizar */
   scrollbar-width: none;
 }
-.pestanas::-webkit-scrollbar { display: none; }
+.pestanas::-webkit-scrollbar,
+.filtros::-webkit-scrollbar { display: none; }
 .pestana {
   display: inline-flex;
   align-items: center;
@@ -458,37 +559,64 @@ textarea { font: inherit; color: inherit; }
   background: var(--blanco);
   color: var(--tinta);
   font-weight: 700;
-  font-size: .95rem;
+  font-size: .93rem;
   white-space: nowrap;
   cursor: pointer;
   scroll-snap-align: start;
   transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
-.pestana__n {
+.pestana__n,
+.filtro__n {
   display: inline-grid;
   place-items: center;
   min-width: 24px;
   height: 24px;
   padding: 0 6px;
   border-radius: 999px;
-  background: var(--algodon);
+  background: var(--crema);
   color: var(--tinta-2);
-  font-size: .78rem;
+  font-size: .76rem;
   font-variant-numeric: tabular-nums;
 }
 .pestana[aria-selected="true"] {
-  background: var(--noche);
-  border-color: var(--noche);
+  background: var(--marca);
+  border-color: var(--marca);
   color: var(--blanco);
 }
-.pestana[aria-selected="true"] .pestana__n { background: var(--estrella); color: var(--noche); }
-@media (hover: hover) { .pestana:hover:not([aria-selected="true"]) { border-color: var(--noche-600); } }
+.pestana[aria-selected="true"] .pestana__n { background: var(--oro-claro); color: var(--marca); }
+@media (hover: hover) { .pestana:hover:not([aria-selected="true"]) { border-color: var(--oro); } }
+
+/* Filtros por tipo o tamaño: píldoras más suaves, la elegida en dorado */
+.filtros { margin-top: 4px; padding-top: 2px; }
+.filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--hilo);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tinta-2);
+  font-weight: 600;
+  font-size: .86rem;
+  white-space: nowrap;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.filtro[aria-pressed="true"] { background: var(--oro-suave); border-color: var(--oro); color: var(--marca); }
+.filtro[aria-pressed="true"] .filtro__n { background: var(--blanco); color: var(--marca); }
+@media (hover: hover) { .filtro:hover:not([aria-pressed="true"]) { border-color: var(--oro); background: var(--blanco); } }
 
 .pestanas__desc {
   min-height: 1.6em;
-  margin: 10px 0 24px;
+  margin: 10px 0 22px;
   color: var(--tinta-2);
-  font-size: .95rem;
+  font-family: var(--fuente-titulos);
+  font-size: 1.12rem;
+  font-style: italic;
 }
 
 .catalogo {
@@ -497,10 +625,10 @@ textarea { font: inherit; color: inherit; }
   gap: 14px;
 }
 
-/* Filtro por colección. El servidor marca con .coincide las tarjetas de la
-   colección inicial (así se ve bien desde el primer pintado, sin esperar
-   al JS) y script.js la mueve al cambiar de pestaña. Sirve para cualquier
-   colección nueva creada desde el CMS, sin tocar este archivo. */
+/* Filtro por colección y grupo. El servidor marca con .coincide las tarjetas
+   de la colección inicial (así se ve bien desde el primer pintado, sin
+   esperar al JS) y script.js las cambia al tocar una pestaña o un filtro.
+   Sirve para cualquier colección o grupo nuevo creado desde el CMS. */
 .catalogo:not([data-filtro="todas"]) .producto:not(.coincide) { display: none; }
 
 .catalogo__vacio {
@@ -511,7 +639,7 @@ textarea { font: inherit; color: inherit; }
   color: var(--tinta-2);
   text-align: center;
 }
-.catalogo__nota { margin: 24px 0 0; color: var(--tinta-3); font-size: .85rem; }
+.catalogo__nota { margin: 24px 0 0; color: var(--tinta-3); font-size: .82rem; }
 
 .producto {
   display: flex;
@@ -521,22 +649,76 @@ textarea { font: inherit; color: inherit; }
   border-radius: var(--radio-m);
   background: var(--blanco);
   overflow: hidden;
-  transition: border-color .2s ease;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
+/* Las tarjetas que están fuera de la pantalla no se dibujan hasta acercarse
+   (menos trabajo para celulares de gama baja). Mientras tanto ocupan un alto
+   aproximado (medido: ~350px en celular, ~440–465px en tablet y escritorio,
+   ver el bloque 15); "auto" recuerda el alto real una vez dibujada. */
+.producto { content-visibility: auto; contain-intrinsic-size: auto 350px; }
+/* Al tocar un enlace interno (#como-pedir…) script.js pone esta clase: se dibujan
+   todas las tarjetas ANTES de calcular el destino, así el desplazamiento suave
+   aterriza exacto (si no, quedaba corrido porque las tarjetas cambian de alto al pasar) */
+.catalogo.dibujar-todo .producto { content-visibility: visible; }
 .producto.entra { animation: entrar-tarjeta .32s ease both; animation-delay: calc(var(--i, 0) * 35ms); }
 @keyframes entrar-tarjeta { from { opacity: 0; transform: translateY(8px); } }
-@media (hover: hover) { .producto:hover { border-color: var(--noche-600); } }
+@media (hover: hover) { .producto:hover { border-color: var(--oro); box-shadow: var(--sombra-1); } }
 
 .producto__foto {
   position: relative;
   aspect-ratio: 1 / 1;
   background: var(--lino);
+  overflow: hidden;
 }
+/* La foto es un botón: abre el visor a pantalla completa */
+.producto__ver {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.producto__ver:focus-visible { outline-offset: -3px; }
 .producto__foto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform .4s ease;
 }
+@media (hover: hover) { .producto:hover .producto__foto img { transform: scale(1.03); } }
+
+/* Estrella "Agregar a mi lista" en la esquina de la foto (44 px de toque) */
+.producto__estrella {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .92);
+  box-shadow: 0 2px 8px rgba(42, 30, 28, .18);
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease;
+}
+.producto__estrella svg {
+  width: 22px;
+  height: 22px;
+  fill: transparent;
+  stroke: var(--marca);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  transition: fill .2s ease, stroke .2s ease;
+}
+.producto__estrella[aria-pressed="true"] { background: var(--blanco); }
+.producto__estrella[aria-pressed="true"] svg { fill: var(--oro); stroke: var(--oro-texto); animation: brillo .35s ease; }
+@keyframes brillo { 40% { transform: scale(1.3) rotate(-8deg); } }
+@media (hover: hover) { .producto__estrella:hover { transform: scale(1.06); } }
 
 /* Etiqueta colgante (forma de marquilla de tela con su ojal) */
 .etiqueta-colgante {
@@ -544,12 +726,13 @@ textarea { font: inherit; color: inherit; }
   top: 12px;
   left: 12px;
   padding: 5px 11px 5px 20px;
-  background: var(--estrella);
-  color: var(--noche);
-  font-size: .76rem;
+  background: var(--oro-claro);
+  color: var(--marca);
+  font-size: .74rem;
   font-weight: 800;
   line-height: 1.3;
   clip-path: polygon(9px 0, 100% 0, 100% 100%, 9px 100%, 0 50%);
+  pointer-events: none;
 }
 .etiqueta-colgante::before {
   content: "";
@@ -562,82 +745,87 @@ textarea { font: inherit; color: inherit; }
   border-radius: 50%;
   background: var(--lino);
 }
-.etiqueta-colgante--agotado { background: var(--noche); color: var(--blanco); }
+.etiqueta-colgante--agotado { background: var(--marca); color: var(--blanco); }
 
 .producto__info {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px;
+  gap: 3px;
+  padding: 12px 12px 14px;
+}
+/* Código de referencia (REF. CB-01): dorado, como en el PDF */
+.producto__ref {
+  margin: 0;
+  color: var(--oro-texto);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
 .producto__nombre {
   margin: 0;
-  font-size: 1.08rem;
-  font-weight: 600;
-  line-height: 1.22;
+  font-size: 1.28rem;
+  font-weight: 700;
+  line-height: 1.12;
 }
-.producto__desc {
-  display: -webkit-box;
-  margin: 0;
-  overflow: hidden;
-  color: var(--tinta-2);
-  font-size: .88rem;
-  line-height: 1.45;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
+.producto__tipo { margin: 0; color: var(--tinta-2); font-size: .8rem; }
+.producto__medida { margin: 0 0 10px; color: var(--tinta-2); font-size: .78rem; font-weight: 600; }
+.producto__medida--consultar { color: var(--rosa-texto); font-weight: 500; }
 .producto__precio {
-  margin: 2px 0 0;
-  color: var(--noche);
-  font-size: 1.15rem;
+  margin: -4px 0 10px;
+  color: var(--marca);
+  font-size: 1.1rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-.producto__compra {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 8px;
-}
-.producto__medida-label { font-size: .8rem; font-weight: 700; color: var(--tinta-2); }
-.producto__medida {
+/* Botón "Consultar" (WhatsApp): siempre abajo, alineado en toda la fila */
+.boton--consultar {
   width: 100%;
-  min-height: 48px;
-  padding: 0 38px 0 12px;
-  border: 1px solid var(--hilo);
-  border-radius: var(--radio-s);
-  background: var(--blanco) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%231C2541' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center / 18px;
-  font-size: 16px; /* 16px evita el zoom automático de iOS */
-  text-overflow: ellipsis;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 10px 12px;
+  gap: 7px;
+  background: var(--marca);
+  color: var(--blanco);
+  font-size: .9rem;
 }
-.producto__medida:focus { border-color: var(--noche); }
-.producto__medida--fija {
-  display: block;
-  margin: 0;
-  padding: 0 12px;
-  overflow: hidden;
-  background: var(--algodon);
-  color: var(--tinta-2);
-  line-height: 46px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  cursor: default;
-}
+.boton--consultar svg { width: 18px; height: 18px; }
+.boton--apagado { background: var(--lino); color: var(--tinta-3); cursor: default; }
 .producto--agotado .producto__foto img { opacity: .55; filter: grayscale(.4); }
+.producto--agotado .producto__estrella { display: none; }
+
+/* ¿Buscas algo más? (como en el catálogo PDF) */
+.buscas {
+  margin-top: clamp(28px, 4vw, 44px);
+  padding: clamp(22px, 4vw, 34px);
+  border: 1px solid var(--hilo);
+  border-radius: var(--radio-l);
+  background: var(--rosa-suave);
+  text-align: center;
+}
+.buscas__titulo {
+  margin: 0;
+  color: var(--marca);
+  font-family: var(--fuente-cursiva);
+  font-size: clamp(2.1rem, 1.7rem + 1.6vw, 2.8rem);
+  line-height: 1.2;
+}
+.buscas__texto {
+  max-width: 34em;
+  margin: 6px auto 18px;
+  color: var(--tinta-2);
+  font-family: var(--fuente-titulos);
+  font-size: 1.18rem;
+}
 
 /* ===========================================================
-   8. CÓMO COMPRAR
+   8. CÓMO PEDIR
    Los pasos sí son una secuencia, por eso van numerados y unidos con
    una costura (línea punteada) como las de las sábanas.
    =========================================================== */
 .pasos {
-  background: var(--algodon);
+  background: var(--rosa-suave);
   padding: clamp(48px, 7vw, 96px) 0;
 }
 .pasos__lista {
@@ -664,12 +852,12 @@ textarea { font: inherit; color: inherit; }
   place-items: center;
   width: 52px;
   height: 52px;
-  border: 1.5px solid var(--noche);
+  border: 1.5px solid var(--oro);
   border-radius: 50%;
   background: var(--blanco);
-  color: var(--noche);
+  color: var(--oro-texto);
   font-family: var(--fuente-titulos);
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 /* costura vertical que une los números en móvil */
@@ -681,14 +869,14 @@ textarea { font: inherit; color: inherit; }
   bottom: -26px;
   border-left: 2px dashed var(--hilo);
 }
-.paso__titulo { margin: 10px 0 4px; font-size: 1.15rem; }
+.paso__titulo { margin: 10px 0 4px; font-size: 1.4rem; }
 .paso p { margin: 0; color: var(--tinta-2); }
 
 /* ===========================================================
    9. PREGUNTAS FRECUENTES (details/summary, funciona sin JS)
    =========================================================== */
 .preguntas {
-  background: var(--blanco); /* blanco: así alterna con Cómo comprar (algodón), que quedó justo antes */
+  background: var(--blanco);
   padding: clamp(48px, 7vw, 96px) 0;
 }
 .pregunta { border-bottom: 1px solid var(--hilo); }
@@ -699,9 +887,9 @@ textarea { font: inherit; color: inherit; }
   align-items: center;
   min-height: 64px;
   padding: 14px 44px 14px 0;
-  color: var(--noche);
+  color: var(--marca);
   font-family: var(--fuente-titulos);
-  font-size: 1.15rem;
+  font-size: 1.32rem;
   font-weight: 600;
   list-style: none;
   cursor: pointer;
@@ -716,8 +904,8 @@ textarea { font: inherit; color: inherit; }
   height: 14px;
   margin-top: -7px;
   background:
-    linear-gradient(var(--noche), var(--noche)) center / 14px 2px no-repeat,
-    linear-gradient(var(--noche), var(--noche)) center / 2px 14px no-repeat;
+    linear-gradient(var(--oro-texto), var(--oro-texto)) center / 14px 2px no-repeat,
+    linear-gradient(var(--oro-texto), var(--oro-texto)) center / 2px 14px no-repeat;
   transition: transform .25s ease;
 }
 .pregunta[open] summary::after { transform: rotate(45deg); }
@@ -728,10 +916,10 @@ textarea { font: inherit; color: inherit; }
    10. PIE DE PÁGINA + CRÉDITO JX COMPANY (formato exacto de la skill)
    =========================================================== */
 .pie {
-  background: var(--noche);
-  color: #D3D9E8;
+  background: var(--marca);
+  color: #E9DFD7;
   padding: 56px 0 calc(28px + env(safe-area-inset-bottom));
-  font-size: .95rem;
+  font-size: .93rem;
 }
 .pie a { color: var(--blanco); }
 .pie__grid {
@@ -742,20 +930,35 @@ textarea { font: inherit; color: inherit; }
 .pie__nombre {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 4px;
   color: var(--blanco);
   font-family: var(--fuente-titulos);
-  font-size: 1.4rem;
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.pie__logo {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--oro);
+  border-radius: 14px;
+  object-fit: cover;
+}
+.pie__lema {
+  margin: 0 0 10px;
+  color: var(--oro-claro);
+  font-family: var(--fuente-cursiva);
+  font-size: 1.9rem;
+  line-height: 1.2;
 }
 .pie__titulo {
   margin: 0 0 12px;
-  color: var(--blanco);
+  color: var(--oro-claro);
   font-family: var(--fuente-texto);
-  font-size: .95rem;
+  font-size: .74rem;
   font-weight: 700;
-  letter-spacing: 0;
+  letter-spacing: .22em;
+  text-transform: uppercase;
 }
 .pie__lista { margin: 0; padding: 0; list-style: none; }
 .pie__lista li { padding: 2px 0; }
@@ -781,9 +984,9 @@ textarea { font: inherit; color: inherit; }
   top: 0;
   left: var(--margen);
   right: var(--margen);
-  border-top: 1px solid rgba(255, 255, 255, .12);
+  border-top: 1px solid rgba(227, 194, 122, .25);
 }
-.pie__copy { margin: 0; text-align: center; font-size: .85rem; color: #B9C1D6; }
+.pie__copy { margin: 0; text-align: center; font-size: .82rem; color: #CFC3BA; }
 
 .footer-dev {
   width: 100%;
@@ -809,7 +1012,7 @@ textarea { font: inherit; color: inherit; }
 }
 
 /* ===========================================================
-   11. WHATSAPP FLOTANTE, CARRITO Y TOAST
+   11. WHATSAPP FLOTANTE, MI LISTA Y TOAST
    =========================================================== */
 .wa-flotante {
   position: fixed;
@@ -822,14 +1025,15 @@ textarea { font: inherit; color: inherit; }
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: var(--noche);
-  /* anillo blanco: así el botón se distingue también sobre el pie, que es del mismo azul */
-  box-shadow: 0 0 0 3px var(--blanco), 0 8px 22px rgba(28, 37, 65, .28);
+  background: var(--marca);
+  /* anillo dorado: el botón se distingue también sobre el pie, que es del mismo color */
+  box-shadow: 0 0 0 3px var(--oro-claro), 0 8px 22px rgba(42, 30, 28, .3);
   transition: bottom .25s ease, background-color .2s ease;
 }
 .wa-flotante svg { width: 30px; height: 30px; fill: var(--blanco); }
-@media (hover: hover) { .wa-flotante:hover { background: var(--noche-700); } }
-body.carrito-abierto .wa-flotante { visibility: hidden; }
+@media (hover: hover) { .wa-flotante:hover { background: var(--marca-700); } }
+body.carrito-abierto .wa-flotante,
+body.visor-abierto .wa-flotante { visibility: hidden; }
 /* Celular o pantalla bajita (horizontal): mientras el banner de cookies está
    abierto, el botón flotante se esconde; si no, queda encima del titular.
    Vuelve apenas la persona acepta o rechaza. */
@@ -837,12 +1041,12 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   body.cookies-abierto .wa-flotante { visibility: hidden; }
 }
 
-/* Fondo oscuro detrás del carrito */
+/* Fondo oscuro detrás de "Mi lista" */
 .carrito-fondo {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: rgba(28, 37, 65, .45);
+  background: rgba(42, 30, 28, .5);
   animation: fundido .2s ease both;
 }
 @keyframes fundido { from { opacity: 0; } }
@@ -871,7 +1075,7 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 10px 20px;
   border-bottom: 1px solid var(--hilo);
 }
-.carrito__titulo { margin: 0; font-size: 1.45rem; }
+.carrito__titulo { margin: 0; font-size: 1.7rem; }
 .boton-cerrar {
   display: grid;
   place-items: center;
@@ -882,8 +1086,8 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   background: transparent;
   cursor: pointer;
 }
-.boton-cerrar svg { width: 24px; height: 24px; fill: none; stroke: var(--noche); stroke-width: 2; stroke-linecap: round; }
-@media (hover: hover) { .boton-cerrar:hover { background: var(--algodon); } }
+.boton-cerrar svg { width: 24px; height: 24px; fill: none; stroke: var(--marca); stroke-width: 2; stroke-linecap: round; }
+@media (hover: hover) { .boton-cerrar:hover { background: var(--rosa-suave); } }
 
 .carrito__cuerpo {
   flex: 1;
@@ -891,7 +1095,10 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   overscroll-behavior: contain;
   padding: 16px calc(20px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) 20px;
 }
-.carrito__vacio { padding: 40px 0; text-align: center; color: var(--tinta-2); }
+.carrito__vacio { padding: 36px 0; text-align: center; color: var(--tinta-2); }
+.carrito__vacio p { margin-bottom: .5em; }
+.carrito__vacio-estrella { width: 48px; height: 48px; margin: 0 auto 12px; fill: var(--oro-suave); stroke: var(--oro); stroke-width: 1; }
+.carrito__vacio-ayuda { max-width: 30em; margin: 0 auto 18px !important; font-size: .9rem; }
 
 .carrito__lista { margin: 0; padding: 0; list-style: none; }
 .item {
@@ -903,8 +1110,9 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   border-bottom: 1px solid var(--hilo);
 }
 .item__foto { width: 68px; height: 68px; border-radius: var(--radio-s); background: var(--lino); object-fit: cover; }
-.item__nombre { margin: 0; font-family: var(--fuente-titulos); font-weight: 600; color: var(--noche); line-height: 1.25; }
-.item__variante { margin: 2px 0 0; color: var(--tinta-2); font-size: .85rem; }
+.item__ref { margin: 0; color: var(--oro-texto); font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.item__nombre { margin: 0; font-family: var(--fuente-titulos); font-size: 1.15rem; font-weight: 700; color: var(--marca); line-height: 1.2; }
+.item__variante { margin: 2px 0 0; color: var(--tinta-2); font-size: .8rem; }
 .item__fila {
   display: flex;
   align-items: center;
@@ -913,7 +1121,7 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   flex-wrap: wrap;
   margin-top: 8px;
 }
-.item__precio { font-weight: 800; color: var(--noche); font-variant-numeric: tabular-nums; }
+.item__precio { font-weight: 800; color: var(--marca); font-variant-numeric: tabular-nums; }
 .cantidad {
   display: inline-flex;
   align-items: center;
@@ -927,15 +1135,15 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   height: 44px;
   border: 0;
   background: transparent;
-  color: var(--noche);
+  color: var(--marca);
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
 }
 .cantidad output { min-width: 26px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
-/* Quitar producto: ícono de basura azul noche en la esquina superior derecha
-   (v1.3, pedido de JX: más visible que el enlace "Quitar"). Área de toque de
-   44 px. Siempre pide confirmación antes de borrar (ver #confirmar-quitar). */
+/* Quitar producto: ícono de basura en la esquina superior derecha (v1.3,
+   pedido de JX). Área de toque de 44 px. Siempre pide confirmación. */
+.item__ref,
 .item__nombre,
 .item__variante { padding-right: 40px; }
 .item__quitar {
@@ -950,53 +1158,52 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: var(--noche);
+  color: var(--marca);
   cursor: pointer;
   transition: background-color .2s ease;
 }
 .item__quitar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-@media (hover: hover) { .item__quitar:hover { background: var(--algodon); } }
+@media (hover: hover) { .item__quitar:hover { background: var(--rosa-suave); } }
 
 .carrito__resumen {
   margin: 16px 0 8px;
   padding: 16px;
   border-radius: var(--radio-m);
-  background: var(--algodon);
+  background: var(--crema);
 }
 .resumen__fila {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  margin: 0;
   padding: 4px 0;
   color: var(--tinta-2);
 }
-.resumen__fila span:last-child,
-.resumen__fila strong { text-align: right; }
-.resumen__fila strong { color: var(--noche); font-variant-numeric: tabular-nums; }
-.resumen__fila--total { color: var(--noche); font-weight: 700; }
-.resumen__fila--total strong { font-family: var(--fuente-titulos); font-size: 1.35rem; }
+.resumen__fila strong { color: var(--marca); text-align: right; font-variant-numeric: tabular-nums; }
+.resumen__fila--total { color: var(--marca); font-weight: 700; }
+.resumen__fila--total strong { font-family: var(--fuente-titulos); font-size: 1.3rem; }
 .resumen__nota {
   margin: 8px 0 0;
   padding-top: 10px;
   border-top: 1px dashed var(--hilo);
   color: var(--tinta-2);
-  font-size: .85rem;
+  font-size: .84rem;
 }
 
-/* Formulario de pedido */
+/* Formulario de la consulta */
 .pedido { margin-top: 20px; }
 .pedido__datos { margin: 0; padding: 0; border: 0; }
 .pedido__datos legend {
   margin-bottom: 12px;
   padding: 0;
-  color: var(--noche);
+  color: var(--marca);
   font-family: var(--fuente-titulos);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 .campo { margin-bottom: 12px; }
-.campo label { display: block; margin-bottom: 6px; font-size: .9rem; font-weight: 700; }
+.campo label { display: block; margin-bottom: 6px; font-size: .88rem; font-weight: 700; }
 .campo__opcional { color: var(--tinta-3); font-weight: 500; }
 .campo input {
   width: 100%;
@@ -1007,9 +1214,9 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   background: var(--blanco);
   font-size: 16px; /* evita zoom en iOS */
 }
-.campo input:focus { outline: none; border-color: var(--noche); box-shadow: 0 0 0 3px rgba(28, 37, 65, .16); }
+.campo input:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 3px rgba(201, 162, 78, .3); }
 .campo input[aria-invalid="true"] { border-color: var(--error); }
-.campo__error { min-height: 0; margin: 4px 0 0; color: var(--error); font-size: .85rem; font-weight: 600; }
+.campo__error { min-height: 0; margin: 4px 0 0; color: var(--error); font-size: .84rem; font-weight: 600; }
 .campo__error:empty { display: none; }
 
 .casilla {
@@ -1018,19 +1225,19 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   gap: 10px;
   align-items: start;
   margin-top: 6px;
-  font-size: .88rem;
+  font-size: .86rem;
   color: var(--tinta-2);
   cursor: pointer;
 }
-.casilla input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--noche); }
+.casilla input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--marca); }
 
 .pedido__botones { display: grid; gap: 10px; margin-top: 16px; }
-.pedido__ayuda { margin: 12px 0 0; color: var(--tinta-3); font-size: .82rem; }
-.pedido__estado { margin: 10px 0 0; font-size: .9rem; font-weight: 600; color: var(--noche); }
+.pedido__ayuda { margin: 12px 0 0; color: var(--tinta-3); font-size: .8rem; }
+.pedido__estado { margin: 10px 0 0; font-size: .88rem; font-weight: 600; color: var(--marca); }
 .pedido__estado.es-error { color: var(--error); }
 
-/* Confirmar antes de quitar un producto (<dialog> nativo en la capa superior).
-   Mismo lenguaje que el carrito: bloque blanco radio-l, sombra-2, foto sobre lino. */
+/* Confirmar antes de quitar un producto de la lista (<dialog> nativo).
+   Mismo lenguaje que el panel: bloque blanco radio-l, sombra-2, foto sobre lino. */
 .confirmar {
   width: min(380px, calc(100% - 32px));
   max-width: none;
@@ -1043,7 +1250,7 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   text-align: center;
 }
 .confirmar[open] { animation: aparecer .22s ease both; }
-.confirmar::backdrop { background: rgba(28, 37, 65, .45); }
+.confirmar::backdrop { background: rgba(42, 30, 28, .5); }
 .confirmar__foto {
   width: 72px;
   height: 72px;
@@ -1052,8 +1259,8 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   background: var(--lino);
   object-fit: cover;
 }
-.confirmar__titulo { margin-bottom: 6px; font-size: 1.35rem; }
-.confirmar__texto { margin: 0 0 20px; color: var(--tinta-2); font-size: .95rem; }
+.confirmar__titulo { margin-bottom: 6px; font-size: 1.6rem; }
+.confirmar__texto { margin: 0 0 20px; color: var(--tinta-2); font-size: .93rem; }
 .confirmar__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .confirmar .boton { padding-left: 12px; padding-right: 12px; }
 
@@ -1070,10 +1277,10 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   max-width: calc(100% - 32px);
   padding: 12px 12px 12px 18px;
   border-radius: var(--radio-m);
-  background: var(--noche);
+  background: var(--marca);
   color: var(--blanco);
   box-shadow: var(--sombra-2);
-  font-size: .92rem;
+  font-size: .9rem;
   font-weight: 600;
   transform: translateX(-50%);
   animation: subir .25s ease both;
@@ -1084,15 +1291,124 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   padding: 0 12px;
   border: 0;
   border-radius: 999px;
-  background: var(--estrella);
-  color: var(--noche);
+  background: var(--oro-claro);
+  color: var(--marca);
   font-weight: 800;
   white-space: nowrap;
   cursor: pointer;
 }
 
 /* ===========================================================
-   12. BANNER DE COOKIES (Aceptar y Rechazar con el mismo peso)
+   12. VISOR DE FOTOS (pantalla completa, tipo carrusel)
+   <dialog> nativo en la capa superior: arriba el contador y la X, en el
+   centro la foto (se desliza con el dedo; flechas a los lados) y abajo la
+   ficha blanca con el código, el nombre y los botones.
+   =========================================================== */
+.visor {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100%;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(24, 16, 15, .97);
+  color: var(--blanco);
+  overflow: hidden;
+}
+.visor[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  animation: fundido .2s ease both;
+}
+.visor::backdrop { background: rgba(24, 16, 15, .9); }
+.visor__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(6px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) 6px calc(16px + env(safe-area-inset-left));
+}
+.visor__contador { margin: 0; color: #E9DFD7; font-size: .86rem; font-weight: 600; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+.visor__cerrar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .12);
+  cursor: pointer;
+}
+.visor__cerrar svg { width: 24px; height: 24px; fill: none; stroke: var(--blanco); stroke-width: 2; stroke-linecap: round; }
+.visor__escena {
+  position: relative;
+  min-height: 0;
+  touch-action: pan-y pinch-zoom; /* el deslizamiento horizontal lo maneja script.js */
+  user-select: none;
+  -webkit-user-select: none;
+}
+.visor__foto {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: calc(100% - 16px);
+  max-height: calc(100% - 8px);
+  margin: auto;
+  border-radius: 12px;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .25s ease;
+  -webkit-user-drag: none;
+}
+.visor__foto--lista { opacity: 1; }
+.visor__foto--entra-der { animation: entra-der .3s ease both; }
+.visor__foto--entra-izq { animation: entra-izq .3s ease both; }
+@keyframes entra-der { from { transform: translateX(28px); } }
+@keyframes entra-izq { from { transform: translateX(-28px); } }
+.visor__flecha {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(42, 30, 28, .55);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
+  cursor: pointer;
+}
+.visor__flecha svg { width: 24px; height: 24px; fill: none; stroke: var(--blanco); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.visor__flecha--ant { left: calc(8px + env(safe-area-inset-left)); }
+.visor__flecha--sig { right: calc(8px + env(safe-area-inset-right)); }
+@media (hover: hover) {
+  .visor__flecha:hover,
+  .visor__cerrar:hover { background: rgba(255, 255, 255, .22); }
+}
+.visor__ficha {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 16px calc(18px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+  border-radius: var(--radio-l) var(--radio-l) 0 0;
+  background: var(--blanco);
+  color: var(--tinta);
+}
+.visor__nombre { margin: 2px 0 2px; font-size: 1.65rem; font-weight: 700; }
+.visor__detalle { margin: 0 0 12px; color: var(--tinta-2); font-size: .86rem; }
+.visor__botones { display: grid; gap: 8px; }
+.boton--estrella .boton__icono { fill: transparent; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.boton--estrella[aria-pressed="true"] { background: var(--oro-suave); border-color: var(--oro); }
+.boton--estrella[aria-pressed="true"] .boton__icono { fill: var(--oro); stroke: var(--oro-texto); }
+
+/* ===========================================================
+   13. BANNER DE COOKIES (Aceptar y Rechazar con el mismo peso)
    =========================================================== */
 .cookies {
   position: fixed;
@@ -1107,12 +1423,12 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   box-shadow: var(--sombra-2);
   animation: aparecer .3s ease both;
 }
-.cookies__titulo { margin: 0 0 4px; color: var(--noche); font-family: var(--fuente-titulos); font-size: 1.15rem; font-weight: 600; }
-.cookies__texto { margin: 0 0 14px; color: var(--tinta-2); font-size: .9rem; }
+.cookies__titulo { margin: 0 0 4px; color: var(--marca); font-family: var(--fuente-titulos); font-size: 1.35rem; font-weight: 600; }
+.cookies__texto { margin: 0 0 14px; color: var(--tinta-2); font-size: .88rem; }
 .cookies__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 /* ===========================================================
-   13. PÁGINAS LEGALES Y 404 (mismo diseño del sitio)
+   14. PÁGINAS LEGALES Y 404 (mismo diseño del sitio)
    =========================================================== */
 .cabecera--simple .cabecera__fila { justify-content: space-between; }
 .volver {
@@ -1120,41 +1436,42 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   align-items: center;
   min-height: 48px;
   padding: 0 16px;
-  border: 1.5px solid var(--noche);
+  border: 1.5px solid var(--marca);
   border-radius: 999px;
-  color: var(--noche);
+  color: var(--marca);
   font-weight: 700;
+  font-size: .93rem;
   text-decoration: none;
   white-space: nowrap;
 }
-.legal { background: var(--algodon); padding: clamp(32px, 6vw, 72px) 0 clamp(48px, 7vw, 96px); }
+.legal { background: var(--crema); padding: clamp(32px, 6vw, 72px) 0 clamp(48px, 7vw, 96px); }
 .legal__hoja {
   padding: clamp(22px, 5vw, 56px);
   border: 1px solid var(--hilo);
   border-radius: var(--radio-l);
   background: var(--blanco);
 }
-.legal h1 { font-size: clamp(2rem, 1.5rem + 2.2vw, 3rem); }
-.legal h2 { margin-top: 1.6em; font-size: clamp(1.3rem, 1.1rem + .8vw, 1.65rem); }
-.legal h3 { margin-top: 1.2em; font-size: 1.1rem; }
+.legal h1 { font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.3rem); }
+.legal h2 { margin-top: 1.6em; font-size: clamp(1.5rem, 1.25rem + .9vw, 1.9rem); }
+.legal h3 { margin-top: 1.2em; font-size: 1.25rem; }
 .legal p,
 .legal li { color: var(--tinta-2); max-width: 70ch; }
 .legal ul,
 .legal ol { padding-left: 1.3em; }
 .legal li { margin-bottom: .4em; }
-.legal__fecha { color: var(--tinta-3); font-size: .9rem; }
+.legal__fecha { color: var(--tinta-3); font-size: .88rem; }
 .legal__aviso {
   margin: 20px 0;
   padding: 14px 16px;
   border-radius: var(--radio-s);
-  background: var(--estrella-suave);
+  background: var(--oro-suave);
   color: var(--tinta);
-  font-size: .92rem;
+  font-size: .9rem;
 }
-.legal table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: .92rem; }
+.legal table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: .9rem; }
 .legal th,
 .legal td { padding: 10px 8px; border-bottom: 1px solid var(--hilo); text-align: left; vertical-align: top; color: var(--tinta-2); }
-.legal th { color: var(--noche); }
+.legal th { color: var(--marca); }
 .tabla-scroll { overflow-x: auto; }
 
 /* Formulario PQR (políticas de compra) */
@@ -1162,7 +1479,7 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
   margin-top: 16px;
   padding: clamp(18px, 4vw, 28px);
   border-radius: var(--radio-m);
-  background: var(--algodon);
+  background: var(--crema);
 }
 .pqr .campo select,
 .pqr .campo textarea {
@@ -1176,32 +1493,33 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
 }
 .pqr .campo textarea { min-height: 120px; resize: vertical; }
 .pqr .campo select:focus,
-.pqr .campo textarea:focus { outline: none; border-color: var(--noche); box-shadow: 0 0 0 3px rgba(28, 37, 65, .16); }
+.pqr .campo textarea:focus { outline: none; border-color: var(--marca); box-shadow: 0 0 0 3px rgba(201, 162, 78, .3); }
 .pqr__radicado {
   margin-top: 16px;
   padding: 16px;
-  border: 1.5px dashed var(--noche-600);
+  border: 1.5px dashed var(--oro);
   border-radius: var(--radio-m);
   background: var(--blanco);
 }
-.pqr__radicado strong { font-variant-numeric: tabular-nums; color: var(--noche); }
+.pqr__radicado strong { font-variant-numeric: tabular-nums; color: var(--marca); }
 
 .error404 {
   display: grid;
   place-items: center;
   min-height: 60vh;
   padding: 56px 0 72px;
-  background: var(--algodon);
+  background: linear-gradient(180deg, var(--rosa-suave), var(--crema));
   text-align: center;
 }
-.error404 .marca__estrella { width: 56px; height: 56px; margin: 0 auto 18px; }
-.error404 h1 { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.2rem); }
+.error404 .estrella-marca { width: 56px; height: 56px; margin: 0 auto 18px; }
+.error404 h1 { font-size: clamp(2.2rem, 1.6rem + 2.6vw, 3.4rem); }
 .error404 p { max-width: 36em; margin: 0 auto 24px; color: var(--tinta-2); }
 .error404 .portada__acciones { justify-content: center; }
 
 /* ===========================================================
-   14. RESPONSIVE — mobile-first, revisado en todos los rangos:
-       ≤380 · ≤480 · ≤500 · 600–767 · 768–900 · ≤900 · ≥901 · ≥1200 · ≥1440
+   15. RESPONSIVE — mobile-first, revisado en todos los rangos:
+       ≤360 · ≤380 · ≤480 · ≤500 · 600–767 · 768–900 · ≤900 · ≥901 · ≥1200 · ≥1440
+       y pantallas bajitas (celular en horizontal)
    =========================================================== */
 
 /* Menú en panel desplegable para ≤900px (móvil general y tablet) */
@@ -1216,11 +1534,11 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
     padding: 8px max(var(--margen), env(safe-area-inset-right)) 16px max(var(--margen), env(safe-area-inset-left));
     border-bottom: 1px solid var(--hilo);
     background: var(--blanco);
-    box-shadow: 0 12px 24px rgba(28, 37, 65, .08);
+    box-shadow: 0 12px 24px rgba(42, 30, 28, .08);
   }
   .menu.abierto { display: block; animation: aparecer .2s ease both; }
   .menu__lista { flex-direction: column; gap: 0; }
-  .menu__lista a { width: 100%; padding: 0 8px; border-radius: var(--radio-s); font-size: 1.05rem; }
+  .menu__lista a { width: 100%; padding: 0 8px; border-radius: var(--radio-s); font-size: 1.02rem; }
   /* el botón flotante de WhatsApp (58px + 18px) no tapa el copyright ni el crédito */
   .pie { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 }
@@ -1228,43 +1546,68 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
 /* Tablet pequeña: 600–767px */
 @media (min-width: 600px) {
   .catalogo { gap: 18px; }
-  .producto__info { padding: 16px; }
+  .producto { contain-intrinsic-size: auto 440px; }
+  .producto__info { padding: 14px 14px 16px; }
   .cookies { left: auto; right: max(16px, env(safe-area-inset-right)); width: 420px; }
+  .visor__botones { grid-template-columns: 1.3fr 1fr; }
 }
 
 /* Tablet: 768–900px */
 @media (min-width: 768px) {
   .catalogo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-  .pasos__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 40px; }
-  .paso:not(:last-child)::after { display: none; }
+  .pasos__lista { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+  .paso { grid-template-columns: 1fr; row-gap: 14px; }
+  .paso__n { grid-row: auto; }
+  .paso__titulo { margin-top: 0; }
+  /* costura horizontal que une los tres números */
+  .paso:not(:last-child)::after {
+    left: 60px;
+    right: -24px;
+    top: 25px;
+    bottom: auto;
+    border-left: 0;
+    border-top: 2px dashed var(--hilo);
+  }
   .pie__grid { grid-template-columns: 1.4fr 1fr 1fr; }
 }
 
 /* Escritorio: ≥901px */
 @media (min-width: 901px) {
   .portada__grid { grid-template-columns: 1.15fr 1fr; }
-  .portada__titulo { max-width: 14.5ch; }
-  .portada__arte img { max-height: min(640px, 74vh); }
+  .portada__titulo { max-width: 15ch; }
   .catalogo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-  .pestanas { margin: 0; padding: 4px 0 8px; flex-wrap: wrap; overflow: visible; }
+  .producto { contain-intrinsic-size: auto 465px; }
+  .pestanas,
+  .filtros { margin: 0; padding: 4px 0 8px; flex-wrap: wrap; overflow: visible; }
+  .filtros { padding-top: 2px; }
+  /* Visor en escritorio: foto grande y ficha en un panel blanco a la derecha */
+  .visor[open] {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .visor__barra { grid-column: 1 / -1; }
+  .visor__escena { grid-row: 2; grid-column: 1; }
+  .visor__ficha {
+    grid-row: 2;
+    grid-column: 2;
+    align-self: center;
+    width: auto; /* así el margen derecho no la saca del borde de la pantalla */
+    max-width: none;
+    margin: 0 24px 24px 0;
+    padding: 26px 24px;
+    border-radius: var(--radio-l);
+  }
+  .visor__nombre { font-size: 2rem; }
+  .visor__botones { grid-template-columns: 1fr; }
+  .visor__flecha--ant { left: 18px; }
+  .visor__flecha--sig { right: 18px; }
+  .visor__flecha { width: 56px; height: 56px; margin-top: -28px; }
 }
 
 /* Escritorio amplio: ≥1200px */
 @media (min-width: 1200px) {
   .catalogo { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .pasos__lista { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-  /* costura horizontal que une los cuatro números */
-  .pasos__lista::before {
-    content: "";
-    position: absolute;
-    top: 26px;
-    left: 26px;
-    right: calc(25% - 26px);
-    border-top: 2px dashed var(--hilo);
-  }
-  .paso { grid-template-columns: 1fr; row-gap: 14px; }
-  .paso__n { grid-row: auto; }
-  .paso__titulo { margin-top: 0; }
+  .producto { contain-intrinsic-size: auto 445px; }
 }
 
 /* Pantallas grandes y TV: ≥1440px (el contenido no se estira más) */
@@ -1275,63 +1618,91 @@ body.carrito-abierto .wa-flotante { visibility: hidden; }
 
 /* Teléfonos pequeños: ≤500px */
 @media (max-width: 500px) {
-  .cabecera__fila { gap: 8px; min-height: 62px; }
-  .marca__nombre { font-size: 1.2rem; }
+  .cabecera__fila { gap: 8px; min-height: 64px; }
+  .marca { gap: 8px; }
+  .marca__logo { width: 40px; height: 40px; border-radius: 10px; }
+  .marca__nombre { font-size: 1.42rem; }
   .boton-carrito { padding: 0 12px; }
-  /* "Carrito" se oculta a la vista pero lo sigue leyendo el lector de pantalla */
+  /* "Mi lista" se oculta a la vista pero lo sigue leyendo el lector de pantalla */
   .boton-carrito__texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .portada__acciones .boton { flex: 1 1 100%; }
-  .portada__acciones .enlace-subrayado { margin: 0 auto; }
+  /* Las 4 categorías caben en una sola línea (sin que una estrella empiece renglón) */
+  .portada__categorias { font-size: .62rem; letter-spacing: .1em; flex-wrap: nowrap; white-space: nowrap; }
+  .portada__categorias li + li::before { margin: 0 .45em 0 .35em; }
 }
 
 /* Teléfonos muy pequeños: ≤480px */
 @media (max-width: 480px) {
   .catalogo { gap: 10px; }
-  .producto__info { padding: 10px 10px 12px; gap: 5px; }
-  .producto__nombre { font-size: .98rem; }
-  .producto__desc { font-size: .82rem; -webkit-line-clamp: 2; line-clamp: 2; }
-  .producto__precio { font-size: 1.05rem; }
-  .producto__medida { padding-right: 32px; padding-left: 10px; background-position: right 8px center; }
-  .producto__medida--fija { padding: 0 10px; }
-  .boton--agregar { padding: 10px 8px; font-size: .9rem; }
+  .producto__info { padding: 10px 10px 12px; }
+  .producto__nombre { font-size: 1.14rem; }
+  .producto__tipo { font-size: .76rem; }
+  .producto__medida { font-size: .74rem; margin-bottom: 8px; }
+  .producto__ref { font-size: .64rem; letter-spacing: .12em; }
+  .boton--consultar { min-height: 44px; padding: 8px 10px; font-size: .86rem; }
+  .producto__estrella { top: 4px; right: 4px; }
   .etiqueta-colgante { top: 8px; left: 8px; font-size: .7rem; padding: 4px 9px 4px 18px; }
   .carrito__cuerpo { padding-left: 16px; padding-right: calc(16px + env(safe-area-inset-right)); }
+  .visor__nombre { font-size: 1.45rem; }
+  .visor__ficha { padding-top: 14px; }
 }
 
 /* Gama baja (Redmi, Samsung de entrada): ≤380px */
 @media (max-width: 380px) {
   :root { --margen: 14px; }
-  .marca { gap: 8px; }
-  .marca__estrella { width: 20px; height: 20px; }
-  .marca__nombre { font-size: 1.08rem; }
-  .marca__casa { letter-spacing: .08em; }
+  .marca__logo { width: 36px; height: 36px; }
+  .marca__nombre { font-size: 1.28rem; }
   .boton-menu { width: 44px; }
-  .pestana { padding: 0 14px; font-size: .9rem; }
-  .producto__desc { display: none; }
-  .producto__medida-label { font-size: .75rem; }
+  .pestana { padding: 0 14px; font-size: .88rem; }
+  .filtro { padding: 0 12px; font-size: .82rem; }
+  .producto__nombre { font-size: 1.06rem; }
+  .boton--consultar { gap: 5px; padding: 8px; font-size: .82rem; }
+  .boton--consultar svg { width: 16px; height: 16px; }
+  .portada__categorias { font-size: .58rem; letter-spacing: .06em; }
   .item { grid-template-columns: 56px 1fr; }
   .item__foto { width: 56px; height: 56px; }
   .cookies { padding: 14px 14px 12px; }
-  .cookies__texto { font-size: .85rem; margin-bottom: 12px; }
+  .cookies__texto { font-size: .84rem; margin-bottom: 12px; }
   .cookies .boton { padding: 10px 12px; }
   .confirmar__botones { grid-template-columns: 1fr; }
 }
 
-/* Pantallas de 360px o menos: el botón dice solo "Agregar" (el lector de
-   pantalla sigue leyendo "Agregar al carrito") para que no parta en dos líneas */
-@media (max-width: 360px) {
-  .boton__extra {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+/* Celulares muy angostos (Galaxy Fold cerrado, 280–320px) */
+@media (max-width: 330px) {
+  .boton--consultar .boton__icono { display: none; }
+  .producto__estrella { width: 40px; height: 40px; }
+  .portada__categorias { flex-wrap: wrap; white-space: normal; }
+  /* cabecera: el logo y el nombre ceden espacio; los botones no se encogen */
+  .cabecera__fila { gap: 6px; }
+  .marca { gap: 6px; }
+  .marca__logo { width: 32px; height: 32px; border-radius: 8px; }
+  .marca__nombre { font-size: 1.12rem; }
+  .boton-carrito { padding: 0 10px; gap: 6px; }
+}
+
+/* Celular en horizontal o pantalla bajita: el visor usa menos alto para la ficha */
+@media (max-height: 520px) and (max-width: 900px) {
+  .visor[open] {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 42%);
+    grid-template-rows: auto minmax(0, 1fr);
   }
+  .visor__barra { grid-column: 1 / -1; }
+  .visor__escena { grid-row: 2; grid-column: 1; }
+  .visor__ficha {
+    grid-row: 2;
+    grid-column: 2;
+    align-self: stretch;
+    overflow-y: auto;
+    max-width: none;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+    border-radius: var(--radio-l) 0 0 0;
+  }
+  .visor__nombre { font-size: 1.3rem; }
+  .visor__botones { grid-template-columns: 1fr; }
 }
 
 /* ===========================================================
-   15. MOVIMIENTO REDUCIDO: se apagan animaciones y transiciones
+   16. MOVIMIENTO REDUCIDO: se apagan animaciones y transiciones
    =========================================================== */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
