@@ -1,0 +1,10 @@
+# Estrellita House — archivos que NUNCA se suben a GitHub
+# Emulador local de Cloudflare Pages (npx wrangler pages dev .)
+.wrangler/
+node_modules/
+# Variables locales de prueba (claves o llaves que nunca deben subirse)
+.dev.vars
+# Basura del sistema
+Thumbs.db
+desktop.ini
+.DS_Store

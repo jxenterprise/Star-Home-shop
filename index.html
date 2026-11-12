@@ -4,14 +4,15 @@
   <!-- ===========================================================
        Estrellita House — index.html (landing de una sola página)
        Tienda de sábanas, cortinas, tapetes y decoración de temporada
-       con domicilio en Cartagena. Venta por WhatsApp o pago en línea (Wompi).
+       en Cartagena. Venta SOLO por WhatsApp: el carrito suma el pedido y lo
+       envía al chat con el total (desde v1.3 no hay pago en línea ni domicilios).
        Depende de: css/styles.css, js/script.js, img/, contenido/*.json
        y functions/index.js (que reinyecta el catálogo vivo del CMS).
        =========================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Estrellita House | Sábanas, cortinas y tapetes en Cartagena</title>
-  <meta name="description" content="Sábanas, cortinas, tapetes y decoración de temporada para tu hogar, con domicilio en Cartagena. Pide por WhatsApp o paga en línea con Wompi.">
+  <meta name="description" content="Sábanas, cortinas, tapetes y decoración de temporada para tu hogar en Cartagena. Arma tu pedido y envíalo por WhatsApp.">
   <!-- Mientras el catálogo sea de muestra va "noindex". functions/index.js lo cambia
        solo a "index, follow…" cuando se apaga el Modo muestra en el administrador. -->
   <meta name="robots" content="noindex, nofollow">
@@ -23,7 +24,7 @@
   <meta property="og:site_name" content="Estrellita House">
   <meta property="og:locale" content="es_CO">
   <meta property="og:title" content="Estrellita House | Sábanas, cortinas y tapetes en Cartagena">
-  <meta property="og:description" content="Diseños de Navidad, Halloween y para todo el año, con domicilio en Cartagena. Pide por WhatsApp o paga en línea.">
+  <meta property="og:description" content="Diseños de Navidad, Halloween y para todo el año en Cartagena. Arma tu pedido y envíalo por WhatsApp.">
   <meta property="og:url" content="https://star-home-shop.pages.dev/">
   <meta property="og:image" content="https://star-home-shop.pages.dev/img/og-estrellita-house-cartagena.webp">
   <meta property="og:image:type" content="image/webp">
@@ -32,7 +33,7 @@
   <meta property="og:image:alt" content="Pila de sábanas con estampados de Navidad frente a una ventana de noche, con el nombre Estrellita House">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Estrellita House | Sábanas, cortinas y tapetes en Cartagena">
-  <meta name="twitter:description" content="Diseños de temporada para tu hogar, con domicilio en Cartagena.">
+  <meta name="twitter:description" content="Diseños de temporada para tu hogar en Cartagena. Pedidos por WhatsApp.">
   <meta name="twitter:image" content="https://star-home-shop.pages.dev/img/og-estrellita-house-cartagena.webp">
 
   <!-- Zona de cobertura (no hay local abierto al público, por eso no van coordenadas exactas) -->
@@ -74,13 +75,12 @@
         "@id": "https://star-home-shop.pages.dev/#tienda",
         "name": "Estrellita House",
         "url": "https://star-home-shop.pages.dev/",
-        "description": "Tienda de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con domicilio en Cartagena.",
+        "description": "Tienda de sábanas, cortinas, tapetes y decoración de temporada para el hogar en Cartagena. Pedidos por WhatsApp.",
         "logo": "https://star-home-shop.pages.dev/img/logo-estrellita-house.webp",
         "image": "https://star-home-shop.pages.dev/img/og-estrellita-house-cartagena.webp",
         "telephone": "+57 300 844 7167",
         "priceRange": "$$",
         "currenciesAccepted": "COP",
-        "paymentAccepted": "Pago en línea con Wompi, pago coordinado por WhatsApp",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Cartagena de Indias",
@@ -100,18 +100,18 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "¿Hacen domicilios?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Sí, hacemos domicilios en Cartagena. Despachamos desde Ciudadela La Paz." }
+            "name": "¿Cómo hago mi pedido?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Agrega los productos al carrito, escribe tu nombre y toca Enviar pedido por WhatsApp. Se abre el chat con tu pedido y el total ya escritos." }
           },
           {
             "@type": "Question",
             "name": "¿Cómo puedo pagar?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Puedes pagar en línea con Wompi (tarjeta, PSE, Nequi, Botón Bancolombia y otros medios) o hacer tu pedido por WhatsApp y acordar el pago por chat." }
+            "acceptedAnswer": { "@type": "Answer", "text": "El pago lo acordamos contigo por WhatsApp cuando confirmamos tu pedido." }
           },
           {
             "@type": "Question",
-            "name": "¿Es seguro pagar en línea?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Sí. El pago se hace en Wompi, la plataforma de pagos de Bancolombia. Estrellita House no ve ni guarda los datos de tu tarjeta." }
+            "name": "¿Cómo recibo mi pedido?",
+            "acceptedAnswer": { "@type": "Answer", "text": "La entrega la coordinamos contigo por WhatsApp al confirmar el pedido." }
           },
           {
             "@type": "Question",
@@ -156,7 +156,6 @@
         <ul class="menu__lista">
           <li><a href="#coleccion">Colección</a></li>
           <li><a href="#como-comprar">Cómo comprar</a></li>
-          <li><a href="#domicilios">Domicilios y pagos</a></li>
           <li><a href="#preguntas">Preguntas</a></li>
         </ul>
       </nav>
@@ -199,10 +198,10 @@
                Va FUERA del h1 a propósito: el h1 lo reescribe functions/index.js
                con el título del administrador.
           -->
-          <p class="portada__version"><svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg><span class="sr-only">Versión del sitio </span>v1.2</p>
+          <p class="portada__version"><svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg><span class="sr-only">Versión del sitio </span>v1.3</p>
           <!-- ▲▲▲ FIN ZONA EDITABLE · VERSIÓN ▲▲▲ -->
           <h1 class="portada__titulo" id="portada-titulo">Estrena sábanas y cortinas para diciembre</h1>
-          <p class="portada__sub" id="portada-subtitulo">Diseños de Navidad, Halloween y para todo el año, con domicilio en Cartagena. Pide por WhatsApp o paga en línea.</p>
+          <p class="portada__sub" id="portada-subtitulo">Diseños de Navidad, Halloween y para todo el año en Cartagena. Arma tu pedido y envíalo por WhatsApp.</p>
           <div class="portada__acciones">
             <a class="boton boton--principal" href="#coleccion">Ver la colección</a>
             <a class="enlace-subrayado" href="#como-comprar">Cómo comprar</a>
@@ -497,41 +496,15 @@
           </li>
           <li class="paso">
             <span class="paso__n" aria-hidden="true">3</span>
-            <h3 class="paso__titulo">Pide por WhatsApp o paga en línea</h3>
-            <p>Tú escoges: envías el pedido por chat o pagas con Wompi.</p>
+            <h3 class="paso__titulo">Envíalo por WhatsApp</h3>
+            <p>Escribe tu nombre y se abre el chat con tu pedido y el total ya escritos.</p>
           </li>
           <li class="paso">
             <span class="paso__n" aria-hidden="true">4</span>
-            <h3 class="paso__titulo">Recíbelo en casa</h3>
-            <p>Llevamos tu pedido a tu barrio en Cartagena.</p>
+            <h3 class="paso__titulo">Lo confirmamos por chat</h3>
+            <p>Te confirmamos la disponibilidad y acordamos contigo el pago y la entrega.</p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- ===========================================================
-         DOMICILIOS Y PAGOS
-         Qué es: cobertura de entregas y formas de pago.
-         Función: reemplaza al mapa, porque el negocio no tiene local
-                  abierto al público (se despacha a domicilio).
-         Depende de: .domicilios en styles.css; el párrafo #domicilio-texto
-                     sale de tienda.json → domicilio (CMS).
-         =========================================================== -->
-    <section class="domicilios" id="domicilios" aria-labelledby="domicilios-titulo">
-      <div class="contenedor domicilios__grid">
-        <div class="domicilios__entrega">
-          <h2 id="domicilios-titulo">Domicilios en Cartagena</h2>
-          <p>Despachamos desde Ciudadela La Paz y llevamos tu pedido hasta la puerta de tu casa.</p>
-          <p id="domicilio-texto">Te confirmamos el valor del domicilio por WhatsApp según tu barrio.</p>
-        </div>
-        <div class="domicilios__pagos">
-          <h3 class="domicilios__subtitulo">Formas de pago</h3>
-          <ul class="lista-pagos">
-            <li><strong>En línea con Wompi.</strong> Tarjeta, PSE, Nequi, Botón Bancolombia y otros medios.</li>
-            <li><strong>Por WhatsApp.</strong> Envías tu pedido por chat y acuerdas el pago ahí mismo.</li>
-          </ul>
-          <p class="domicilios__nota">Wompi es la plataforma de pagos de Bancolombia. El pago se hace en su página: nosotros no vemos ni guardamos los datos de tu tarjeta.</p>
-        </div>
       </div>
     </section>
 
@@ -546,16 +519,16 @@
       <div class="contenedor contenedor--estrecho">
         <h2 id="preguntas-titulo">Preguntas frecuentes</h2>
         <details class="pregunta">
-          <summary>¿Hacen domicilios?</summary>
-          <p>Sí, hacemos domicilios en Cartagena. Despachamos desde Ciudadela La Paz.</p>
+          <summary>¿Cómo hago mi pedido?</summary>
+          <p>Agrega los productos al carrito, escribe tu nombre y toca "Enviar pedido por WhatsApp". Se abre el chat con tu pedido y el total ya escritos.</p>
         </details>
         <details class="pregunta">
           <summary>¿Cómo puedo pagar?</summary>
-          <p>Puedes pagar en línea con Wompi (tarjeta, PSE, Nequi, Botón Bancolombia y otros medios) o hacer tu pedido por WhatsApp y acordar el pago por chat.</p>
+          <p>El pago lo acordamos contigo por WhatsApp cuando confirmamos tu pedido.</p>
         </details>
         <details class="pregunta">
-          <summary>¿Es seguro pagar en línea?</summary>
-          <p>Sí. El pago se hace en Wompi, la plataforma de pagos de Bancolombia. Estrellita House no ve ni guarda los datos de tu tarjeta.</p>
+          <summary>¿Cómo recibo mi pedido?</summary>
+          <p>La entrega la coordinamos contigo por WhatsApp al confirmar el pedido.</p>
         </details>
         <details class="pregunta">
           <summary>¿Puedo devolver un producto?</summary>
@@ -578,7 +551,7 @@
           <svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg>
           Estrellita House
         </p>
-        <p>Sábanas, cortinas y tapetes con diseños de temporada. Domicilios en Cartagena.</p>
+        <p>Sábanas, cortinas y tapetes con diseños de temporada, en Cartagena. Pedidos por WhatsApp.</p>
       </div>
 
       <!-- ▼▼▼ ZONA EDITABLE · CONTACTO ▼▼▼
@@ -603,7 +576,7 @@
       <div class="pie__columna">
         <h2 class="pie__titulo">Legal</h2>
         <ul class="pie__lista">
-          <li><a href="politicas-de-compra.html">Compras, envíos y devoluciones</a></li>
+          <li><a href="politicas-de-compra.html">Compras, entregas y devoluciones</a></li>
           <li><a href="politicas-de-compra.html#pqr">PQR, retracto y reversión del pago</a></li>
           <li><a href="privacidad.html">Política de privacidad</a></li>
           <li><a href="cookies.html">Política de cookies</a></li>
@@ -625,7 +598,9 @@
     <!-- ===========================================================
          BOTÓN FLOTANTE DE WHATSAPP (el único botón de WhatsApp de la página)
          Qué es: acceso directo al chat con mensaje ya escrito.
-         Depende de: .wa-flotante en styles.css; se oculta con el carrito abierto.
+         Depende de: .wa-flotante en styles.css (azul noche, el color de la marca,
+                     con anillo blanco para verse también sobre el pie);
+                     se oculta con el carrito abierto.
          ⚠ El número se repite: ver la ZONA EDITABLE · CONTACTO del pie.
          =========================================================== -->
     <a class="wa-flotante" href="https://wa.me/573008447167?text=Hola%20Estrellita%20House%2C%20vi%20la%20p%C3%A1gina%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" data-medir="clic_whatsapp">
@@ -637,12 +612,13 @@
 
   <!-- ===========================================================
        CARRITO (panel lateral / pantalla completa en móvil)
-       Qué es: productos agregados, total, datos de entrega y los dos
-               caminos para comprar: pagar en línea (Wompi) o pedir por WhatsApp.
-       Función: cerrar la venta. El botón "Pedir por WhatsApp" de aquí es parte
-                del pedido (lleva el detalle armado), no un botón de contacto más.
-       Depende de: script.js (módulos Carrito y Pedido); /api/wompi/firma
-                   (functions) para el pago en línea; .carrito en styles.css.
+       Qué es: productos agregados, cantidades y el total del pedido, más el
+               nombre de quien compra.
+       Función: cerrar la venta por WhatsApp. El botón "Enviar pedido por WhatsApp"
+                abre el chat con el pedido y el total ya escritos (es parte del
+                pedido, no un botón de contacto más). Desde v1.3 no hay pago en
+                línea ni domicilios: el pago y la entrega se acuerdan en el chat.
+       Depende de: script.js (módulos Carrito y Pedido); .carrito en styles.css.
        =========================================================== -->
   <div class="carrito-fondo" id="carrito-fondo" hidden></div>
   <div class="carrito" id="carrito" role="dialog" aria-modal="true" aria-labelledby="carrito-titulo" hidden>
@@ -662,42 +638,17 @@
       <ul class="carrito__lista" id="carrito-lista"></ul>
 
       <div class="carrito__resumen" id="carrito-resumen" hidden>
-        <div class="resumen__fila"><span>Subtotal</span><strong id="carrito-subtotal">$0</strong></div>
-        <div class="resumen__fila"><span>Domicilio</span><span id="carrito-domicilio">Se confirma por WhatsApp</span></div>
         <div class="resumen__fila resumen__fila--total"><span>Total</span><strong id="carrito-total">$0</strong></div>
+        <p class="resumen__nota">El pago y la entrega los acordamos contigo por WhatsApp.</p>
       </div>
 
       <form class="pedido" id="form-pedido" novalidate hidden>
         <fieldset class="pedido__datos">
-          <legend>Datos de entrega</legend>
+          <legend>Tus datos</legend>
           <div class="campo">
             <label for="pedido-nombre">Nombre y apellido</label>
             <input id="pedido-nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required aria-describedby="error-nombre">
             <p class="campo__error" id="error-nombre"></p>
-          </div>
-          <div class="campo">
-            <label for="pedido-celular">Celular</label>
-            <input id="pedido-celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="300 123 4567" required aria-describedby="error-celular">
-            <p class="campo__error" id="error-celular"></p>
-          </div>
-          <div class="campo">
-            <label for="pedido-barrio">Barrio</label>
-            <input id="pedido-barrio" name="barrio" type="text" autocomplete="address-level3" maxlength="60" required aria-describedby="error-barrio">
-            <p class="campo__error" id="error-barrio"></p>
-          </div>
-          <div class="campo">
-            <label for="pedido-direccion">Dirección</label>
-            <input id="pedido-direccion" name="direccion" type="text" autocomplete="address-line1" maxlength="120" required aria-describedby="error-direccion">
-            <p class="campo__error" id="error-direccion"></p>
-          </div>
-          <div class="campo">
-            <label for="pedido-indicaciones">Indicaciones para el domicilio <span class="campo__opcional">(opcional)</span></label>
-            <input id="pedido-indicaciones" name="indicaciones" type="text" maxlength="140" placeholder="Casa, apartamento, punto de referencia">
-          </div>
-          <div class="campo">
-            <label for="pedido-correo">Correo <span class="campo__opcional">(opcional, para el comprobante de pago)</span></label>
-            <input id="pedido-correo" name="correo" type="email" autocomplete="email" maxlength="100" aria-describedby="error-correo">
-            <p class="campo__error" id="error-correo"></p>
           </div>
         </fieldset>
 
@@ -708,33 +659,36 @@
         <p class="campo__error" id="error-autorizo"></p>
 
         <div class="pedido__botones">
-          <button type="submit" class="boton boton--principal boton--ancho" data-metodo="wompi" id="boton-wompi">Pagar en línea</button>
-          <button type="submit" class="boton boton--whatsapp boton--ancho" data-metodo="whatsapp">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-            Pedir por WhatsApp
+          <button type="submit" class="boton boton--principal boton--ancho">
+            <svg class="boton__icono" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Enviar pedido por WhatsApp
           </button>
         </div>
-        <p class="pedido__ayuda" id="pedido-ayuda">Pagar en línea te lleva a Wompi: tarjeta, PSE, Nequi, Botón Bancolombia y más. Pedir por WhatsApp abre el chat con tu pedido escrito.</p>
+        <p class="pedido__ayuda" id="pedido-ayuda">Se abre WhatsApp con tu pedido y el total ya escritos. Solo tienes que enviar el mensaje.</p>
         <p class="pedido__estado" id="pedido-estado" role="status" aria-live="polite"></p>
       </form>
     </div>
   </div>
 
   <!-- ===========================================================
-       RESULTADO DEL PAGO EN LÍNEA
-       Qué es: ventana que aparece al volver de Wompi (?id=… en la URL).
-       Función: mostrar si el pago quedó aprobado, pendiente o rechazado y
-                ofrecer el siguiente paso (coordinar la entrega por WhatsApp).
-       Depende de: /api/wompi/transaccion (functions) y script.js (RetornoPago).
+       CONFIRMAR ANTES DE QUITAR UN PRODUCTO DEL CARRITO
+       Qué es: ventanita "¿Quitar este producto?" con foto, nombre y medida.
+       Función: que un toque por error en "Quitar" (o en "−" con 1 unidad)
+                no borre el producto de una vez.
+       Depende de: <dialog> nativo (capa superior, foco atrapado y Escape
+                   solos), script.js (Carrito → pedirConfirmacion) y
+                   .confirmar en styles.css. Va FUERA de #carrito a propósito:
+                   así su Escape no cierra también el carrito.
        =========================================================== -->
-  <div class="modal-fondo" id="pago-fondo" hidden>
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pago-titulo" aria-describedby="pago-texto">
-      <div class="modal__icono" id="pago-icono" aria-hidden="true"></div>
-      <h2 class="modal__titulo" id="pago-titulo">Consultando tu pago…</h2>
-      <p class="modal__texto" id="pago-texto">Un momento, estamos revisando el estado de tu pago con Wompi.</p>
-      <div class="modal__acciones" id="pago-acciones"></div>
+  <dialog class="confirmar" id="confirmar-quitar" aria-labelledby="confirmar-titulo" aria-describedby="confirmar-texto">
+    <img class="confirmar__foto" id="confirmar-foto" src="data:," alt="" width="72" height="72">
+    <h2 class="confirmar__titulo" id="confirmar-titulo">¿Quitar este producto?</h2>
+    <p class="confirmar__texto" id="confirmar-texto"></p>
+    <div class="confirmar__botones">
+      <button type="button" class="boton boton--secundario" data-confirmar="no">Cancelar</button>
+      <button type="button" class="boton boton--principal" data-confirmar="si">Sí, quitar</button>
     </div>
-  </div>
+  </dialog>
 
   <!-- Mensaje corto de confirmación ("Agregado al carrito") -->
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -757,7 +711,7 @@
   </div>
 
   <!-- Datos del catálogo para el carrito (los regenera functions/index.js) -->
-  <script type="application/json" id="catalogo-datos">{"colecciones":[{"id":"navidad","nombre":"Navidad","descripcion":"Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre."},{"id":"halloween","nombre":"Halloween","descripcion":"Calabazas y fantasmas para la noche de brujas. Últimos días."},{"id":"todo-el-ano","nombre":"Todo el año","descripcion":"Básicos suaves para cualquier temporada."}],"domicilio":{"modo":"acordar","valor":0,"texto":"Te confirmamos el valor del domicilio por WhatsApp según tu barrio."},"pagoEnLinea":true,"productos":[{"id":"p-sabanas-pinos-estrellas","nombre":"Juego de sábanas Pinos y estrellas","coleccion":"navidad","imagen":"img/productos/sabanas-pinos-y-estrellas-navidad.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":64900},{"nombre":"Semidoble 120 × 190 cm","precio":74900},{"nombre":"Doble 140 × 190 cm","precio":84900},{"nombre":"Queen 160 × 190 cm","precio":94900}]},{"id":"p-cortina-copos-nieve","nombre":"Cortina Copos de nieve","coleccion":"navidad","imagen":"img/productos/cortina-copos-de-nieve-navidad.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":54900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":99900}]},{"id":"p-tapete-feliz-navidad","nombre":"Tapete de entrada Feliz Navidad","coleccion":"navidad","imagen":"img/productos/tapete-entrada-feliz-navidad.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":32900},{"nombre":"60 × 90 cm","precio":49900}]},{"id":"p-mantel-cuadros-navidad","nombre":"Mantel Cuadros de Navidad","coleccion":"navidad","imagen":"img/productos/mantel-cuadros-de-navidad.webp","agotado":false,"variantes":[{"nombre":"Redondo 1,50 m","precio":59900},{"nombre":"Rectangular 1,50 × 2,20 m","precio":69900}]},{"id":"p-cojines-tejido-nordico","nombre":"Fundas de cojín Tejido nórdico","coleccion":"navidad","imagen":"img/productos/fundas-cojin-tejido-nordico.webp","agotado":false,"variantes":[{"nombre":"Par de fundas 45 × 45 cm","precio":36900}]},{"id":"p-sabanas-calabazas","nombre":"Juego de sábanas Calabazas","coleccion":"halloween","imagen":"img/productos/sabanas-calabazas-halloween.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900}]},{"id":"p-tapete-boo","nombre":"Tapete de entrada Boo!","coleccion":"halloween","imagen":"img/productos/tapete-entrada-boo-halloween.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":29900}]},{"id":"p-sabanas-rayas-suaves","nombre":"Juego de sábanas Rayas suaves","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-rayas-suaves.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900},{"nombre":"Queen 160 × 190 cm","precio":89900}]},{"id":"p-cortina-lino-arena","nombre":"Cortina blackout Lino arena","coleccion":"todo-el-ano","imagen":"img/productos/cortina-blackout-lino-arena.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":64900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":119900}]},{"id":"p-tapete-bano-algodon-nube","nombre":"Tapete de baño Algodón nube","coleccion":"todo-el-ano","imagen":"img/productos/tapete-bano-algodon-nube.webp","agotado":false,"variantes":[{"nombre":"45 × 70 cm","precio":27900}]},{"id":"p-sabanas-hojas-palma","nombre":"Juego de sábanas Hojas de palma","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-hojas-de-palma.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":62900},{"nombre":"Semidoble 120 × 190 cm","precio":72900},{"nombre":"Doble 140 × 190 cm","precio":82900},{"nombre":"Queen 160 × 190 cm","precio":92900}]}]}</script>
+  <script type="application/json" id="catalogo-datos">{"colecciones":[{"id":"navidad","nombre":"Navidad","descripcion":"Pinos, copos de nieve y cuadros escoceses para estrenar en diciembre."},{"id":"halloween","nombre":"Halloween","descripcion":"Calabazas y fantasmas para la noche de brujas. Últimos días."},{"id":"todo-el-ano","nombre":"Todo el año","descripcion":"Básicos suaves para cualquier temporada."}],"productos":[{"id":"p-sabanas-pinos-estrellas","nombre":"Juego de sábanas Pinos y estrellas","coleccion":"navidad","imagen":"img/productos/sabanas-pinos-y-estrellas-navidad.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":64900},{"nombre":"Semidoble 120 × 190 cm","precio":74900},{"nombre":"Doble 140 × 190 cm","precio":84900},{"nombre":"Queen 160 × 190 cm","precio":94900}]},{"id":"p-cortina-copos-nieve","nombre":"Cortina Copos de nieve","coleccion":"navidad","imagen":"img/productos/cortina-copos-de-nieve-navidad.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":54900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":99900}]},{"id":"p-tapete-feliz-navidad","nombre":"Tapete de entrada Feliz Navidad","coleccion":"navidad","imagen":"img/productos/tapete-entrada-feliz-navidad.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":32900},{"nombre":"60 × 90 cm","precio":49900}]},{"id":"p-mantel-cuadros-navidad","nombre":"Mantel Cuadros de Navidad","coleccion":"navidad","imagen":"img/productos/mantel-cuadros-de-navidad.webp","agotado":false,"variantes":[{"nombre":"Redondo 1,50 m","precio":59900},{"nombre":"Rectangular 1,50 × 2,20 m","precio":69900}]},{"id":"p-cojines-tejido-nordico","nombre":"Fundas de cojín Tejido nórdico","coleccion":"navidad","imagen":"img/productos/fundas-cojin-tejido-nordico.webp","agotado":false,"variantes":[{"nombre":"Par de fundas 45 × 45 cm","precio":36900}]},{"id":"p-sabanas-calabazas","nombre":"Juego de sábanas Calabazas","coleccion":"halloween","imagen":"img/productos/sabanas-calabazas-halloween.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900}]},{"id":"p-tapete-boo","nombre":"Tapete de entrada Boo!","coleccion":"halloween","imagen":"img/productos/tapete-entrada-boo-halloween.webp","agotado":false,"variantes":[{"nombre":"40 × 60 cm","precio":29900}]},{"id":"p-sabanas-rayas-suaves","nombre":"Juego de sábanas Rayas suaves","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-rayas-suaves.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":59900},{"nombre":"Semidoble 120 × 190 cm","precio":69900},{"nombre":"Doble 140 × 190 cm","precio":79900},{"nombre":"Queen 160 × 190 cm","precio":89900}]},{"id":"p-cortina-lino-arena","nombre":"Cortina blackout Lino arena","coleccion":"todo-el-ano","imagen":"img/productos/cortina-blackout-lino-arena.webp","agotado":false,"variantes":[{"nombre":"1 panel 1,40 × 2,20 m","precio":64900},{"nombre":"Par de paneles 2,80 × 2,20 m","precio":119900}]},{"id":"p-tapete-bano-algodon-nube","nombre":"Tapete de baño Algodón nube","coleccion":"todo-el-ano","imagen":"img/productos/tapete-bano-algodon-nube.webp","agotado":false,"variantes":[{"nombre":"45 × 70 cm","precio":27900}]},{"id":"p-sabanas-hojas-palma","nombre":"Juego de sábanas Hojas de palma","coleccion":"todo-el-ano","imagen":"img/productos/sabanas-hojas-de-palma.webp","agotado":false,"variantes":[{"nombre":"Sencilla 100 × 190 cm","precio":62900},{"nombre":"Semidoble 120 × 190 cm","precio":72900},{"nombre":"Doble 140 × 190 cm","precio":82900},{"nombre":"Queen 160 × 190 cm","precio":92900}]}]}</script>
   <script src="js/script.js" defer></script>
 </body>
 </html>

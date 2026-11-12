@@ -3,14 +3,15 @@
 <head>
   <!-- ===========================================================
        Estrellita House — politicas-de-compra.html
-       Políticas de compra, envíos, devoluciones, retracto, garantía y reversión del pago + formulario PQR.
+       Políticas de compra, entregas, devoluciones, retracto, garantía y reversión del pago + formulario PQR.
+       Desde v1.3 (11 nov 2026) la venta es solo por WhatsApp: sin pago en línea ni domicilios.
        Comparte cabecera, pie, banner de cookies y estilos con index.html
        (css/styles.css y js/script.js). noindex: no compite en Google.
        =========================================================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Compras, envíos y devoluciones | Estrellita House</title>
-  <meta name="description" content="Cómo comprar en Estrellita House: medios de pago, domicilios en Cartagena, derecho de retracto, garantía, reversión del pago y PQR.">
+  <title>Compras, entregas y devoluciones | Estrellita House</title>
+  <meta name="description" content="Cómo comprar en Estrellita House por WhatsApp: pago, entrega, derecho de retracto, garantía, reversión del pago y PQR.">
   <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://star-home-shop.pages.dev/politicas-de-compra">
   <meta name="theme-color" content="#1C2541">
@@ -42,28 +43,24 @@
   <main id="contenido" class="legal">
     <div class="contenedor contenedor--estrecho">
       <article class="legal__hoja">
-        <h1>Compras, envíos, devoluciones y garantía</h1>
-        <p class="legal__fecha">Última actualización: 29 de octubre de 2026.</p>
+        <h1>Compras, entregas, devoluciones y garantía</h1>
+        <p class="legal__fecha">Última actualización: 11 de noviembre de 2026.</p>
 
         <p>Aquí está todo lo que necesitas saber antes y después de tu compra. Si algo no queda claro, escríbenos por WhatsApp al +57 300 844 7167.</p>
 
         <h2>1. Cómo comprar</h2>
         <ol>
           <li>Elige el producto y la medida, y agrégalo al carrito.</li>
-          <li>Escribe tus datos de entrega.</li>
-          <li>Elige: <strong>pagar en línea</strong> con Wompi o <strong>pedir por WhatsApp</strong> y acordar el pago por chat.</li>
+          <li>Escribe tu nombre y toca <strong>Enviar pedido por WhatsApp</strong>: se abre el chat con tu pedido y el total ya escritos.</li>
+          <li>Por WhatsApp te confirmamos la disponibilidad y acordamos contigo el pago y la entrega.</li>
         </ol>
 
         <h2>2. Medios de pago</h2>
-        <ul>
-          <li><strong>En línea con Wompi:</strong> tarjeta, PSE, Nequi, Botón Bancolombia y los demás medios que Wompi tenga habilitados al momento de pagar.</li>
-          <li><strong>Por WhatsApp:</strong> {POR CONFIRMAR: medios aceptados, por ejemplo Nequi, transferencia o efectivo contra entrega}.</li>
-        </ul>
+        <p>En esta página no se hacen pagos en línea. El pago lo acordamos contigo por WhatsApp al confirmar tu pedido. Medios aceptados: {POR CONFIRMAR: por ejemplo Nequi, transferencia o efectivo}.</p>
 
-        <h2>3. Domicilios</h2>
+        <h2>3. Entregas</h2>
         <ul>
-          <li><strong>Cobertura:</strong> Cartagena de Indias. Despachamos desde Ciudadela La Paz.</li>
-          <li><strong>Valor del domicilio:</strong> depende del barrio y te lo confirmamos por WhatsApp antes de despachar.</li>
+          <li><strong>Forma y lugar de entrega:</strong> los acordamos contigo por WhatsApp al confirmar tu pedido.</li>
           <li><strong>Tiempo de entrega:</strong> {POR CONFIRMAR}. Si no acordamos un plazo, la entrega se hace en máximo 30 días calendario, como exige la ley.</li>
           <li>Revisa tu pedido al recibirlo. Si algo no está bien, escríbenos de inmediato.</li>
         </ul>
@@ -86,7 +83,7 @@
         <p>La garantía no cubre los casos que la ley excluye, como el uso indebido o no seguir las instrucciones de lavado y cuidado (artículo 16 de la Ley 1480 de 2011). Para hacerla efectiva, usa el formulario de PQR y elige "Garantía".</p>
 
         <h2>7. Reversión del pago</h2>
-        <p>Si pagaste en línea con tarjeta de crédito, débito u otro instrumento de pago electrónico, puedes pedir que se reverse el pago (artículo 51 de la Ley 1480 de 2011 y Decreto 587 de 2016) cuando:</p>
+        <p>Si pagaste tu compra con tarjeta de crédito, débito u otro instrumento de pago electrónico, puedes pedir que se reverse el pago (artículo 51 de la Ley 1480 de 2011 y Decreto 587 de 2016) cuando:</p>
         <ul>
           <li>Fuiste víctima de fraude o el pago no fue hecho por ti.</li>
           <li>El producto no te llegó.</li>
@@ -123,8 +120,8 @@
             <p class="campo__error" id="error-pqr-celular"></p>
           </div>
           <div class="campo">
-            <label for="pqr-pedido">Referencia de pago o fecha del pedido <span class="campo__opcional">(opcional)</span></label>
-            <input id="pqr-pedido" name="pedido" type="text" maxlength="60" placeholder="EH-20261029-…">
+            <label for="pqr-pedido">Fecha o detalle del pedido <span class="campo__opcional">(opcional)</span></label>
+            <input id="pqr-pedido" name="pedido" type="text" maxlength="60" placeholder="Ej.: pedido del 15 de diciembre">
           </div>
           <div class="campo">
             <label for="pqr-detalle">Cuéntanos qué pasó</label>
@@ -166,7 +163,7 @@
           <svg class="marca__estrella" viewBox="-1 -1 2 2" aria-hidden="true" focusable="false"><path d="M 0 -1 Q 0.2 -0.2 1 0 Q 0.2 0.2 0 1 Q -0.2 0.2 -1 0 Q -0.2 -0.2 0 -1 Z"/></svg>
           Estrellita House
         </p>
-        <p>Sábanas, cortinas y tapetes con diseños de temporada. Domicilios en Cartagena.</p>
+        <p>Sábanas, cortinas y tapetes con diseños de temporada, en Cartagena. Pedidos por WhatsApp.</p>
       </div>
       <div class="pie__columna">
         <h2 class="pie__titulo">Contacto</h2>
@@ -178,7 +175,7 @@
       <div class="pie__columna">
         <h2 class="pie__titulo">Legal</h2>
         <ul class="pie__lista">
-          <li><a href="politicas-de-compra.html">Compras, envíos y devoluciones</a></li>
+          <li><a href="politicas-de-compra.html">Compras, entregas y devoluciones</a></li>
           <li><a href="politicas-de-compra.html#pqr">PQR, retracto y reversión del pago</a></li>
           <li><a href="privacidad.html">Política de privacidad</a></li>
           <li><a href="cookies.html">Política de cookies</a></li>

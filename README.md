@@ -1,8 +1,8 @@
 # Estrellita House — Tienda de sábanas, cortinas y tapetes en Cartagena
 
-Landing de una sola página con catálogo por temporadas, carrito, pedido por WhatsApp, pago en línea con Wompi y administrador para que la dueña cambie productos y precios sin depender del desarrollador.
+Landing de una sola página con catálogo por temporadas, carrito y pedido por WhatsApp (con el total calculado), más un administrador para que la dueña cambie productos y precios sin depender del desarrollador.
 
-**Versión actual: v1.2** (11 nov 2026) · En vivo: <https://star-home-shop.pages.dev> · Historial de cambios: [`CHANGELOG.md`](CHANGELOG.md)
+**Versión actual: v1.3** (11 nov 2026). Próximo paso: catálogo con las fotos reales de la vendedora (ver "📍 DÓNDE NOS QUEDAMOS" en `CLAUDE.md`) · En vivo: <https://star-home-shop.pages.dev> · Historial de cambios: [`CHANGELOG.md`](CHANGELOG.md)
 
 > ⚠ **Catálogo de muestra.** Los productos, fotos y precios actuales son simulados mientras llega el material real. La página está en **Modo muestra**: muestra un aviso arriba y no se indexa en Google. Se apaga desde el administrador.
 
@@ -24,10 +24,9 @@ Cómo llegar: abre el archivo, busca `ZONA EDITABLE` con Ctrl+F, cambia solo lo 
 ## Características
 
 - Catálogo por colecciones (Navidad, Halloween, Todo el año y las que se creen), con medidas y precio por medida.
-- Carrito con cantidades, total y datos de entrega; se recuerda en el navegador solo si la persona acepta cookies.
-- Dos formas de comprar: **pedir por WhatsApp** (el mensaje sale con todo el pedido escrito) o **pagar en línea con Wompi** (tarjeta, PSE, Nequi, Botón Bancolombia y más).
-- Precios recalculados en el servidor antes de cobrar (nadie puede cambiar el precio desde el navegador).
-- Administrador **Sveltia CMS** en español: productos, fotos (se convierten solas a WebP), colecciones, portada, aviso, domicilio y pausa del pago en línea.
+- Carrito con cantidades y total; se recuerda en el navegador solo si la persona acepta cookies.
+- Venta **solo por WhatsApp**: la persona escribe su nombre y se abre el chat con cada producto, su medida, la cantidad, el valor y el **total** ya escritos. El pago y la entrega se acuerdan por chat. No hay pago en línea ni domicilios (se retiraron en v1.3; ver más abajo cómo volver a tenerlos).
+- Administrador **Sveltia CMS** en español: productos, fotos (se convierten solas a WebP), colecciones, portada y aviso.
 - HTML real en el código fuente (lo leen Google y los bots de IA), sin frameworks ni build step.
 - SEO completo: title, description, canonical, Open Graph, Twitter Card, JSON-LD (WebSite, HomeGoodsStore, FAQPage, productos con Offer), sitemap, robots que permite bots de IA y `llms.txt`.
 - Páginas legales: privacidad, cookies, términos y políticas de compra con **retracto, garantía, reversión del pago y formulario PQR con número de radicado**.
@@ -46,7 +45,7 @@ css/styles.css · js/script.js
 img/            (todo WebP; productos en img/productos/)
 contenido/      catalogo.json y tienda.json (los edita el administrador)
 admin/          index.html y config.yml (Sveltia CMS)
-functions/      index.js (catálogo vivo en la página) y api/wompi/ (pago en línea)
+functions/      index.js (catálogo vivo en la página)
 CLAUDE.md · README.md
 ```
 
@@ -61,12 +60,7 @@ cd estrellita-house
 npx wrangler pages dev .
 ```
 
-Abre la dirección que aparece (normalmente `http://localhost:8788`). Para probar Wompi en local crea un archivo `.dev.vars` (no lo subas a GitHub) con las llaves de **pruebas**:
-
-```
-WOMPI_PUBLIC_KEY=pub_test_...
-WOMPI_INTEGRITY_SECRET=test_integrity_...
-```
+Abre la dirección que aparece (normalmente `http://localhost:8788`).
 
 **Solo para mirar el diseño:** `python3 -m http.server 8000` dentro de la carpeta y abre `http://localhost:8000`. Se ve la copia de respaldo del catálogo y el botón "Pagar en línea" avisa que no está activo.
 
@@ -108,10 +102,6 @@ Cambiar la URL `https://star-home-shop.pages.dev` en: `index.html` (canonical, o
 
 **Portada y aviso:** en *Ajustes* cambias el título grande, el texto de abajo y la barra de aviso de arriba.
 
-**Domicilio:** *Se acuerda por WhatsApp según el barrio* (el pago en línea cubre solo los productos) o *Valor fijo en todo Cartagena* (se suma al total y se cobra en línea).
-
-**Pausar pagos en línea:** apaga *Pago en línea con Wompi activo*. Los pedidos por WhatsApp siguen funcionando.
-
 **Modo muestra:** apágalo cuando estén los productos y precios reales. Así desaparece el aviso y Google puede mostrar la página.
 
 ### Configurar el inicio de sesión (lo hace JX una sola vez)
@@ -126,15 +116,9 @@ Mientras tanto se puede entrar con un token personal de GitHub (opción *Sign in
 
 ---
 
-## Pagos con Wompi
+## Pago en línea y domicilios (retirados en v1.3)
 
-1. La dueña crea su **cuenta de comercio en Wompi** a su nombre (Wompi pide los documentos y la cuenta bancaria donde recibe el dinero). JX no puede abrirla por ella.
-2. En el panel de Wompi, sección de desarrolladores, copia la **llave pública** y el **secreto de integridad**. Hay un par de **pruebas** (`pub_test_…`, `test_integrity_…`) y uno de **producción** (`pub_prod_…`, `prod_integrity_…`). Nunca mezcles un par con el otro (la página lo detecta y no cobra).
-3. Primero pon las de **pruebas** en Cloudflare y haz compras de prueba con los datos de prueba que indica la documentación de Wompi.
-4. Cuando todo esté bien, cambia a las de **producción**.
-5. **Antes de despachar un pedido pagado en línea, confirma en el panel de Wompi que la transacción está APROBADA.** La ventana que ve el comprador al volver es informativa.
-
-Detalles técnicos: Web Checkout (`https://checkout.wompi.co/p/`) con firma de integridad SHA-256 de `referencia + monto en centavos + COP + secreto`, calculada en `functions/api/wompi/firma.js`. La consulta del resultado usa `GET /v1/transactions/{id}` (`sandbox.wompi.co` o `production.wompi.co`).
+Desde la v1.3 (11 nov 2026) la tienda vende **solo por WhatsApp**: es un emprendimiento pequeño y por ahora no hace domicilios en todo Cartagena. El código del pago en línea con **Wompi** (Web Checkout con firma de integridad, `functions/api/wompi/`) y el del **domicilio** (fijo o por barrio, desde el administrador) se borraron, pero siguen guardados en GitHub en la etiqueta **`v1.2`**. Para volver a tenerlos se recuperan desde esa versión; antes de activar Wompi hay que corregir las fallas anotadas en la memoria de JX/Claude (la consulta de la transacción necesita la llave privada, entre otras).
 
 ---
 
@@ -171,13 +155,13 @@ La ficha de Google hace que el negocio aparezca en Google Maps y en búsquedas c
 
 El código fuente y el contenido de esta página son **propiedad de Estrellita House**. Se entregan todos los archivos sin minificar.
 **Dominio y hosting:** por ser cliente básico, el sitio está en la cuenta de Cloudflare de JX Company. Para transferirlo: se pasa el repositorio de GitHub a la cuenta de la dueña (*Settings → Transfer*), se crea el proyecto de Pages en su cuenta de Cloudflare conectado a ese repositorio, se copian las variables de Wompi y se mueve el dominio.
-**Credenciales a entregar** cuando existan: Cloudflare, dominio, GitHub, Wompi (las de la dueña), GA4 y Search Console.
+**Credenciales a entregar** cuando existan: Cloudflare, dominio, GitHub, GA4 y Search Console.
 
 ---
 
 ## Pendientes `{POR CONFIRMAR}`
 
-Ver la lista completa en `CLAUDE.md`. Resumen: nombre exacto, catálogo real, IVA, datos legales del responsable, medios de pago por WhatsApp, tiempo de entrega, cambios, garantía, ID de GA4, dominio, repositorio y autenticador del CMS, llaves de Wompi, redes sociales, horario y confirmar si se muestra Ciudadela La Paz.
+Ver la lista completa en `CLAUDE.md`. Resumen: nombre exacto, catálogo real, IVA, datos legales del responsable, medios de pago por WhatsApp, forma y tiempo de entrega, cambios, garantía, ID de GA4, autenticador del CMS, redes sociales y horario.
 
 > Los textos legales son una base profesional, no asesoría legal. Deben revisarlos un abogado antes de publicar con productos reales.
 

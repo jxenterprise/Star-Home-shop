@@ -7,6 +7,43 @@ Cómo publicar una versión nueva: ver "Versiones" en `CLAUDE.md`.
 
 ---
 
+## v1.3 — 11 nov 2026, 23:40 (hora de Colombia) · Solo WhatsApp (sin pago en línea ni domicilios)
+
+Estrellita House es un emprendimiento pequeño: por ahora todo se vende por
+WhatsApp y todavía no hay envíos a domicilio en todo Cartagena.
+
+**Quitado**
+- **Pago en línea con Wompi**: botón "Pagar en línea", ventana de resultado
+  del pago y las funciones del servidor (`functions/api/wompi/`).
+- **Domicilios**: la sección "Domicilios y pagos", el valor del domicilio en
+  el carrito y los ajustes de domicilio y pago del administrador.
+- Datos que ya no hacen falta en el carrito: celular, barrio, dirección,
+  indicaciones y correo.
+
+**Cambiado**
+- **Carrito**: suma el **total** y pide solo el nombre. El botón "Enviar
+  pedido por WhatsApp" abre el chat con cada producto (medida, cantidad y
+  valor) y el total ya escritos. El pago y la entrega se acuerdan en el chat.
+- **Botón flotante de WhatsApp**: ahora es azul noche, el color de la marca,
+  con un anillo blanco para que se vea también sobre el pie.
+- **Mensaje de WhatsApp más claro y sin precios repetidos**: cada producto
+  en su bloque, con el nombre en negrita y la medida. Con un solo producto el
+  valor sale una sola vez, en el Total; con varios, cada uno lleva su valor y
+  al final va el Total con las unidades. Cierra con el nombre del cliente y la
+  pregunta "¿Me confirman disponibilidad, forma de pago y entrega?".
+- **Quitar del carrito pide confirmación**: el enlace "Quitar" se cambió por
+  un ícono de basura azul. Al tocarlo, o al tocar "−" con 1 unidad, sale una
+  ventanita "¿Quitar este producto?" con foto, nombre y medida, y los botones
+  Cancelar / Sí, quitar. Nada se borra por un toque accidental.
+- Textos de portada, "Cómo comprar", preguntas frecuentes, pie, SEO y páginas
+  legales (compras, privacidad, términos y cookies) acordes a la venta por
+  WhatsApp. El enlace legal ahora dice "Compras, entregas y devoluciones".
+
+> Nada se pierde: el pago en línea y los domicilios siguen en la versión
+> `v1.2` de GitHub, por si se vuelven a necesitar.
+
+---
+
 ## v1.2 — 11 nov 2026 · Revisión en vivo y arreglos de móvil
 
 Primera revisión con la web ya publicada en Cloudflare Pages, probada con

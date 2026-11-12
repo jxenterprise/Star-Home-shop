@@ -8,14 +8,15 @@
 
    Orden del archivo:
      1. Variables (:root)          8. Cómo comprar
-     2. Base y accesibilidad       9. Domicilios y pagos
-     3. Utilidades y botones      10. Preguntas frecuentes
-     4. Aviso superior            11. Pie de página y crédito JX Company
-     5. Cabecera y menú           12. WhatsApp flotante, carrito, modal, toast
-     6. Portada                   13. Banner de cookies
-     7. Colección y tarjetas      14. Páginas legales y 404
-                                  15. Responsive (todos los breakpoints)
-                                  16. Movimiento reducido
+     2. Base y accesibilidad       9. Preguntas frecuentes
+     3. Utilidades y botones      10. Pie de página y crédito JX Company
+     4. Aviso superior            11. WhatsApp flotante, carrito y toast
+     5. Cabecera y menú           12. Banner de cookies
+     6. Portada                   13. Páginas legales y 404
+     7. Colección y tarjetas      14. Responsive (todos los breakpoints)
+                                  15. Movimiento reducido
+   v1.3: el botón de WhatsApp va en azul noche (color de la marca, no verde)
+   y se retiraron los estilos de Domicilios y pagos y de la ventana de pago.
    Ojo: los colores salen SIEMPRE de las variables :root; no meter hex sueltos.
    ========================================================================== */
 
@@ -36,9 +37,6 @@
   --tinta: #222A43;          /* texto principal */
   --tinta-2: #4E5775;        /* texto secundario (contraste 6.5:1 sobre algodón) */
   --tinta-3: #646C8A;        /* notas pequeñas (≥4.7:1) */
-  --whatsapp: #1DA851;       /* verde WhatsApp oscurecido para contraste ≥3:1 */
-  --whatsapp-texto: #136B37;
-  --exito: #1F6B4D;
   --error: #A3262E;
 
   /* Tipografía (máx. 2 familias) */
@@ -81,7 +79,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Al abrir el carrito o un modal se bloquea el scroll de fondo */
+/* Al abrir el carrito se bloquea el scroll de fondo */
 body.sin-scroll { overflow: hidden; }
 
 img, svg { display: block; max-width: 100%; }
@@ -181,8 +179,8 @@ textarea { font: inherit; color: inherit; }
 
 .boton--principal { background: var(--noche); color: var(--blanco); }
 .boton--secundario { background: var(--blanco); color: var(--noche); border-color: var(--noche); }
-.boton--whatsapp { background: var(--blanco); color: var(--whatsapp-texto); border-color: var(--whatsapp); }
-.boton--whatsapp svg { fill: var(--whatsapp); }
+/* Ícono dentro de un botón (p. ej. el de WhatsApp en "Enviar pedido por WhatsApp"): toma el color del texto */
+.boton__icono { fill: currentColor; }
 .boton--agregar { width: 100%; gap: .3em; background: var(--noche); color: var(--blanco); padding: 12px 14px; font-size: .95rem; }
 .boton--cookies { background: var(--blanco); color: var(--noche); border-color: var(--noche); }
 
@@ -192,7 +190,6 @@ textarea { font: inherit; color: inherit; }
   .boton--agregar:hover:not(:disabled) { background: var(--noche-700); }
   .boton--secundario:hover,
   .boton--cookies:hover { background: var(--algodon); }
-  .boton--whatsapp:hover { background: #F1FAF4; }
   a:hover { text-decoration-thickness: 2px; }
 }
 
@@ -688,47 +685,10 @@ textarea { font: inherit; color: inherit; }
 .paso p { margin: 0; color: var(--tinta-2); }
 
 /* ===========================================================
-   9. DOMICILIOS Y PAGOS (reemplaza al mapa: no hay local al público)
-   =========================================================== */
-.domicilios { padding: clamp(48px, 7vw, 96px) 0; }
-.domicilios__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-  align-items: start;
-}
-.domicilios__entrega p { max-width: 36em; color: var(--tinta-2); font-size: 1.05rem; }
-.domicilios__pagos {
-  padding: clamp(20px, 3vw, 32px);
-  border-radius: var(--radio-l);
-  background: var(--algodon);
-}
-.domicilios__subtitulo { font-size: 1.35rem; }
-.lista-pagos { margin: 0 0 16px; padding: 0; list-style: none; }
-.lista-pagos li {
-  position: relative;
-  padding: 10px 0 10px 28px;
-  border-bottom: 1px solid var(--hilo);
-  color: var(--tinta-2);
-}
-.lista-pagos li::before {
-  content: "";
-  position: absolute;
-  left: 2px;
-  top: 17px;
-  width: 12px;
-  height: 12px;
-  background: var(--estrella);
-  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
-}
-.lista-pagos strong { color: var(--tinta); }
-.domicilios__nota { margin: 0; color: var(--tinta-3); font-size: .88rem; }
-
-/* ===========================================================
-   10. PREGUNTAS FRECUENTES (details/summary, funciona sin JS)
+   9. PREGUNTAS FRECUENTES (details/summary, funciona sin JS)
    =========================================================== */
 .preguntas {
-  background: var(--algodon);
+  background: var(--blanco); /* blanco: así alterna con Cómo comprar (algodón), que quedó justo antes */
   padding: clamp(48px, 7vw, 96px) 0;
 }
 .pregunta { border-bottom: 1px solid var(--hilo); }
@@ -765,7 +725,7 @@ textarea { font: inherit; color: inherit; }
 .pregunta[open] p { animation: aparecer .3s ease both; }
 
 /* ===========================================================
-   11. PIE DE PÁGINA + CRÉDITO JX COMPANY (formato exacto de la skill)
+   10. PIE DE PÁGINA + CRÉDITO JX COMPANY (formato exacto de la skill)
    =========================================================== */
 .pie {
   background: var(--noche);
@@ -849,7 +809,7 @@ textarea { font: inherit; color: inherit; }
 }
 
 /* ===========================================================
-   12. WHATSAPP FLOTANTE, CARRITO, MODAL Y TOAST
+   11. WHATSAPP FLOTANTE, CARRITO Y TOAST
    =========================================================== */
 .wa-flotante {
   position: fixed;
@@ -862,13 +822,14 @@ textarea { font: inherit; color: inherit; }
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: var(--whatsapp);
-  box-shadow: 0 6px 18px rgba(28, 37, 65, .22);
-  transition: bottom .25s ease;
+  background: var(--noche);
+  /* anillo blanco: así el botón se distingue también sobre el pie, que es del mismo azul */
+  box-shadow: 0 0 0 3px var(--blanco), 0 8px 22px rgba(28, 37, 65, .28);
+  transition: bottom .25s ease, background-color .2s ease;
 }
 .wa-flotante svg { width: 30px; height: 30px; fill: var(--blanco); }
-body.carrito-abierto .wa-flotante,
-body.modal-abierto .wa-flotante { visibility: hidden; }
+@media (hover: hover) { .wa-flotante:hover { background: var(--noche-700); } }
+body.carrito-abierto .wa-flotante { visibility: hidden; }
 /* Celular o pantalla bajita (horizontal): mientras el banner de cookies está
    abierto, el botón flotante se esconde; si no, queda encima del titular.
    Vuelve apenas la persona acepta o rechaza. */
@@ -877,8 +838,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 }
 
 /* Fondo oscuro detrás del carrito */
-.carrito-fondo,
-.modal-fondo {
+.carrito-fondo {
   position: fixed;
   inset: 0;
   z-index: 80;
@@ -935,6 +895,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 
 .carrito__lista { margin: 0; padding: 0; list-style: none; }
 .item {
+  position: relative; /* para el ícono de basura en la esquina */
   display: grid;
   grid-template-columns: 68px 1fr;
   gap: 12px;
@@ -972,16 +933,29 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
   cursor: pointer;
 }
 .cantidad output { min-width: 26px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+/* Quitar producto: ícono de basura azul noche en la esquina superior derecha
+   (v1.3, pedido de JX: más visible que el enlace "Quitar"). Área de toque de
+   44 px. Siempre pide confirmación antes de borrar (ver #confirmar-quitar). */
+.item__nombre,
+.item__variante { padding-right: 40px; }
 .item__quitar {
-  min-height: 44px;
-  padding: 0 4px;
+  position: absolute;
+  top: 8px;
+  right: -10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border: 0;
-  background: none;
-  color: var(--tinta-2);
-  font-size: .85rem;
-  text-decoration: underline;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--noche);
   cursor: pointer;
+  transition: background-color .2s ease;
 }
+.item__quitar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@media (hover: hover) { .item__quitar:hover { background: var(--algodon); } }
 
 .carrito__resumen {
   margin: 16px 0 8px;
@@ -1000,15 +974,15 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 .resumen__fila span:last-child,
 .resumen__fila strong { text-align: right; }
 .resumen__fila strong { color: var(--noche); font-variant-numeric: tabular-nums; }
-.resumen__fila--total {
-  margin-top: 6px;
+.resumen__fila--total { color: var(--noche); font-weight: 700; }
+.resumen__fila--total strong { font-family: var(--fuente-titulos); font-size: 1.35rem; }
+.resumen__nota {
+  margin: 8px 0 0;
   padding-top: 10px;
   border-top: 1px dashed var(--hilo);
-  color: var(--noche);
-  font-weight: 700;
+  color: var(--tinta-2);
+  font-size: .85rem;
 }
-.resumen__fila--total strong { font-family: var(--fuente-titulos); font-size: 1.35rem; }
-.resumen__extra { font-family: var(--fuente-texto); font-size: .85rem; font-weight: 700; color: var(--tinta-2); }
 
 /* Formulario de pedido */
 .pedido { margin-top: 20px; }
@@ -1055,40 +1029,33 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 .pedido__estado { margin: 10px 0 0; font-size: .9rem; font-weight: 600; color: var(--noche); }
 .pedido__estado.es-error { color: var(--error); }
 
-/* Ventana de resultado del pago */
-.modal-fondo {
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  z-index: 95;
-}
-.modal {
-  width: min(440px, 100%);
-  padding: 28px 24px 24px;
+/* Confirmar antes de quitar un producto (<dialog> nativo en la capa superior).
+   Mismo lenguaje que el carrito: bloque blanco radio-l, sombra-2, foto sobre lino. */
+.confirmar {
+  width: min(380px, calc(100% - 32px));
+  max-width: none;
+  padding: 24px 22px 20px;
+  border: 0;
   border-radius: var(--radio-l);
   background: var(--blanco);
+  color: var(--tinta);
   box-shadow: var(--sombra-2);
   text-align: center;
-  animation: aparecer .3s ease both;
 }
-.modal__icono {
-  display: grid;
-  place-items: center;
-  width: 60px;
-  height: 60px;
+.confirmar[open] { animation: aparecer .22s ease both; }
+.confirmar::backdrop { background: rgba(28, 37, 65, .45); }
+.confirmar__foto {
+  width: 72px;
+  height: 72px;
   margin: 0 auto 14px;
-  border-radius: 50%;
-  background: var(--algodon);
+  border-radius: var(--radio-s);
+  background: var(--lino);
+  object-fit: cover;
 }
-.modal__icono svg { width: 30px; height: 30px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.modal__icono.ok { background: #E3F2EA; }
-.modal__icono.ok svg { stroke: var(--exito); }
-.modal__icono.no { background: #F8E3E5; }
-.modal__icono.no svg { stroke: var(--error); }
-.modal__icono.espera svg { stroke: var(--noche); }
-.modal__titulo { font-size: 1.5rem; }
-.modal__texto { color: var(--tinta-2); }
-.modal__acciones { display: grid; gap: 10px; margin-top: 18px; }
+.confirmar__titulo { margin-bottom: 6px; font-size: 1.35rem; }
+.confirmar__texto { margin: 0 0 20px; color: var(--tinta-2); font-size: .95rem; }
+.confirmar__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.confirmar .boton { padding-left: 12px; padding-right: 12px; }
 
 /* Aviso corto */
 .toast {
@@ -1125,7 +1092,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 }
 
 /* ===========================================================
-   13. BANNER DE COOKIES (Aceptar y Rechazar con el mismo peso)
+   12. BANNER DE COOKIES (Aceptar y Rechazar con el mismo peso)
    =========================================================== */
 .cookies {
   position: fixed;
@@ -1145,7 +1112,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 .cookies__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 /* ===========================================================
-   14. PÁGINAS LEGALES Y 404 (mismo diseño del sitio)
+   13. PÁGINAS LEGALES Y 404 (mismo diseño del sitio)
    =========================================================== */
 .cabecera--simple .cabecera__fila { justify-content: space-between; }
 .volver {
@@ -1233,7 +1200,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 .error404 .portada__acciones { justify-content: center; }
 
 /* ===========================================================
-   15. RESPONSIVE — mobile-first, revisado en todos los rangos:
+   14. RESPONSIVE — mobile-first, revisado en todos los rangos:
        ≤380 · ≤480 · ≤500 · 600–767 · 768–900 · ≤900 · ≥901 · ≥1200 · ≥1440
    =========================================================== */
 
@@ -1279,7 +1246,6 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
   .portada__titulo { max-width: 14.5ch; }
   .portada__arte img { max-height: min(640px, 74vh); }
   .catalogo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-  .domicilios__grid { grid-template-columns: 1fr 1fr; gap: 56px; }
   .pestanas { margin: 0; padding: 4px 0 8px; flex-wrap: wrap; overflow: visible; }
 }
 
@@ -1348,6 +1314,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
   .cookies { padding: 14px 14px 12px; }
   .cookies__texto { font-size: .85rem; margin-bottom: 12px; }
   .cookies .boton { padding: 10px 12px; }
+  .confirmar__botones { grid-template-columns: 1fr; }
 }
 
 /* Pantallas de 360px o menos: el botón dice solo "Agregar" (el lector de
@@ -1364,7 +1331,7 @@ body.modal-abierto .wa-flotante { visibility: hidden; }
 }
 
 /* ===========================================================
-   16. MOVIMIENTO REDUCIDO: se apagan animaciones y transiciones
+   15. MOVIMIENTO REDUCIDO: se apagan animaciones y transiciones
    =========================================================== */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

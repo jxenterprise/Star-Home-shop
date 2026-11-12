@@ -6,8 +6,10 @@
 # Qué edita la dueña desde /admin:
 #   · Productos  → contenido/catalogo.json (nombre, colección, foto, medidas,
 #                  precios, etiqueta, agotado, mostrar/ocultar)
-#   · Ajustes    → contenido/tienda.json (modo muestra, aviso, portada,
-#                  colecciones, domicilio, pago en línea)
+#   · Ajustes    → contenido/tienda.json (modo muestra, aviso, portada y
+#                  colecciones)
+# Desde v1.3 (11 nov 2026) no hay pago en línea ni domicilios: todo el pedido
+# se hace por WhatsApp, así que esos ajustes se quitaron del administrador.
 # Cada vez que guarda, el CMS hace un commit en GitHub y Cloudflare Pages
 # vuelve a publicar la página sola en 1–2 minutos. functions/index.js pinta
 # los cambios dentro del HTML.
@@ -171,7 +173,7 @@ singletons:
         widget: object
         fields:
           - { name: mostrar, label: Mostrar aviso, widget: boolean, default: false }
-          - { name: texto, label: Texto del aviso, widget: string, maxlength: 90, required: false, hint: 'Ej.: Domicilio gratis por compras desde $150.000' }
+          - { name: texto, label: Texto del aviso, widget: string, maxlength: 90, required: false, hint: 'Ej.: Ya llegó la colección de Navidad' }
       - name: portada
         label: Portada
         widget: object
@@ -200,20 +202,3 @@ singletons:
         file: tienda
         value_field: 'colecciones.*.id'
         display_fields: ['colecciones.*.nombre']
-      - name: domicilio
-        label: Domicilio
-        widget: object
-        fields:
-          - name: modo
-            label: ¿Cómo se cobra el domicilio?
-            widget: select
-            options:
-              - { label: 'Se acuerda por WhatsApp según el barrio', value: acordar }
-              - { label: 'Valor fijo en todo Cartagena', value: fijo }
-          - { name: valor, label: Valor fijo en pesos (solo si elegiste valor fijo), widget: number, value_type: int, min: 0, step: 500 }
-          - { name: texto, label: Texto que sale en la página, widget: string, maxlength: 140 }
-      - name: pago_en_linea
-        label: Pago en línea con Wompi activo
-        widget: boolean
-        default: true
-        hint: 'Apágalo si necesitas pausar los pagos en línea; el pedido por WhatsApp sigue funcionando.'

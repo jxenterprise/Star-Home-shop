@@ -1,16 +1,15 @@
 # Estrellita House
 
-> Tienda en Cartagena de Indias (Colombia) de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con colecciones de Navidad, Halloween y para todo el año. Domicilios en Cartagena; pedidos por WhatsApp o pago en línea con Wompi.
+> Tienda en Cartagena de Indias (Colombia) de sábanas, cortinas, tapetes y decoración de temporada para el hogar, con colecciones de Navidad, Halloween y para todo el año. Pedidos por WhatsApp: el carrito arma el pedido con el total y el pago y la entrega se acuerdan por chat.
 
 ## Secciones
 - [Inicio](https://star-home-shop.pages.dev/): colección de temporada con precios en pesos colombianos y carrito de compras.
 - [Colección](https://star-home-shop.pages.dev/#coleccion): productos por temporada con medidas y precios.
-- [Cómo comprar](https://star-home-shop.pages.dev/#como-comprar): cuatro pasos, de elegir el diseño a recibirlo en casa.
-- [Domicilios y pagos](https://star-home-shop.pages.dev/#domicilios): cobertura en Cartagena y medios de pago.
-- [Preguntas frecuentes](https://star-home-shop.pages.dev/#preguntas): domicilios, pagos, seguridad y devoluciones.
+- [Cómo comprar](https://star-home-shop.pages.dev/#como-comprar): cuatro pasos, de elegir el diseño a confirmar el pedido por WhatsApp.
+- [Preguntas frecuentes](https://star-home-shop.pages.dev/#preguntas): cómo pedir, pagar, recibir y devolver.
 
 ## Políticas
-- [Compras, envíos y devoluciones](https://star-home-shop.pages.dev/politicas-de-compra): domicilios, retracto, garantía, reversión del pago y PQR.
+- [Compras, entregas y devoluciones](https://star-home-shop.pages.dev/politicas-de-compra): pago, entrega, retracto, garantía, reversión del pago y PQR.
 - [Política de privacidad](https://star-home-shop.pages.dev/privacidad)
 - [Términos y condiciones](https://star-home-shop.pages.dev/terminos)
 
@@ -19,5 +18,5 @@
 - Ciudad: Cartagena de Indias, Bolívar, Colombia
 
 ## Notas
-- Pagos en línea procesados por Wompi (Bancolombia).
+- Venta solo por WhatsApp; no hay pagos en línea.
 - Sitio desarrollado por JX Company.

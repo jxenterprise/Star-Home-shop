@@ -7,17 +7,18 @@
  *   Toma el index.html estático y, antes de enviarlo al navegador, le inyecta
  *   el catálogo VIVO que la dueña edita desde el administrador (/admin):
  *     - contenido/catalogo.json  → productos, precios, fotos, medidas
- *     - contenido/tienda.json    → colecciones, textos de portada, aviso,
- *                                  domicilio, modo muestra, pago en línea
+ *     - contenido/tienda.json    → colecciones, textos de portada, aviso
+ *                                  y modo muestra
  *   Así los productos quedan escritos en el HTML real (view-source), que es
  *   lo que leen Google y los bots de IA, sin build step ni frameworks.
  *
  * De qué depende:
  *   - index.html: elementos con id portada-titulo, portada-subtitulo,
  *     aviso-tienda, catalogo-pestanas, coleccion-desc, catalogo-grid,
- *     catalogo-datos, jsonld-productos, domicilio-texto y meta[name=robots].
+ *     catalogo-datos, jsonld-productos y meta[name=robots].
  *   - js/script.js lee #catalogo-datos para el carrito.
- *   - functions/api/wompi/firma.js recalcula los precios desde el mismo JSON.
+ *   Desde v1.3 (11 nov 2026) no hay pago en línea ni domicilios: el pedido
+ *   y su total se envían por WhatsApp (ver js/script.js → Pedido).
  *
  * Si algo falla (JSON roto, archivo faltante), devuelve el index.html tal cual
  * (que ya trae una copia del catálogo), así la página NUNCA se cae.
@@ -95,12 +96,6 @@ export function normalizarDatos(catalogo, tienda) {
     ? inicialPedida
     : (colecciones.find((c) => productos.some((p) => p.coleccion === c.id))?.id || 'todas');
 
-  const domicilio = {
-    modo: tienda?.domicilio?.modo === 'fijo' ? 'fijo' : 'acordar',
-    valor: Math.max(0, Math.round(Number(tienda?.domicilio?.valor) || 0)),
-    texto: String(tienda?.domicilio?.texto || 'Te confirmamos el valor del domicilio por WhatsApp según tu barrio.')
-  };
-
   return {
     modoMuestra: tienda?.modo_muestra !== false,
     aviso: {
@@ -113,8 +108,6 @@ export function normalizarDatos(catalogo, tienda) {
     },
     colecciones,
     coleccionInicial,
-    domicilio,
-    pagoEnLinea: tienda?.pago_en_linea !== false,
     productos
   };
 }
@@ -188,8 +181,6 @@ export function descripcionInicial(datos) {
 export function renderDatosCliente(datos) {
   const json = JSON.stringify({
     colecciones: datos.colecciones,
-    domicilio: datos.domicilio,
-    pagoEnLinea: datos.pagoEnLinea,
     productos: datos.productos.map((p) => ({
       id: p.id, nombre: p.nombre, coleccion: p.coleccion, imagen: p.imagen,
       agotado: p.agotado, variantes: p.variantes
@@ -252,11 +243,6 @@ async function leerJSON(context, ruta) {
   return r.json();
 }
 
-/* ¿Están las dos llaves de Wompi? (las mismas que exige api/wompi/firma.js) */
-export function wompiConfigurado(env = {}) {
-  return Boolean(String(env.WOMPI_PUBLIC_KEY || '').trim() && String(env.WOMPI_INTEGRITY_SECRET || '').trim());
-}
-
 /* ---------------------------------------------------------------------------
    Manejador de la ruta "/"
 --------------------------------------------------------------------------- */
@@ -272,10 +258,6 @@ export async function onRequest(context) {
       leerJSON(context, '/contenido/tienda.json')
     ]);
     datos = normalizarDatos(catalogo, tienda);
-    // Sin las llaves de Wompi en Cloudflare, el botón "Pagar en línea" no se
-    // muestra (si no, el cliente lo toca y le sale error). Aparece solo cuando
-    // JX cargue WOMPI_PUBLIC_KEY y WOMPI_INTEGRITY_SECRET, sin tocar código.
-    datos.pagoEnLinea = datos.pagoEnLinea && wompiConfigurado(context.env);
   } catch (error) {
     console.error('Catálogo no disponible, se sirve la copia estática:', error);
     return respuesta;
@@ -306,9 +288,6 @@ export async function onRequest(context) {
     })
     .on('#catalogo-datos', html(renderDatosCliente(datos)))
     .on('#jsonld-productos', html(renderJsonLdProductos(datos)))
-    .on('#domicilio-texto', texto(datos.domicilio.modo === 'fijo'
-      ? `El domicilio dentro de Cartagena cuesta ${formatoCOP(datos.domicilio.valor)}.`
-      : datos.domicilio.texto))
     .transform(respuesta);
 
   // Cabeceras de seguridad básicas (el archivo _headers no aplica a respuestas de Functions)

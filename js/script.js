@@ -13,13 +13,13 @@
      6. Toast .............. aviso corto "Agregado al carrito"
      7. Menu ............... hamburguesa en ≤900px
      8. Catalogo ........... pestañas de colección, medidas y precios
-     9. Carrito ............ panel lateral, cantidades, totales
-    10. Pedido ............. datos de entrega, WhatsApp o pago con Wompi
-    11. RetornoPago ........ resultado al volver de Wompi (?id=…)
-    12. PQR ................ formulario con número de radicado (políticas)
-    13. Arranque
-   Depende de: los id del index.html, functions/api/wompi/* para el pago en
-   línea y #catalogo-datos (lo escribe functions/index.js).
+     9. Carrito ............ panel lateral, cantidades y total
+    10. Pedido ............. nombre + autorización y envío del pedido por WhatsApp
+    11. PQR ................ formulario con número de radicado (políticas)
+    12. Arranque
+   Depende de: los id del index.html y #catalogo-datos (lo escribe
+   functions/index.js). Desde v1.3 no hay pago en línea ni domicilios:
+   todo el pedido, con su total, se envía por WhatsApp.
    ========================================================================== */
 (() => {
   'use strict';
@@ -34,8 +34,8 @@
     ga4: 'G-XXXXXXXXXX',           // {POR CONFIRMAR} Measurement ID de Google Analytics 4
     claveConsentimiento: 'eh_consentimiento_v1',
     claveCarrito: 'eh_carrito_v1',
-    clavePedido: 'eh_pedido_wompi_v1',
-    claveCompras: 'eh_compras_medidas_v1',
+    // Claves que usaba el pago en línea (hasta v1.2): se borran del navegador al cargar
+    clavesViejas: ['eh_pedido_wompi_v1', 'eh_compras_medidas_v1'],
     maxCantidad: 20
   };
 
@@ -133,6 +133,7 @@
       try { localStorage.setItem('__eh', '1'); localStorage.removeItem('__eh'); return true; } catch (e) { return false; }
     })();
     const permitido = () => hayLocal && Consentimiento.estado() === 'aceptado';
+    if (hayLocal) CONFIG.clavesViejas.forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
     return {
       leer(clave) {
         if (permitido()) {
@@ -144,10 +145,6 @@
         memoria.set(clave, valor);
         if (permitido()) { try { localStorage.setItem(clave, JSON.stringify(valor)); } catch (e) { /* sin espacio */ } }
       },
-      borrar(clave) {
-        memoria.delete(clave);
-        if (hayLocal) { try { localStorage.removeItem(clave); } catch (e) { /* nada */ } }
-      },
       // Al aceptar: lo que estaba en memoria pasa al navegador
       volcar() {
         if (!permitido()) return;
@@ -156,7 +153,7 @@
       // Al rechazar: se borra del navegador (queda en memoria mientras la página siga abierta)
       limpiarNavegador() {
         if (!hayLocal) return;
-        [CONFIG.claveCarrito, CONFIG.clavePedido, CONFIG.claveCompras].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
+        [CONFIG.claveCarrito].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* nada */ } });
       }
     };
   })();
@@ -164,8 +161,8 @@
   /* ==========================================================================
      5. ANALITICA (Google Analytics 4)
      No carga nada si el ID sigue en {POR CONFIRMAR} o si no hay consentimiento.
-     Eventos: clic_whatsapp, clic_telefono, add_to_cart, begin_checkout,
-     pedido_whatsapp, purchase (pago aprobado) y envio_formulario (PQR).
+     Eventos: clic_whatsapp, clic_telefono, add_to_cart, pedido_whatsapp y
+     envio_formulario (PQR).
      ========================================================================== */
   const Analitica = (() => {
     const valido = /^G-[A-Z0-9]{6,}$/.test(CONFIG.ga4) && CONFIG.ga4 !== 'G-XXXXXXXXXX';
@@ -265,7 +262,7 @@
      maneja las pestañas de colección y el cambio de medida/precio.
      ========================================================================== */
   const Catalogo = (() => {
-    const datos = { productos: [], colecciones: [], domicilio: { modo: 'acordar', valor: 0, texto: '' }, pagoEnLinea: true };
+    const datos = { productos: [], colecciones: [] };
     const nodo = $('#catalogo-datos');
     if (nodo) {
       try { Object.assign(datos, JSON.parse(nodo.textContent || '{}')); } catch (e) { /* sin datos: el carrito queda vacío */ }
@@ -344,7 +341,7 @@
   })();
 
   /* ==========================================================================
-     9. CARRITO — panel lateral con productos, cantidades y totales.
+     9. CARRITO — panel lateral con productos, cantidades y el total del pedido.
      Cada línea guarda { id, v: índice de la medida, n: cantidad }.
      Al cargar se cruza con el catálogo vivo: si un producto o medida ya no
      existe o se agotó, sale del carrito; los precios siempre son los actuales.
@@ -373,8 +370,7 @@
         return { ...l, producto: p, variante: v, total: v.precio * l.n };
       });
     }
-    const subtotal = () => detalle().reduce((s, l) => s + l.total, 0);
-    const valorDomicilio = () => (Catalogo.datos.domicilio.modo === 'fijo' ? Catalogo.datos.domicilio.valor : 0);
+    const totalPedido = () => detalle().reduce((s, l) => s + l.total, 0);
     const unidades = () => lineas.reduce((s, l) => s + l.n, 0);
 
     function agregar(id, v, n) {
@@ -412,8 +408,55 @@
       const siguiente = $('.item button', panel) || $('#cerrar-carrito');
       if (siguiente) siguiente.focus();
     }
-    function vaciar() { lineas = []; guardar(); pintar(); }
 
+    /* Confirmación antes de sacar un producto del carrito (botón "Quitar" o
+       "−" con 1 unidad): así un toque por error no borra nada. Usa <dialog>
+       nativo (#confirmar-quitar, fuera de #carrito para que su Escape no
+       cierre el carrito): showModal() atrapa el foco y Escape cancela solo.
+       Si el navegador es tan viejo que no tiene <dialog>, usa confirm(). */
+    const dialogo = $('#confirmar-quitar');
+    let porQuitar = null;   // índice de la línea que espera confirmación
+    let origen = null;      // botón que abrió la pregunta (vuelve el foco ahí si cancelan)
+
+    function pedirConfirmacion(indice, boton) {
+      const l = detalle()[indice];
+      if (!l) return;
+      const descripcion = `${l.producto.nombre} · ${l.variante.nombre}${l.n > 1 ? ` · ${l.n} unidades` : ''}`;
+      if (!dialogo || typeof dialogo.showModal !== 'function') {
+        if (window.confirm(`¿Quitar del carrito? ${descripcion}`)) quitar(indice);
+        return;
+      }
+      porQuitar = indice;
+      origen = boton || null;
+      $('#confirmar-texto', dialogo).textContent = descripcion;
+      const foto = $('#confirmar-foto', dialogo);
+      if (foto) foto.src = l.producto.imagen;
+      dialogo.returnValue = '';
+      dialogo.showModal();
+      $('[data-confirmar="no"]', dialogo).focus(); // lo seguro queda enfocado
+    }
+
+    function iniciarConfirmacion() {
+      if (!dialogo || typeof dialogo.showModal !== 'function') return;
+      dialogo.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-confirmar]');
+        if (b) dialogo.close(b.dataset.confirmar);
+        else if (e.target === dialogo) {
+          // El <dialog> también es el objetivo del clic en su relleno blanco: solo
+          // se cancela si el toque cae FUERA de la tarjeta (en el fondo oscuro)
+          const r = dialogo.getBoundingClientRect();
+          const fuera = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+          if (fuera) dialogo.close('no');
+        }
+      });
+      dialogo.addEventListener('close', () => {
+        const indice = porQuitar;
+        porQuitar = null;
+        if (dialogo.returnValue === 'si' && indice !== null) quitar(indice);
+        else if (origen && document.contains(origen)) origen.focus();
+        origen = null;
+      });
+    }
     // Dibuja la lista, el resumen y el contador de la cabecera
     function pintar() {
       const total = unidades();
@@ -443,21 +486,12 @@
               </div>
               <span class="item__precio">${formatoCOP(l.total)}</span>
             </div>
-            <button type="button" class="item__quitar" data-accion="quitar" data-i="${i}">Quitar</button>
+            <button type="button" class="item__quitar" data-accion="quitar" data-i="${i}" aria-label="Quitar ${escapar(l.producto.nombre)} del carrito" title="Quitar del carrito">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/></svg>
+            </button>
           </div>
         </li>`).join('');
-      const sub = subtotal();
-      const dom = valorDomicilio();
-      $('#carrito-subtotal').textContent = formatoCOP(sub);
-      $('#carrito-domicilio').textContent = Catalogo.datos.domicilio.modo === 'fijo' ? formatoCOP(dom) : 'Se confirma por WhatsApp';
-      $('#carrito-total').innerHTML = Catalogo.datos.domicilio.modo === 'fijo'
-        ? formatoCOP(sub + dom)
-        : `${formatoCOP(sub)} <span class="resumen__extra">+ domicilio</span>`;
-      const botonWompi = $('#boton-wompi');
-      if (botonWompi) botonWompi.hidden = !Catalogo.datos.pagoEnLinea;
-      // Sin pago en línea (pausado o sin llaves de Wompi) la ayuda habla solo de WhatsApp
-      const ayuda = $('#pedido-ayuda');
-      if (ayuda && !Catalogo.datos.pagoEnLinea) ayuda.textContent = 'Pedir por WhatsApp abre el chat con tu pedido escrito. Por ahí acordamos el pago y el domicilio.';
+      $('#carrito-total').textContent = formatoCOP(totalPedido());
     }
 
     function abrir() {
@@ -492,33 +526,34 @@
         if (e.key === 'Escape') cerrar();
         atraparFoco(panel, e);
       });
+      iniciarConfirmacion();
       panel.addEventListener('click', (e) => {
         const b = e.target.closest('[data-accion]');
         if (b) {
           const i = Number(b.dataset.i);
           if (b.dataset.accion === 'mas') cambiar(i, 1);
-          if (b.dataset.accion === 'menos') cambiar(i, -1);
-          if (b.dataset.accion === 'quitar') quitar(i);
+          // "−" con 1 unidad también saca el producto: pide confirmación igual que "Quitar"
+          if (b.dataset.accion === 'menos') { if (lineas[i] && lineas[i].n <= 1) pedirConfirmacion(i, b); else cambiar(i, -1); }
+          if (b.dataset.accion === 'quitar') pedirConfirmacion(i, b);
         }
         if (e.target.closest('[data-cerrar-carrito]')) cerrar();
       });
     }
 
-    return { iniciar, agregar, abrir, cerrar, vaciar, detalle, subtotal, valorDomicilio, lineas: () => lineas.slice(), pintar };
+    return { iniciar, agregar, abrir, detalle, totalPedido, lineas: () => lineas.slice() };
   })();
 
   /* ==========================================================================
-     10. PEDIDO — valida los datos de entrega y sigue el camino elegido:
-       · Pedir por WhatsApp: arma el mensaje con todo el pedido y abre el chat.
-       · Pagar en línea: pide al servidor la firma de Wompi (el precio se
-         recalcula allá con el catálogo, nunca se confía en el navegador)
-         y lleva a la página de pago de Wompi.
+     10. PEDIDO — todo se hace por WhatsApp (desde v1.3 no hay pago en línea
+     ni domicilios). Valida el nombre y la autorización de datos, arma el
+     mensaje con cada producto (medida, cantidad y valor) y el TOTAL, y abre
+     el chat de la tienda con el mensaje ya escrito. El pago y la entrega se
+     acuerdan en ese chat.
      ========================================================================== */
   const Pedido = (() => {
     const form = $('#form-pedido');
     const estado = $('#pedido-estado');
-    const campos = ['nombre', 'celular', 'barrio', 'direccion', 'correo', 'autorizo'];
-    let metodoElegido = 'whatsapp';
+    const campos = ['nombre', 'autorizo'];
 
     function avisar(texto, esError) {
       if (!estado) return;
@@ -528,29 +563,17 @@
 
     function leer() {
       const f = new FormData(form);
-      const valor = (k) => String(f.get(k) || '').trim().replace(/\s+/g, ' ');
       return {
-        nombre: valor('nombre'),
-        celular: valor('celular').replace(/\D/g, ''),
-        barrio: valor('barrio'),
-        direccion: valor('direccion'),
-        indicaciones: valor('indicaciones'),
-        correo: valor('correo'),
+        nombre: String(f.get('nombre') || '').trim().replace(/\s+/g, ' '),
         autorizo: $('#pedido-autorizo').checked
       };
     }
 
     function validar(d) {
       const errores = {};
-      let celular = d.celular;
-      if (celular.length === 12 && celular.startsWith('57')) celular = celular.slice(2);
       if (d.nombre.length < 3) errores.nombre = 'Escribe tu nombre y apellido.';
-      if (!/^3\d{9}$/.test(celular)) errores.celular = 'Escribe un celular de 10 dígitos que empiece por 3.';
-      if (d.barrio.length < 3) errores.barrio = 'Escribe tu barrio.';
-      if (d.direccion.length < 5) errores.direccion = 'Escribe la dirección completa.';
-      if (d.correo && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.correo)) errores.correo = 'Revisa el correo o déjalo vacío.';
       if (!d.autorizo) errores.autorizo = 'Para enviar el pedido necesitamos tu autorización.';
-      return { errores, datos: { ...d, celular } };
+      return errores;
     }
 
     function mostrarErrores(errores) {
@@ -564,34 +587,46 @@
       if (primero) { const el = $(`#pedido-${primero}`); if (el) el.focus(); }
     }
 
-    // Texto del pedido para WhatsApp (se usa también tras pagar en línea)
-    function textoPedido(d, { encabezado, referencia } = {}) {
+    /* Mensaje de WhatsApp (v1.3): cada producto en su bloque, con el nombre en
+       negrita (*texto* es negrita en WhatsApp), y el total al final. Para no
+       repetir precios:
+       · Un solo producto: no lleva precio propio, solo el Total (y el valor
+         por unidad si pidió varias).
+       · Varios productos: cada uno lleva su valor y abajo va el Total. */
+    function textoPedido(d) {
       const lineas = Carrito.detalle();
-      const sub = Carrito.subtotal();
-      const fijo = Catalogo.datos.domicilio.modo === 'fijo';
-      const partes = [
-        encabezado || `Hola ${CONFIG.tienda}, quiero hacer este pedido:`,
+      const unidades = lineas.reduce((s, l) => s + l.n, 0);
+      const variosProductos = lineas.length > 1;
+      const bloques = lineas.map((l, i) => {
+        const r = [`${variosProductos ? `${i + 1}. ` : ''}*${l.producto.nombre}*`, `Medida: ${l.variante.nombre}`];
+        if (variosProductos) {
+          r.push(l.n > 1
+            ? `Cantidad: ${l.n} × ${formatoCOP(l.variante.precio)} = ${formatoCOP(l.total)}`
+            : `Precio: ${formatoCOP(l.total)}`);
+        } else if (l.n > 1) {
+          r.push(`Cantidad: ${l.n} (${formatoCOP(l.variante.precio)} c/u)`);
+        }
+        return r.join('\n');
+      });
+      return [
+        `¡Hola, ${CONFIG.tienda}! ✨`,
+        'Quiero hacer este pedido:',
         '',
-        ...lineas.map((l) => `• ${l.n} × ${l.producto.nombre} (${l.variante.nombre}): ${formatoCOP(l.total)}`),
+        bloques.join('\n\n'),
         '',
-        `Subtotal: ${formatoCOP(sub)}`,
-        `Domicilio: ${fijo ? formatoCOP(Carrito.valorDomicilio()) : 'por confirmar según mi barrio'}`,
-        `Total: ${fijo ? formatoCOP(sub + Carrito.valorDomicilio()) : `${formatoCOP(sub)} + domicilio`}`
-      ];
-      if (referencia) partes.push(`Referencia de pago Wompi: ${referencia}`);
-      if (d) {
-        partes.push('', 'Mis datos de entrega:', `Nombre: ${d.nombre}`, `Celular: ${d.celular}`, `Barrio: ${d.barrio}`, `Dirección: ${d.direccion}`);
-        if (d.indicaciones) partes.push(`Indicaciones: ${d.indicaciones}`);
-      }
-      return partes.join('\n');
+        `*Total: ${formatoCOP(Carrito.totalPedido())}*${unidades > 1 ? ` (${unidades} unidades)` : ''}`,
+        '',
+        `A nombre de: ${d.nombre}`,
+        '¿Me confirman disponibilidad, forma de pago y entrega? ¡Gracias!'
+      ].join('\n');
     }
 
-    function itemsGA() {
-      return Carrito.detalle().map((l) => ({ item_id: l.id, item_name: l.producto.nombre, item_variant: l.variante.nombre, price: l.variante.precio, quantity: l.n }));
-    }
-
-    function pedirPorWhatsApp(d) {
-      Analitica.medir('pedido_whatsapp', { currency: 'COP', value: Carrito.subtotal(), items: itemsGA() });
+    function enviar(d) {
+      Analitica.medir('pedido_whatsapp', {
+        currency: 'COP',
+        value: Carrito.totalPedido(),
+        items: Carrito.detalle().map((l) => ({ item_id: l.id, item_name: l.producto.nombre, item_variant: l.variante.nombre, price: l.variante.precio, quantity: l.n }))
+      });
       const url = abrirWhatsApp(textoPedido(d));
       if (estado) {
         estado.classList.remove('es-error');
@@ -599,36 +634,9 @@
       }
     }
 
-    async function pagarEnLinea(d) {
-      const boton = $('#boton-wompi');
-      if (!Catalogo.datos.pagoEnLinea) { avisar('El pago en línea está pausado por ahora. Puedes pedir por WhatsApp.', true); return; }
-      if (boton) boton.disabled = true;
-      avisar('Preparando tu pago seguro con Wompi…');
-      try {
-        const respuesta = await fetch('/api/wompi/firma', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            items: Carrito.lineas().map((l) => ({ id: l.id, variante: l.v, cantidad: l.n })),
-            cliente: { nombre: d.nombre, celular: d.celular, barrio: d.barrio, direccion: d.direccion, indicaciones: d.indicaciones, correo: d.correo }
-          })
-        });
-        let resultado = {};
-        try { resultado = await respuesta.json(); } catch (e) { resultado = {}; }
-        if (!respuesta.ok || !resultado.url) throw new Error(resultado.mensaje || 'No pudimos iniciar el pago en línea.');
-        // Se guarda el pedido para armar el mensaje de entrega al volver (solo con consentimiento)
-        Almacen.guardar(CONFIG.clavePedido, { referencia: resultado.referencia, total: resultado.total, texto: textoPedido(d, { encabezado: `Hola ${CONFIG.tienda}, ya pagué en línea este pedido:`, referencia: resultado.referencia }), fecha: Date.now() });
-        Analitica.medir('begin_checkout', { currency: 'COP', value: resultado.total, payment_type: 'wompi', items: itemsGA() });
-        window.location.href = resultado.url;
-      } catch (error) {
-        avisar(`${error.message} Mientras tanto, puedes pedir por WhatsApp.`, true);
-        if (boton) boton.disabled = false;
-      }
-    }
-
     function iniciar() {
       if (!form) return;
-      $$('button[type="submit"]', form).forEach((b) => b.addEventListener('click', () => { metodoElegido = b.dataset.metodo || 'whatsapp'; }));
+      // Al corregir un campo se borra su mensaje de error
       form.addEventListener('input', (e) => {
         const nombre = e.target.name;
         if (nombre && campos.includes(nombre)) {
@@ -638,130 +646,21 @@
       });
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const metodo = (e.submitter && e.submitter.dataset.metodo) || metodoElegido;
         if (!Carrito.lineas().length) return;
-        const { errores, datos } = validar(leer());
+        const d = leer();
+        const errores = validar(d);
         mostrarErrores(errores);
         if (Object.keys(errores).length) { avisar('Revisa los datos marcados en rojo.', true); return; }
         avisar('');
-        if (metodo === 'wompi') pagarEnLinea(datos);
-        else pedirPorWhatsApp(datos);
+        enviar(d);
       });
     }
 
-    return { iniciar, textoPedido };
-  })();
-
-  /* ==========================================================================
-     11. RETORNO DEL PAGO — Wompi devuelve a la página con ?id=<transacción>.
-     Se consulta el estado en /api/wompi/transaccion y se muestra el resultado.
-     Ojo: esto es informativo. Antes de despachar, la dueña confirma en el
-     panel de Wompi que la transacción quedó APROBADA.
-     ========================================================================== */
-  const RetornoPago = (() => {
-    const fondo = $('#pago-fondo');
-    const iconos = {
-      ok: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>',
-      no: '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></svg>',
-      espera: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>'
-    };
-    let reintentos = 0;
-
-    function pintar(tipo, titulo, texto, acciones) {
-      const icono = $('#pago-icono');
-      icono.className = `modal__icono ${tipo}`;
-      icono.innerHTML = iconos[tipo] || '';
-      $('#pago-titulo').textContent = titulo;
-      $('#pago-texto').textContent = texto;
-      const caja = $('#pago-acciones');
-      caja.innerHTML = '';
-      acciones.forEach(({ texto: t, clase, accion, href }) => {
-        const el = document.createElement(href ? 'a' : 'button');
-        el.className = `boton ${clase} boton--ancho`;
-        el.textContent = t;
-        if (href) { el.href = href; el.target = '_blank'; el.rel = 'noopener'; }
-        else el.type = 'button';
-        if (accion) el.addEventListener('click', accion);
-        caja.appendChild(el);
-      });
-      const primero = $('button, a', caja);
-      if (primero) primero.focus();
-    }
-    function abrir() {
-      fondo.hidden = false;
-      document.body.classList.add('sin-scroll', 'modal-abierto');
-    }
-    function cerrar() {
-      fondo.hidden = true;
-      document.body.classList.remove('sin-scroll', 'modal-abierto');
-    }
-
-    async function consultar(id) {
-      pintar('espera', 'Consultando tu pago…', 'Un momento, estamos revisando el estado de tu pago con Wompi.', []);
-      let res = null;
-      try {
-        const r = await fetch(`/api/wompi/transaccion?id=${encodeURIComponent(id)}`, { headers: { Accept: 'application/json' } });
-        res = await r.json();
-        if (!r.ok) throw new Error('consulta');
-      } catch (e) {
-        pintar('no', 'No pudimos confirmar el pago aquí', `Si Wompi te mostró el pago como aprobado, escríbenos con este número de transacción: ${id}.`, [
-          { texto: 'Escribir por WhatsApp', clase: 'boton--principal', href: enlaceWhatsApp(`Hola ${CONFIG.tienda}, hice un pago en línea y quiero confirmarlo. Número de transacción: ${id}`) },
-          { texto: 'Cerrar', clase: 'boton--secundario', accion: cerrar }
-        ]);
-        return;
-      }
-      const pendiente = Almacen.leer(CONFIG.clavePedido);
-      const mismo = pendiente && pendiente.referencia === res.referencia;
-      if (res.estado === 'APPROVED') {
-        const texto = mismo ? pendiente.texto : `Hola ${CONFIG.tienda}, ya pagué en línea. Referencia: ${res.referencia}. Quiero coordinar la entrega.`;
-        medirCompra(res);
-        Carrito.vaciar();
-        Almacen.borrar(CONFIG.clavePedido);
-        pintar('ok', '¡Pago aprobado!', `Tu pago de ${formatoCOP(res.total)} quedó aprobado. Referencia ${res.referencia}. Escríbenos para coordinar la entrega.`, [
-          { texto: 'Coordinar la entrega por WhatsApp', clase: 'boton--principal', href: enlaceWhatsApp(texto) },
-          { texto: 'Seguir mirando', clase: 'boton--secundario', accion: cerrar }
-        ]);
-      } else if (res.estado === 'PENDING') {
-        pintar('espera', 'Tu pago está en proceso', 'Algunos medios, como PSE, tardan unos minutos en confirmar. Lo revisamos de nuevo en un momento.', [
-          { texto: 'Consultar de nuevo', clase: 'boton--principal', accion: () => consultar(id) },
-          { texto: 'Escribir por WhatsApp', clase: 'boton--secundario', href: enlaceWhatsApp(`Hola ${CONFIG.tienda}, mi pago en línea quedó en proceso. Referencia: ${res.referencia}`) }
-        ]);
-        if (reintentos < 3) { reintentos += 1; setTimeout(() => { if (!fondo.hidden) consultar(id); }, 6000); }
-      } else {
-        pintar('no', 'El pago no se completó', 'Wompi no aprobó el pago. Tu carrito sigue guardado: puedes intentarlo de nuevo o pedir por WhatsApp.', [
-          { texto: 'Volver al carrito', clase: 'boton--principal', accion: () => { cerrar(); Carrito.abrir(); } },
-          { texto: 'Cerrar', clase: 'boton--secundario', accion: cerrar }
-        ]);
-      }
-    }
-
-    // purchase se mide una sola vez por transacción
-    function medirCompra(res) {
-      const ya = Almacen.leer(CONFIG.claveCompras) || [];
-      if (ya.includes(res.referencia)) return;
-      Analitica.medir('purchase', { transaction_id: res.referencia, currency: 'COP', value: res.total, payment_type: res.metodo || 'wompi' });
-      Almacen.guardar(CONFIG.claveCompras, ya.concat(res.referencia).slice(-20));
-    }
-
-    function iniciar() {
-      if (!fondo) return;
-      const parametros = new URLSearchParams(window.location.search);
-      const id = parametros.get('id');
-      if (!id || !/^[A-Za-z0-9_-]{4,80}$/.test(id)) return;
-      // Limpia la URL para que al recargar no vuelva a abrir la ventana
-      window.history.replaceState(null, '', window.location.pathname + window.location.hash);
-      fondo.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') cerrar();
-        atraparFoco(fondo, e);
-      });
-      abrir();
-      consultar(id);
-    }
     return { iniciar };
   })();
 
   /* ==========================================================================
-     12. PQR — formulario de peticiones, quejas, reclamos, retracto, garantía y
+     11. PQR — formulario de peticiones, quejas, reclamos, retracto, garantía y
      reversión del pago (politicas-de-compra.html). Genera un número de
      radicado con fecha y hora y lo envía por WhatsApp para dejar registro.
      ========================================================================== */
@@ -816,7 +715,7 @@
   }
 
   /* ==========================================================================
-     13. ARRANQUE (el script va con defer: el HTML ya está listo)
+     12. ARRANQUE (el script va con defer: el HTML ya está listo)
      ========================================================================== */
   Consentimiento.iniciar();
   if (Consentimiento.estado() === 'aceptado') Analitica.cargar();
@@ -829,7 +728,6 @@
   Catalogo.iniciar();
   Carrito.iniciar();
   Pedido.iniciar();
-  RetornoPago.iniciar();
   iniciarPQR();
 
   $$('[data-anio]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
